@@ -28,7 +28,7 @@ export function LoginPage() {
 
   return (
     <div className="h-screen flex gap-12 items-center">
-      <img className="w-[55%] object-cover opacity-[0.8] h-[100%]" src={img} />
+      <img className="w-1/2 object-cover opacity-[0.8] h-[100%]" src={img} />
 
       <Card>
         {loginErrors?.map((error, i) => (

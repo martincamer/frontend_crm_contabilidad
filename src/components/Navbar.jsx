@@ -8,7 +8,7 @@ export function Navbar() {
   return (
     <header
       className={`${
-        isAuthenticated ? "bg-blue-600 shadow-sm" : "bg-white"
+        isAuthenticated ? "bg-blue-500 shadow-sm" : "bg-white py-3"
       } z-[-100]`}
     >
       <nav className="flex justify-between items-center py-1 px-10">
@@ -34,9 +34,15 @@ export function Navbar() {
           {isAuthenticated ? (
             <div className="flex justify-between items-center gap-36 w-full">
               <div className="dropdown dropdown-end z-[100]">
-                <div tabIndex={0} role="button" className="avatar">
-                  <div className="w-12 rounded-full">
-                    <img src={user?.imagen} className="bg-gray-500" />
+                <div tabIndex={0} role="button">
+                  <div className="w-12">
+                    {user.imagen ? (
+                      <img src={user?.imagen} className="rounded-full" />
+                    ) : (
+                      <div className="rounded-xl py-4 my-0.5 px-6 bg-gray-200 text-[10px] font-bold flex justify-center">
+                        User
+                      </div>
+                    )}
                   </div>
                 </div>
                 <ul
@@ -44,14 +50,20 @@ export function Navbar() {
                   className="mt-3 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content bg-base-100 rounded-box w-60 cursor-pointer"
                 >
                   <div className="py-2 px-2">
-                    <img
-                      className="rounded-full w-28 mx-auto"
-                      src={
-                        user.imagen ||
-                        "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
-                      }
-                      alt=""
-                    />
+                    {user.imagen ? (
+                      <img
+                        className="rounded-full w-28 mx-auto"
+                        src={user.imagen}
+                        alt=""
+                      />
+                    ) : (
+                      <Link
+                        to={"/perfil"}
+                        className="rounded-xl w-16 mx-auto py-5 px-6 bg-gray-200 text-[10px] font-bold flex justify-center"
+                      >
+                        User
+                      </Link>
+                    )}
                     <div className="py-2 ">
                       <p className="font-semibold text-blue-400 capitalize text-center">
                         {user.nombre} {user.apellido}

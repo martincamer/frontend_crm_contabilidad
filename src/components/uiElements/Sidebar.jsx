@@ -6,7 +6,7 @@ import { FaFileAlt } from "react-icons/fa";
 import { GiCash } from "react-icons/gi";
 import { PiSuitcaseSimpleLight } from "react-icons/pi";
 import { TbUserFilled } from "react-icons/tb";
-
+import { MdOutlinePersonPin } from "react-icons/md";
 import { Disclosure, Transition } from "@headlessui/react";
 
 export const SideBar = () => {
@@ -20,7 +20,7 @@ export const SideBar = () => {
         isOpen ? "w-64 opacity-1 border-r border-gray-300" : "w-0 opacity-0"
       } transition-all ease-linear flex flex-col bg-white min-h-screen max-h-full h-full `}
     >
-      <div className="flex flex-col gap-2 py-5 px-6">
+      <div className="flex flex-col gap-5 py-5 px-6">
         <Link
           className={`flex gap-2 ${
             location.pathname === "/home" ? "text-blue-600" : "text-gray-700"
@@ -29,13 +29,6 @@ export const SideBar = () => {
         >
           <BsClipboardData /> Analisis
         </Link>
-
-        {/* <Link
-          className="flex gap-2 text-blue-600 font-bold items-center text-base"
-          // to={"/home"}
-        >
-          <FaFileAlt /> Facturación
-        </Link> */}
 
         <Disclosure>
           <Disclosure.Button className="">
@@ -58,7 +51,7 @@ export const SideBar = () => {
             leaveTo="transform translateY(-10%) opacity-0"
           >
             {" "}
-            <Disclosure.Panel className="text-gray-500 py1">
+            <Disclosure.Panel className="text-gray-500">
               <ul className="flex flex-col gap-2">
                 <Link
                   to="/crear-factura"
@@ -85,21 +78,21 @@ export const SideBar = () => {
                   to="/gastos"
                   className="text-sm font-bold hover:text-blue-600"
                 >
-                  Gastós mensuales
+                  Gastós
                 </Link>
 
                 <Link
                   to="/ingresos"
                   className="text-sm font-bold hover:text-blue-600"
                 >
-                  Ingresos mensuales
+                  Ingresos
                 </Link>
 
                 <Link
                   to="/facturas"
                   className="text-sm font-bold hover:text-blue-600"
                 >
-                  Facturas mensuales
+                  Facturas
                 </Link>
 
                 <Link
@@ -141,7 +134,7 @@ export const SideBar = () => {
             leaveTo="transform translateY(-10%) opacity-0"
           >
             {" "}
-            <Disclosure.Panel className="text-gray-500 py-2">
+            <Disclosure.Panel className="text-gray-500">
               <ul className="flex flex-col gap-2">
                 <Link
                   to="/caja"
@@ -154,6 +147,51 @@ export const SideBar = () => {
                   className="text-sm font-bold hover:text-blue-600 capitalize"
                 >
                   Banco {user.localidad}
+                </Link>
+              </ul>
+            </Disclosure.Panel>
+          </Transition>
+        </Disclosure>
+
+        <Disclosure>
+          <Disclosure.Button className="">
+            <button
+              type="button"
+              className={`flex gap-2 ${
+                location.pathname === "/" ? "text-blue-600" : "text-gray-700"
+              } font-bold items-center text-base hover:text-blue-600`}
+            >
+              <MdOutlinePersonPin className="text-xl" /> Empleados
+            </button>
+          </Disclosure.Button>
+          <Transition
+            enter="transition duration-100 ease-out"
+            enterFrom="transform translateY(-10%) opacity-0"
+            enterTo="transform translateY(0%) opacity-100"
+            leave="transition duration-75 ease-out"
+            leaveFrom="transform translateY(0%) opacity-100"
+            leaveTo="transform translateY(-10%) opacity-0"
+          >
+            {" "}
+            <Disclosure.Panel className="text-gray-500">
+              <ul className="flex flex-col gap-2">
+                <Link
+                  to="/empleados"
+                  className="text-sm font-bold hover:text-blue-600 capitalize"
+                >
+                  Empleados
+                </Link>
+                <Link
+                  to="/crear-empleado"
+                  className="text-sm font-bold hover:text-blue-600 capitalize"
+                >
+                  Crear nuevo empleado
+                </Link>
+                <Link
+                  to="/comprobantes"
+                  className="text-sm font-bold hover:text-blue-600 capitalize"
+                >
+                  Comprobantes
                 </Link>
               </ul>
             </Disclosure.Panel>
@@ -181,7 +219,7 @@ export const SideBar = () => {
             leaveTo="transform translateY(-10%) opacity-0"
           >
             {" "}
-            <Disclosure.Panel className="text-gray-500 py-2">
+            <Disclosure.Panel className="text-gray-500">
               <ul className="flex flex-col gap-2">
                 <Link
                   to="/cliente"
@@ -221,7 +259,7 @@ export const SideBar = () => {
             leaveTo="transform translateY(-10%) opacity-0"
           >
             {" "}
-            <Disclosure.Panel className="text-gray-500 py-2">
+            <Disclosure.Panel className="text-gray-500">
               <ul className="flex flex-col gap-2">
                 <Link
                   to="/caja"

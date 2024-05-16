@@ -29,6 +29,7 @@
     "react-icons": "^4.9.0",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.11.2",
+    "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "react-transition-group": "^4.4.5",
     "react-whatsapp": "^0.3.0",
