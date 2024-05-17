@@ -9,20 +9,25 @@ const FileDropZone = ({
   handleDrop,
   handleRemoveFile,
 }) => {
+  const isImage = (file) => {
+    return file.type.startsWith("image/");
+  };
+
+  const isPDF = (file) => {
+    return file.type === "application/pdf";
+  };
+
   return (
     <div className="bg-white border-[2px] border-dashed py-5 px-5 w-full">
       <div className="p-6 bg-white">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            {/* Input oculto para carga de archivos */}
             <input
               type="file"
               id="file-upload"
               className="hidden"
               onChange={handleFileChange}
             />
-
-            {/* Label que actúa como botón, enlazado con el input por el ID */}
             <label
               htmlFor="file-upload"
               className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold cursor-pointer hover:bg-blue-500"
@@ -31,7 +36,6 @@ const FileDropZone = ({
             </label>
           </div>
         </div>
-        {/* Zona para arrastrar y soltar archivos */}
         <div
           className={`border-2 border-dashed border-gray-300 p-6 text-center ${
             dragging ? "bg-gray-100" : ""
@@ -42,35 +46,36 @@ const FileDropZone = ({
         >
           {uploadedFile ? (
             <div className="relative">
-              {/* Muestra el nombre del archivo */}
               <p className="text-gray-600">
                 Archivo cargado: {uploadedFile.name}
               </p>
-              {uploadedFile.type.startsWith("image/") && (
-                <>
-                  {/* Muestra la imagen cargada */}
-                  <img
-                    src={URL.createObjectURL(uploadedFile)}
-                    alt="Vista previa"
-                    className="mt-4 mx-auto rounded w-1/2"
-                  />
-
-                  {/* Botón para eliminar el archivo */}
-                  <button
-                    onClick={handleRemoveFile}
-                    className="absolute top-0 right-0 text-red-500 hover:text-red-700"
-                  >
-                    <IoClose className="w-6 h-6" />
-                  </button>
-                </>
+              {isImage(uploadedFile) && (
+                <img
+                  src={URL.createObjectURL(uploadedFile)}
+                  alt="Vista previa"
+                  className="mt-4 mx-auto rounded w-1/2"
+                />
               )}
+              {isPDF(uploadedFile) && (
+                <iframe
+                  src={URL.createObjectURL(uploadedFile)}
+                  title="Documento PDF"
+                  className="mt-4 mx-auto rounded w-full h-64"
+                ></iframe>
+              )}
+              <button
+                onClick={handleRemoveFile}
+                className="absolute top-0 right-0 text-red-500 hover:text-red-700"
+              >
+                <IoClose className="w-6 h-6" />
+              </button>
             </div>
           ) : (
             <div>
               <div className="text-gray-500 text-sm">
                 Arrastra y suelta o{" "}
                 <span className="text-blue-500 font-semibold cursor-pointer">
-                  carga tu imagen aquí
+                  carga tu imagen o documento aquí
                 </span>
               </div>
               <div className="mt-2 text-sm text-gray-500">

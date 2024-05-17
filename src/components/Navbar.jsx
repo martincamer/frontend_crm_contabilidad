@@ -8,20 +8,20 @@ export function Navbar() {
   return (
     <header
       className={`${
-        isAuthenticated ? "bg-blue-500 shadow-sm" : "bg-white py-3"
+        isAuthenticated ? "bg-blue-500 shadow-sm" : "bg-white py-3 hidden"
       } z-[-100]`}
     >
       <nav className="flex justify-between items-center py-1 px-10">
         <div className="text-xl font-semibold flex gap-8 items-center">
-          <Link to={isAuthenticated ? "/home" : "/"}>
+          {/* <Link to={isAuthenticated ? "/home" : "/"}>
             <p
               className={`${
                 isAuthenticated ? "text-white" : "text-blue-600"
               } z-[-100]`}
             >
-              <span className="text-orange-300 font-bold">Crm</span> Tecnohouse
+              <span className="text-white-300 font-bold">Crm</span> Tecnohouse
             </p>
-          </Link>
+          </Link> */}
           <div>
             <RxHamburgerMenu
               onClick={() => handleToggle()}

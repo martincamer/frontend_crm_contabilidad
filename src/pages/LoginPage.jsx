@@ -28,15 +28,23 @@ export function LoginPage() {
 
   return (
     <div className="h-screen flex gap-12 items-center">
-      <img className="w-1/2 object-cover opacity-[0.8] h-[100%]" src={img} />
-
+      <div className="h-screen w-1/2  shadow-2xl background-image">
+        <div>
+          <h3 className="text-white font-bold text-2xl py-20 px-20">
+            <span className="border-b-4 border-blue-500">CRM CONTABLE </span>
+            <span className="bg-blue-500 pl-1 pr-3 py-1 rounded-r-xl">
+              TECNOHOUSE
+            </span>
+          </h3>
+        </div>
+      </div>
       <Card>
         {loginErrors?.map((error, i) => (
           <Message message={error} key={i} />
         ))}
         <h1 className="text-xl font-semibold text-center mb-5">
           Te damos la bienvenida al{" "}
-          <span className="text-violet-500 font-bold capitalize">
+          <span className="text-blue-600 font-bold capitalize">
             CRM contable
           </span>{" "}
           👋

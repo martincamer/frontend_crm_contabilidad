@@ -1,4 +1,5 @@
-export const TableGastos = () => {
+export const TableGastos = ({ gastos }) => {
+  console.log(gastos);
   return (
     <div>
       <div className="bg-white py-5 px-5 my-5 mx-3 max-w-md">
@@ -17,16 +18,17 @@ export const TableGastos = () => {
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            <tr>
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td>Blue</td>
-              <td>Blue</td>
-              <td>Blue</td>
-            </tr>
+            {gastos?.map((g) => (
+              <tr key={g._id}>
+                <th>1</th>
+                <td>Cy Ganderton</td>
+                <td>Quality Control Specialist</td>
+                <td>Blue</td>
+                <td>Blue</td>
+                <td>Blue</td>
+                <td>Blue</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

@@ -64,7 +64,7 @@ export function ProveedorProvider({ children }) {
       const nuevoProveedor = res.data;
       setProveedores([...proveedores, nuevoProveedor]);
       toast.success("Proveedor creado correctamente");
-      navigate("/proveedores");
+      // navigate("/proveedores");
     } catch (error) {
       console.error("Error al crear proveedor:", error);
       setError("Error al crear proveedor");
@@ -79,7 +79,7 @@ export function ProveedorProvider({ children }) {
       );
       setProveedores(proveedoresActualizados);
       toast.success("Proveedor editado correctamente");
-      navigate("/proveedores");
+      // navigate("/proveedores");
     } catch (error) {
       console.error("Error al editar proveedor:", error);
       setError("Error al editar proveedor");

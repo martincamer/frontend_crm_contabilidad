@@ -7,9 +7,16 @@ import { Search } from "../components/ui/Search";
 import { SearchButton } from "../components/ui/SearchButton";
 import { useSearch } from "../helpers/openSearch";
 import { Skeleton } from "../components/ui/Skeleton";
+import { useGasto } from "../context/GastosContext";
 
 export const Gastos = () => {
   const { click, openSearch } = useSearch();
+
+  const { gastos, getGastos } = useGasto();
+
+  useEffect(() => {
+    getGastos();
+  }, []);
 
   const [loading, setLoading] = useState(true);
 
@@ -59,7 +66,7 @@ export const Gastos = () => {
         <Search placeholder={"Buscar gastó por proveedor o categoria"} />
       )}
 
-      <TableGastos />
+      <TableGastos gastos={gastos} />
     </section>
   );
 };

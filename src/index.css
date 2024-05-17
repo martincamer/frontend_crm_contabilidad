@@ -100,3 +100,11 @@ body {
   transform: translateY(-10%);
   transition: all 300ms;
 }
+
+.background-image {
+  background: linear-gradient(to bottom, #3b82f6, rgba(0, 0, 0, 0)),
+    url("https://app.getbillage.com/saas/img/icons/backgrounds/pc_billage.jpg");
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
