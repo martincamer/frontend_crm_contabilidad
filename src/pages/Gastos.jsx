@@ -3,15 +3,11 @@ import { Link } from "react-router-dom";
 import { Navegacion } from "../components/ui/Navegacion";
 import { NavegacionLink } from "../components/ui/NavegacionLink";
 import { TableGastos } from "../components/gastos/TableGastos";
-import { Search } from "../components/ui/Search";
-import { SearchButton } from "../components/ui/SearchButton";
 import { useSearch } from "../helpers/openSearch";
 import { Skeleton } from "../components/ui/Skeleton";
 import { useGasto } from "../context/GastosContext";
 
 export const Gastos = () => {
-  const { click, openSearch } = useSearch();
-
   const { gastos, getGastos } = useGasto();
 
   useEffect(() => {
@@ -50,21 +46,22 @@ export const Gastos = () => {
             to={"/crear-gasto"}
             className="bg-orange-500 text-white font-semibold text-sm rounded-full py-1.5 px-5 hover:shadow hover:bg-blue-500 transition-all"
           >
-            Crear nuevo gastó
+            Crear nuevo gasto
           </Link>
           <Link
             to={"/crear-gasto"}
             className="bg-orange-500 text-white font-semibold text-sm rounded-full py-1.5 px-5 hover:shadow transition-all hover:bg-blue-500"
           >
-            Crear categorias gastós
+            Crear categorias
+          </Link>
+          <Link
+            to={"/crear-gasto"}
+            className="bg-orange-500 text-white font-semibold text-sm rounded-full py-1.5 px-5 hover:shadow transition-all hover:bg-blue-500"
+          >
+            Crear proveedor/empresa
           </Link>
         </div>
       </Navegacion>
-
-      <SearchButton open={() => openSearch()} />
-      {click && (
-        <Search placeholder={"Buscar gastó por proveedor o categoria"} />
-      )}
 
       <TableGastos gastos={gastos} />
     </section>

@@ -17,6 +17,8 @@ import Select from "react-select";
 import { IoClose } from "react-icons/io5";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { useGasto } from "../context/GastosContext";
+import useLoading from "../helpers/useLoading";
+import { Skeleton } from "../components/ui/Skeleton";
 
 dayjs.extend(utc);
 
@@ -196,6 +198,13 @@ export function PageCrearGasto() {
 
     return total + precioFinal;
   }, 0);
+
+  //skeleton
+  const loading = useLoading(3000); // 3000ms = 3 seconds
+
+  if (loading) {
+    return <Skeleton />;
+  }
 
   return (
     <section>
