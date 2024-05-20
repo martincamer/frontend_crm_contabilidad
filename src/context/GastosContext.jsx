@@ -5,6 +5,7 @@ import {
   createGastoRequest,
   deleteGastoRequest,
   updateGastoRequest,
+  updateGastoEstadoRequest,
 } from "../api/gasto"; // Asegúrate de importar las funciones API correctas
 import { useNavigate } from "react-router-dom";
 import { showSuccessToast } from "../helpers/toast";
@@ -87,6 +88,21 @@ export function GastoProvider({ children }) {
     }
   };
 
+  const updateGastoEstado = async (id, gasto) => {
+    try {
+      const res = await updateGastoEstadoRequest(id, gasto);
+      const gastosActualizados = gastos.map((g) =>
+        g._id === id ? res.data : g
+      );
+      setGastos(gastosActualizados);
+      showSuccessToast("Gasto editado correctamente");
+      // navigate('/gastos');
+    } catch (error) {
+      console.error("Error al editar gasto:", error);
+      setError("Error al editar gasto");
+    }
+  };
+
   return (
     <GastoContext.Provider
       value={{
@@ -97,6 +113,7 @@ export function GastoProvider({ children }) {
         deleteGasto,
         createGasto,
         updateGasto,
+        updateGastoEstado,
       }}
     >
       {children}

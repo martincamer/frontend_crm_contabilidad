@@ -3,6 +3,7 @@ import { useCaja } from "../context/CajasContext";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
+import { ModalCrearCaja } from "../components/caja/ModalCrearCaja";
 
 export const PageCaja = () => {
   const { getCajas, cajas } = useCaja();
@@ -24,7 +25,7 @@ export const PageCaja = () => {
 
       <div
         className="
-      bg-white py-5 px-5 flex gap-2"
+      bg-white py-5 px-5 flex gap-2 items-center"
       >
         <div>
           <Link className="flex gap-3 text-sm font-bold bg-blue-500 text-white rounded-full py-2 px-5 hover:bg-orange-500 transition-all items-center">
@@ -46,9 +47,23 @@ export const PageCaja = () => {
             <FaArrowRight />
           </Link>
         </div>
+
+        <div>
+          <button
+            type="button"
+            className="text-sm font-bold bg-blue-500 text-white rounded-full py-2 px-5 hover:bg-orange-500 transition-all"
+            onClick={() =>
+              document.getElementById("my_modal_crear_caja").showModal()
+            }
+          >
+            Crear nueva caja
+          </button>
+        </div>
       </div>
 
       <div className="bg-white py-10 px-10 grid grid-cols-2 gap-5"></div>
+
+      {/* <ModalCrearCaja /> */}
     </section>
   );
 };

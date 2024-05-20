@@ -27,11 +27,7 @@ export function PageCrearGasto() {
   const { categorias, getCategorias } = useCategoria();
   const { createGasto } = useGasto();
 
-  const { register, handleSubmit, control, watch } = useForm();
-
-  const categoria = watch("categoria");
-
-  console.log(categoria);
+  const { register, handleSubmit, control } = useForm();
 
   //obtener datos
   useEffect(() => {
@@ -210,14 +206,22 @@ export function PageCrearGasto() {
     <section>
       <div>
         <Navegacion>
-          <div>
+          <div className="flex">
             <NavegacionLink
               link={"/gastos"}
               estilos={
-                "bg-orange-400 text-white text-white font-semibold h-10 flex items-center px-5 z-[100]"
+                "bg-orange-50 text-orange-400 text-white text-white font-semibold h-10 flex items-center px-5 z-[100]"
               }
             >
               Gastos
+            </NavegacionLink>
+            <NavegacionLink
+              link={"/crear-gasto"}
+              estilos={
+                "bg-orange-500 text-white text-white text-white font-semibold h-10 flex items-center px-5 z-[100]"
+              }
+            >
+              Crear nuevo gasto
             </NavegacionLink>
           </div>
           <div className="px-5 flex gap-2">
@@ -225,13 +229,13 @@ export function PageCrearGasto() {
               to={"/crear-gasto"}
               className="bg-orange-500 text-white font-semibold text-sm rounded-full py-1.5 px-5 hover:shadow hover:bg-blue-500 transition-all"
             >
-              Crear nuevo gastó
+              Crear nuevo gasto
             </Link>
             <Link
               to={"/crear-gasto"}
               className="bg-orange-500 text-white font-semibold text-sm rounded-full py-1.5 px-5 hover:shadow transition-all hover:bg-blue-500"
             >
-              Crear categorias gastós
+              Crear categorias gastos
             </Link>
           </div>
         </Navegacion>
@@ -598,11 +602,42 @@ export function PageCrearGasto() {
                                     e.target.value
                                   )
                                 }
-                                className="border border-gray-300 px-2 py-2 focus:border-blue-500 outline-none w-full text-xs font-semibold text-gray-700"
-                                placeholder="Unidad"
+                                className="border border-gray-300 px-2 py-2 focus:border-blue-500 outline-none w-full text-xs font-semibold text-gray-700 scroll-bar"
                               >
-                                <option value="unidad">Unidad</option>
-                                <option value="km">Km</option>
+                                <option className="font-bold text-blue-500">
+                                  Tipo Und
+                                </option>
+                                <option value="unidad">Unidades</option>
+                                <option value="kilometros">Kilometros</option>
+                                <option value="kilogramos">Kilogramos</option>
+                                <option value="metros">Metros</option>
+                                <option value="litros">Litros</option>
+                                <option value="centimetros">Centímetros</option>
+                                <option value="millas">Millas</option>
+                                <option value="pulgadas">Pulgadas</option>
+                                <option value="libras">Libras</option>
+                                <option value="toneladas">Toneladas</option>
+                                <option value="galones">Galones</option>
+                                <option value="metros_cuadrados">
+                                  Metros cuadrados
+                                </option>
+                                <option value="metros_cubicos">
+                                  Metros cúbicos
+                                </option>
+                                <option value="litros_por_minuto">
+                                  Litros por minuto
+                                </option>
+                                <option value="kilowatts">Kilowatts</option>
+                                <option value="gramos">Gramos</option>
+                                <option value="mililitros">Mililitros</option>
+                                <option value="hectáreas">Hectáreas</option>
+                                <option value="pie_cúbico">Pies cúbicos</option>
+                                <option value="toneladas_cortas">
+                                  Toneladas cortas
+                                </option>
+                                <option value="toneladas_largas">
+                                  Toneladas largas
+                                </option>
                               </select>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">

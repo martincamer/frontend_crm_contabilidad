@@ -17,7 +17,7 @@ export const SideBar = () => {
   return (
     <div
       className={`${
-        isOpen ? "w-64 opacity-1 border-r border-gray-300" : "w-0 opacity-0"
+        isOpen ? "w-64 opacity-1 shadow-lg" : "w-0 opacity-0"
       } transition-all ease-linear flex flex-col bg-white min-h-screen max-h-full h-full `}
     >
       <div className="flex flex-col gap-5 py-5 px-6">
@@ -54,27 +54,6 @@ export const SideBar = () => {
             <Disclosure.Panel className="text-gray-500">
               <ul className="flex flex-col gap-2">
                 <Link
-                  to="/crear-factura"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Crear nueva factura
-                </Link>
-
-                <Link
-                  to="/crear-gasto"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Crear nuevo gasto
-                </Link>
-
-                <Link
-                  to="/crear-ingreso"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Crear nuevo ingreso/cuota/etc.
-                </Link>
-
-                <Link
                   to="/gastos"
                   className="text-sm font-bold hover:text-blue-600"
                 >
@@ -107,6 +86,34 @@ export const SideBar = () => {
                   className="text-sm font-bold hover:text-blue-600"
                 >
                   Pedidos de compra
+                </Link>
+
+                <Link
+                  to="/crear-gasto"
+                  className="text-sm font-bold hover:text-blue-600"
+                >
+                  Crear nuevo gasto
+                </Link>
+
+                <Link
+                  to="/crear-factura"
+                  className="text-sm font-bold hover:text-blue-600"
+                >
+                  Crear nueva orden de compra
+                </Link>
+
+                <Link
+                  to="/crear-factura"
+                  className="text-sm font-bold hover:text-blue-600"
+                >
+                  Crear una nota de credito
+                </Link>
+
+                <Link
+                  to="/crear-ingreso"
+                  className="text-sm font-bold hover:text-blue-600"
+                >
+                  Crear nuevo ingreso/cuota/etc.
                 </Link>
               </ul>
             </Disclosure.Panel>
@@ -222,16 +229,10 @@ export const SideBar = () => {
             <Disclosure.Panel className="text-gray-500">
               <ul className="flex flex-col gap-2">
                 <Link
-                  to="/cliente"
-                  className="text-sm font-bold hover:text-blue-600 capitalize"
-                >
-                  Crear nuevo cliente
-                </Link>
-                <Link
                   to="/clientes"
                   className="text-sm font-bold hover:text-blue-600 capitalize"
                 >
-                  Clientes
+                  Clientes/contratos
                 </Link>
               </ul>
             </Disclosure.Panel>

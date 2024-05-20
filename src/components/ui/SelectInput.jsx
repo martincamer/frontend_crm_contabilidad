@@ -1,0 +1,14 @@
+export const SelectInput = ({ labelText, props, type, children }) => {
+  return (
+    <div className="flex flex-col gap-1 w-full">
+      <label className="font-semibold text-xs text-gray-700">{labelText}</label>
+      <select
+        {...props}
+        type={type}
+        className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-bold"
+      >
+        {children}
+      </select>
+    </div>
+  );
+};

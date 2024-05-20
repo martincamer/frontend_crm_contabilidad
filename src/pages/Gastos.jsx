@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Navegacion } from "../components/ui/Navegacion";
 import { NavegacionLink } from "../components/ui/NavegacionLink";
 import { TableGastos } from "../components/gastos/TableGastos";
-import { useSearch } from "../helpers/openSearch";
 import { Skeleton } from "../components/ui/Skeleton";
 import { useGasto } from "../context/GastosContext";
 
@@ -35,7 +34,7 @@ export const Gastos = () => {
           <NavegacionLink
             link={"/gastos"}
             estilos={
-              "bg-orange-400 text-white text-white font-semibold h-10 flex items-center px-5 z-[100]"
+              "bg-orange-500 text-white text-white font-semibold h-10 flex items-center px-5"
             }
           >
             Gastos

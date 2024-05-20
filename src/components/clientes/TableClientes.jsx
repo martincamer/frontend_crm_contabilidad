@@ -8,21 +8,19 @@ import {
   FaSignal,
 } from "react-icons/fa";
 import { updateFecha } from "../../helpers/FechaUpdate";
-import { formatearDinero } from "../../helpers/FormatearDinero";
 import { Dropdown } from "../ui/Dropdown";
 import { SearchButton } from "../ui/SearchButton";
 import { Search } from "../ui/Search";
 import { useSearch } from "../../helpers/openSearch";
-import Calendar from "../ui/Calendary";
-import { ModalEstado } from "./ModalEstado";
 import { useObtenerId } from "../../helpers/obtenerId";
-import ModalEliminar from "../ui/ModalEliminar";
 import { useModal } from "../../helpers/modal";
-import { useGasto } from "../../context/GastosContext";
+import { useCliente } from "../../context/ClientesContext";
+import Calendar from "../ui/Calendary";
+import ModalEliminar from "../ui/ModalEliminar";
 
-export const TableGastos = ({ gastos }) => {
+export const TableClientes = ({ Clientes }) => {
   const { click, openSearch } = useSearch();
-  const { deleteGasto } = useGasto();
+  const { deleteCliente } = useCliente();
 
   //Search
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,10 +30,10 @@ export const TableGastos = ({ gastos }) => {
   // Índices para la paginación
   const indexOfLastVenta = currentPage * ventasPerPage;
   const indexOfFirstVenta = indexOfLastVenta - ventasPerPage;
-  // Ordenar gastos por fecha de creación
-  const sortedVentas = gastos
-    .slice()
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  // Ordenar Clientes por fecha de creación
+  const sortedVentas = Clientes?.slice().sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
   const currentVentas = sortedVentas.slice(indexOfFirstVenta, indexOfLastVenta); // Elementos a mostrar
 
   // Cambiar la página
@@ -47,11 +45,12 @@ export const TableGastos = ({ gastos }) => {
     setSearchTerm(event.target.value); // Actualizar el término de búsqueda
   };
 
-  // Filtrar gastos por el término de búsqueda
-  const filteredGastos = currentVentas.filter((venta) =>
-    venta.empresa_proveedor.value
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+  // Filtrar Clientes por el término de búsqueda
+  const filteredClientes = currentVentas.filter(
+    (venta) =>
+      venta.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      venta.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      venta.numero_contrato.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalPages = Math.ceil(sortedVentas.length / ventasPerPage); // Calcular el total de páginas
@@ -67,14 +66,13 @@ export const TableGastos = ({ gastos }) => {
     return pageNumbers;
   };
 
-  //truncate ID
-  const truncateText = (text, maxLength) => {
-    if (text.length <= maxLength) {
-      return text;
-    }
-    return text.substring(0, maxLength);
-  };
+  //obtener el id
+  const { handleObtenerId, idObtenida } = useObtenerId();
 
+  //modal eliminar
+  const { closeModal, isOpen, openModal } = useModal();
+
+  //estado
   //estado gastado
   const getEstadoClassNames = (estado) => {
     switch (estado) {
@@ -89,24 +87,10 @@ export const TableGastos = ({ gastos }) => {
     }
   };
 
-  const totalFinal = gastos.reduce((total, detalle) => {
-    return total + parseFloat(detalle.total_final);
-  }, 0);
-
-  const totalImpuestos = gastos.reduce((total, detalle) => {
-    return total + parseFloat(detalle.impuestos_total);
-  }, 0);
-
-  //obtener el id
-  const { handleObtenerId, idObtenida } = useObtenerId();
-
-  //modal eliminar
-  const { closeModal, isOpen, openModal } = useModal();
-
   return (
     <div>
       <div className="bg-white py-2 px-5 my-5 mx-3 max-w-lg justify-between flex items-center">
-        <p className="text-xs font-bold text-blue-500">Mas opciones gastos</p>
+        <p className="text-xs font-bold text-blue-500">Mas opciones Clientes</p>
         <div className="flex gap-2">
           <div className="dropdown">
             <div
@@ -153,21 +137,21 @@ export const TableGastos = ({ gastos }) => {
                   Importes cargados
                 </p>
                 <p className="text-blue-500 text-lg font-bold">
-                  {formatearDinero(totalFinal)}
+                  {/* {formatearDinero(totalFinal)} */}
                 </p>
               </div>
               <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                 <p className="text-sm font-semibold text-gray-700">Impuestos</p>
                 <p className="text-blue-500 text-lg font-bold">
-                  {formatearDinero(totalImpuestos)}
+                  {/* {formatearDinero(totalImpuestos)} */}
                 </p>
               </div>
               <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                 <p className="text-sm font-semibold text-gray-700">
-                  Gastos generados
+                  Clientes generados
                 </p>
                 <p className="text-blue-500 text-lg font-bold">
-                  {gastos.length}
+                  {Clientes.length}
                 </p>
               </div>
             </ul>
@@ -178,25 +162,20 @@ export const TableGastos = ({ gastos }) => {
         <table className="table">
           <thead>
             <tr className="text-gray-800">
-              <th>Referencia</th>
-              <th>Fecha</th>
-              <th>Proveedor/empresa</th>
-              <th>Categoria</th>
+              <th>Numero contrato</th>
+              <th>Fecha de alta</th>
+              <th>Cliente</th>
               <th>Estado</th>
-              <th>Total</th>
             </tr>
           </thead>
           <tbody className="text-xs capitalize">
-            {filteredGastos?.map((g) => (
+            {filteredClientes?.map((g) => (
               <tr key={g._id}>
-                <th className="text-">{truncateText(g._id, 6)}</th>
+                <th>n° {g?.numero_contrato}</th>
                 <td>{updateFecha(g?.date)}</td>
-                <th className="text-blue-500">{g?.empresa_proveedor?.value}</th>
-                <td>
-                  <span className="bg-blue-500 py-1 px-2 rounded text-white font-bold">
-                    {g?.categoria?.value}
-                  </span>
-                </td>
+                <th>
+                  {g?.nombre} {g?.apellido}
+                </th>
                 <td>
                   <span
                     className={`${getEstadoClassNames(
@@ -205,9 +184,6 @@ export const TableGastos = ({ gastos }) => {
                   >
                     {g?.estado}
                   </span>
-                </td>
-                <td className="font-bold text-blue-500">
-                  {formatearDinero(g.total)}
                 </td>
                 <td>
                   <Dropdown>
@@ -230,15 +206,15 @@ export const TableGastos = ({ gastos }) => {
                         className="hover:text-blue-500 font-bold"
                         type="button"
                       >
-                        Editar el gasto
+                        Editar el cliente
                       </button>
                     </li>
                     <li>
                       <Link
                         className="hover:text-blue-500 font-bold"
-                        to={`/gasto/${g._id}`}
+                        to={`/cliente/${g._id}`}
                       >
-                        Ver detalles del gasto
+                        Cargar cuotas/entregas
                       </Link>
                     </li>
                     <li>
@@ -249,7 +225,7 @@ export const TableGastos = ({ gastos }) => {
                         className="hover:text-blue-500 font-bold"
                         type="button"
                       >
-                        Eliminar el gasto
+                        Eliminar el cliente
                       </button>
                     </li>{" "}
                   </Dropdown>
@@ -303,14 +279,13 @@ export const TableGastos = ({ gastos }) => {
         </div>
       )}
 
-      {/* Modal editar estado */}
-      <ModalEstado idObtenida={idObtenida} />
       <ModalEliminar
         isOpen={isOpen}
         closeModal={closeModal}
-        deleteTodo={deleteGasto}
+        s
+        deleteTodo={deleteCliente}
         idObtenida={idObtenida}
-        message={"¿Deseas eliminar el gasto?"}
+        message={"¿Deseas eliminar el cliente, estas seguro?"}
       />
     </div>
   );

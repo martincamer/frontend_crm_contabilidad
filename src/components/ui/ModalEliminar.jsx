@@ -28,7 +28,7 @@ export default function ModalEliminar({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/10" />
+          <div className="fixed inset-0 bg-black/30" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -42,11 +42,11 @@ export default function ModalEliminar({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-sm transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-sm transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all rounded-none">
                 <div className="flex justify-end py-2">
                   <IoMdClose
                     onClick={() => closeModal()}
-                    className="hover:text-sky-500 hover:bg-gray-100 transition-all cursor-pointer text-4xl text-slate-800 bg-gray-200 py-2 px-2 rounded-full"
+                    className="hover:text-gray-700 hover:bg-gray-200 transition-all cursor-pointer text-4xl text-slate-800 py-2 px-2 rounded-full"
                   />
                 </div>
 

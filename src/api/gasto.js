@@ -10,3 +10,6 @@ export const updateGastoRequest = async (id, gasto) =>
   axios.put(`/gastos/${id}`, gasto);
 
 export const deleteGastoRequest = async (id) => axios.delete(`/gastos/${id}`);
+
+export const updateGastoEstadoRequest = async (id, gasto) =>
+  axios.put(`/gastos/${id}/estado`, gasto);
