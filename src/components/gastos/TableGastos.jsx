@@ -20,7 +20,7 @@ export const TableGastos = ({ gastos }) => {
 
   //Search
   const [currentPage, setCurrentPage] = useState(1);
-  const [ventasPerPage] = useState(15); // Número de elementos por página
+  const [ventasPerPage] = useState(10); // Número de elementos por página
   const [searchTerm, setSearchTerm] = useState(""); // Para la búsqueda
 
   // Índices para la paginación
@@ -182,7 +182,7 @@ export const TableGastos = ({ gastos }) => {
                 <th className="text-blue-500">{g?.empresa_proveedor?.value}</th>
                 <td>
                   <span className="bg-blue-500 py-1 px-2 rounded text-white font-bold">
-                    {g.categoria.value}
+                    {g?.categoria?.value}
                   </span>
                 </td>
                 <td>

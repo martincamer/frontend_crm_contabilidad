@@ -39,7 +39,7 @@ export const SideBar = () => {
               } font-bold items-center text-base hover:text-blue-600`}
               // to={"/home"}
             >
-              <FaFileAlt /> Facturación
+              <FaFileAlt /> Acciones
             </button>
           </Disclosure.Button>
           <Transition
@@ -64,7 +64,7 @@ export const SideBar = () => {
                   to="/crear-gasto"
                   className="text-sm font-bold hover:text-blue-600"
                 >
-                  Crear nuevo gastó
+                  Crear nuevo gasto
                 </Link>
 
                 <Link
@@ -78,7 +78,7 @@ export const SideBar = () => {
                   to="/gastos"
                   className="text-sm font-bold hover:text-blue-600"
                 >
-                  Gastós
+                  Gastos
                 </Link>
 
                 <Link

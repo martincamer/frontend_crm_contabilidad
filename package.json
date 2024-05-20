@@ -14,7 +14,7 @@
     "@hookform/resolvers": "^3.1.0",
     "@onedoc/react-print": "^0.1.131",
     "@react-pdf/renderer": "^3.4.4",
-    "apexcharts": "^3.49.0",
+    "apexcharts": "^3.49.1",
     "axios": "^1.4.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.7",
