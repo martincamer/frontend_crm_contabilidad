@@ -5,6 +5,7 @@ import {
   createClienteRequest,
   deleteClienteRequest,
   updateClienteRequest,
+  createEntregaRequest,
 } from "../api/cliente"; // Asegúrate de importar las funciones API correctas
 import { useNavigate } from "react-router-dom";
 import { showSuccessToast } from "../helpers/toast";
@@ -83,10 +84,31 @@ export function ClienteProvider({ children }) {
       setClientes(clientesActualizados);
 
       setCliente(res.data);
-      showSuccessToast("Cliente editado correctamente");
+      showSuccessToast("Cuota cargada correctamente");
     } catch (error) {
       console.error("Error al editar cliente:", error);
       setError("Error al editar cliente");
+    }
+  };
+
+  const createEntrega = async (clienteId, entregaData) => {
+    try {
+      // Llamar a la función API para crear la entrega
+      const res = await createEntregaRequest(clienteId, entregaData);
+
+      console.log(res);
+
+      const clientesActualizados = clientes.map((c) =>
+        c._id === clienteId ? res.data : c
+      );
+      setClientes(clientesActualizados);
+
+      setCliente(res.data);
+
+      // Mostrar mensaje de éxito
+      showSuccessToast("Entrega creada correctamente");
+    } catch (error) {
+      console.error("Error al crear entrega:", error);
     }
   };
 
@@ -120,6 +142,7 @@ export function ClienteProvider({ children }) {
         updateCliente,
         setCliente,
         cliente,
+        createEntrega,
       }}
     >
       {children}

@@ -8,6 +8,7 @@ import { BreadCrumbs } from "../components/ui/BreadCrumbs";
 import { updateFecha } from "../helpers/FechaUpdate";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { ModalCuotas } from "../components/clientes/ModalCuotas";
+import { ModalEntrega } from "../components/clientes/ModalEntrega";
 
 export const ClientePage = () => {
   const params = useParams();
@@ -30,7 +31,7 @@ export const ClientePage = () => {
           <NavegacionLink
             link={"/clientes"}
             estilos={
-              "text-orange-400 bg-orange-50 text-white font-semibold h-10 flex items-center px-5"
+              "bg-orange-50 text-orange-500 font-semibold h-10 flex items-center px-5"
             }
           >
             Clientes
@@ -38,7 +39,7 @@ export const ClientePage = () => {
           <NavegacionLink
             link={`/cliente/${params.id}`}
             estilos={
-              "bg-orange-500 text-white text-white font-semibold h-10 flex items-center px-5 z-[100] capitalize"
+              "bg-orange-500 text-white font-semibold h-10 flex items-center px-5 z-[100] capitalize"
             }
           >
             Cliente {cliente.nombre} {cliente.apellido} /{" "}
@@ -50,6 +51,7 @@ export const ClientePage = () => {
           <LinkBreadCrumbs link={"clientes"}>Clientes</LinkBreadCrumbs>
         </BreadCrumbs>
       </Navegacion>
+
       <div className="flex my-10 mx-10">
         <div className="bg-white py-5 px-5">
           <p className="font-bold text-blue-500">
@@ -187,6 +189,9 @@ export const ClientePage = () => {
           Cargar nueva cuota
         </button>
         <button
+          onClick={() =>
+            document.getElementById("my_modal_nueva_entrega").showModal()
+          }
           type="button"
           className="bg-blue-500 py-2 px-8 rounded-full font-semibold text-white text-sm"
         >
@@ -200,70 +205,84 @@ export const ClientePage = () => {
             <p>Entregas cargadas</p>
           </div>
         </div>
-
-        <table className="table">
-          <thead>
-            <tr className="text-gray-800">
-              <th>Numero entregas</th>
-              <th>Total del comprobante</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="text-xs capitalize">
-            {cliente?.entregas
-              ?.filter((g) => g.total > 0) // Filtrar las cuotas con un total mayor que cero
-              .map((g, index) => (
-                <tr key={index}>
-                  <th>{index + 1}</th>
-                  <th>{formatearDinero(g.total)}</th>
-                  <th>
-                    <button
-                      type="button"
-                      className="bg-green-100 text-green-700 py-1 px-6 rounded"
-                    >
-                      Descargar comprobante
-                    </button>
-                  </th>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="scroll-bar h-[50vh] overflow-y-scroll px-4">
+          <table className="table">
+            <thead>
+              <tr className="text-gray-800">
+                <th>Numero entregas</th>
+                <th>Tipo de pago</th>
+                <th>Fecha de carga</th>
+                <th>Total del comprobante</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="text-xs capitalize">
+              {cliente?.entregas
+                ?.filter((g) => g.total > 0) // Filtrar las cuotas con un total mayor que cero
+                .map((g, index) => (
+                  <tr key={index}>
+                    <th>{index + 1}</th>
+                    <th>{g.tipo_pago}</th>
+                    <th>{updateFecha(g.created_at)}</th>
+                    <th>{formatearDinero(g.total)}</th>
+                    <th>
+                      <button
+                        type="button"
+                        className="bg-green-100 text-green-700 py-1 px-6 rounded"
+                      >
+                        Descargar comprobante
+                      </button>
+                    </th>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="bg-white py-5 px-5 mx-10 my-10">
+      <div className="bg-white py-5 px-5 mx-10 my-10 h-full">
         <div className="flex">
           <div className="bg-blue-100/50 py-2.5 px-6 font-semibold text-blue-500">
             <p>Cuotas cargadas</p>
           </div>
         </div>
-        <table className="table">
-          <thead>
-            <tr className="text-gray-800">
-              <th>Cuota numero</th>
-              <th>Total del comprobante</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="text-xs capitalize">
-            {cliente?.cuotas_plan
-              ?.filter((g) => g.total > 0) // Filtrar las cuotas con un total mayor que cero
-              .map((g, index) => (
-                <tr key={index}>
-                  <th>{index + 1}</th>
-                  <th>{formatearDinero(g.total)}</th>
-                  <th>
-                    <button
-                      type="button"
-                      className="bg-green-100 text-green-700 py-1 px-6 rounded"
-                    >
-                      Descargar comprobante
-                    </button>
-                  </th>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="scroll-bar h-[50vh] overflow-y-scroll px-4">
+          <table className="table">
+            <thead>
+              <tr className="text-gray-800">
+                <th>Cuota numero</th>
+                <th>Total del comprobante</th>
+                <th>Tipo de pago</th>
+                <th>Fecha de carga</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="text-xs capitalize">
+              {cliente?.cuotas_plan
+                ?.filter((g) => g.total > 0) // Filtrar las cuotas con un total mayor que cero
+                .map((g, index) => (
+                  <tr key={index}>
+                    <th>{index + 1}</th>
+                    <th>{g.tipo_pago}</th>
+                    <th>{updateFecha(g.created_at)}</th>
+                    <th>{formatearDinero(g.total)}</th>
+                    <th>
+                      <a
+                        href={g?.comprobante}
+                        target="_blank"
+                        download
+                        className="bg-green-100 text-green-700 py-1 px-6 rounded"
+                      >
+                        Descargar comprobante
+                      </a>
+                    </th>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+      <ModalEntrega cliente={cliente} id={params.id} setCliente={setCliente} />
       <ModalCuotas cliente={cliente} id={params.id} setCliente={setCliente} />
     </section>
   );

@@ -12,3 +12,7 @@ export const updateClienteRequest = async (id, cliente) =>
 
 export const deleteClienteRequest = async (id) =>
   axios.delete(`/clientes/${id}`);
+
+// Crear una nueva entrega para un cliente
+export const createEntregaRequest = async (clienteId, entrega) =>
+  axios.post(`/clientes/${clienteId}/entregas`, entrega);

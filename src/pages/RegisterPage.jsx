@@ -73,7 +73,7 @@ function Register() {
             <div>
               <Label htmlFor="apellido">Fecha nacimiento</Label>
               <input
-                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 rounded-xl focus:outline-violet-500 transition-all"
+                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 rounded-xl focus:outline-violet-500 transition-all capitalize"
                 type="date"
                 name="fecha_nacimiento"
                 {...register("fecha_nacimiento")}
@@ -84,7 +84,7 @@ function Register() {
             <div>
               <Label htmlFor="puesto_sector">Puesto sector</Label>
               <select
-                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 rounded-xl focus:outline-violet-500 transition-all"
+                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 rounded-xl focus:outline-violet-500 transition-all capitalize"
                 type="date"
                 name="puesto_sector"
                 {...register("puesto_sector")}
@@ -94,11 +94,12 @@ function Register() {
                 <option value={"administración"}>Administración</option>
                 <option value={"contabilidad"}>Contabilidad</option>
                 <option value={"gerencia"}>Gerencia</option>
+                <option value={"ventas"}>Ventas</option>{" "}
               </select>
             </div>
 
             <div>
-              <Label htmlFor="fabrica">Fabrica</Label>
+              <Label htmlFor="fabrica">Fabrica/Sucursal</Label>
               <Input
                 type="text"
                 name="fabrica"

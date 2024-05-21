@@ -17,34 +17,49 @@ import { ClientesPage } from "./pages/ClientesPage";
 import { ClienteProvider } from "./context/ClientesContext";
 import { PageCrearCliente } from "./pages/PageCrearCliente";
 import { ClientePage } from "./pages/ClientePage";
+import { BancoProvider } from "./context/BancoContext";
+import { PageBanco } from "./pages/PageBanco";
+import { Ingresos } from "./pages/Ingresos";
+import { IngresoProvider } from "./context/IngresosContext";
+import { IngresoPage } from "./pages/IngresoPage";
 
 function App() {
   return (
     <CajaProvider>
-      <ClienteProvider>
-        <GastoProvider>
-          <ProveedorProvider>
-            <CategoriaProvider>
-              <Navbar />
-              <Routes>
-                <Route index path="/" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route element={<ProtectedRoute />}>
-                  <Route index path="/home" element={<HomeApp />} />
-                  <Route index path="/caja" element={<PageCaja />} />
-                  <Route path="/gastos" element={<Gastos />} />
-                  <Route path="/crear-gasto" element={<PageCrearGasto />} />
-                  <Route path="/perfil" element={<Perfil />} />
-                  <Route path="/gasto/:id" element={<GastoPage />} />
-                  <Route path="/clientes" element={<ClientesPage />} />
-                  <Route path="/crear-cliente" element={<PageCrearCliente />} />
-                  <Route path="/cliente/:id" element={<ClientePage />} />
-                </Route>
-              </Routes>
-            </CategoriaProvider>
-          </ProveedorProvider>
-        </GastoProvider>
-      </ClienteProvider>
+      <BancoProvider>
+        <ClienteProvider>
+          <GastoProvider>
+            <IngresoProvider>
+              <ProveedorProvider>
+                <CategoriaProvider>
+                  <Navbar />
+                  <Routes>
+                    <Route index path="/" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route element={<ProtectedRoute />}>
+                      <Route index path="/home" element={<HomeApp />} />
+                      <Route index path="/caja" element={<PageCaja />} />
+                      <Route index path="/banco" element={<PageBanco />} />
+                      <Route path="/gastos" element={<Gastos />} />
+                      <Route path="/ingresos" element={<Ingresos />} />
+                      <Route path="/crear-gasto" element={<PageCrearGasto />} />
+                      <Route path="/perfil" element={<Perfil />} />
+                      <Route path="/gasto/:id" element={<GastoPage />} />
+                      <Route path="/ingreso/:id" element={<IngresoPage />} />
+                      <Route path="/clientes" element={<ClientesPage />} />
+                      <Route
+                        path="/crear-cliente"
+                        element={<PageCrearCliente />}
+                      />
+                      <Route path="/cliente/:id" element={<ClientePage />} />
+                    </Route>
+                  </Routes>
+                </CategoriaProvider>
+              </ProveedorProvider>
+            </IngresoProvider>
+          </GastoProvider>
+        </ClienteProvider>
+      </BancoProvider>
     </CajaProvider>
   );
 }

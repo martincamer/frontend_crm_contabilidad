@@ -10,12 +10,12 @@ import { formatearDinero } from "../../helpers/FormatearDinero";
 import axios from "axios";
 import { tiposDePagos } from "../../../../backend/src/data/TiposDePagos";
 
-export const ModalCuotas = ({ id, cliente }) => {
+export const ModalEntrega = ({ id }) => {
   const { register, handleSubmit, reset, watch } = useForm();
 
   const totalFinal = watch("total");
 
-  const { updateCliente } = useCliente();
+  const { createEntrega } = useCliente();
 
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -58,9 +58,9 @@ export const ModalCuotas = ({ id, cliente }) => {
         date: dayjs.utc(formData.date).format(),
       };
 
-      await updateCliente(id, cajaData);
+      await createEntrega(id, cajaData);
 
-      document.getElementById("my_modal_nueva_cuota").close();
+      document.getElementById("my_modal_nueva_entrega").close();
 
       reset();
     } catch (error) {
@@ -99,7 +99,7 @@ export const ModalCuotas = ({ id, cliente }) => {
   };
 
   return (
-    <dialog id="my_modal_nueva_cuota" className="modal">
+    <dialog id="my_modal_nueva_entrega" className="modal">
       <div className="modal-box rounded-none">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
@@ -109,26 +109,12 @@ export const ModalCuotas = ({ id, cliente }) => {
         </form>
         <div>
           <h3 className="font-semibold text-sm border-b pb-2 text-left">
-            Cargar nueva cuota
+            Cargar nueva entrega
           </h3>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-3 text-left">
           <div className="flex flex-col gap-3">
-            <SelectInput
-              labelText={"Seleccionar cuota"}
-              props={{ ...register("cuotaId", { required: true }) }}
-            >
-              <option>Seleccionar cuotas existentes</option>
-              {cliente?.cuotas_plan?.map(
-                (c, index) =>
-                  c.total <= 0 && (
-                    <option className="font-bold" key={index} value={c._id}>
-                      {c.numero}
-                    </option>
-                  )
-              )}
-            </SelectInput>
             <SelectInput
               labelText={"Seleccionar el tipo de pago"}
               props={{ ...register("tipo_pago", { required: true }) }}
@@ -141,8 +127,8 @@ export const ModalCuotas = ({ id, cliente }) => {
               ))}
             </SelectInput>
             <FormInput
-              labelText={"Total de la cuota"}
-              placeholder={"Total de la cuota"}
+              labelText={"Total de la entrega"}
+              placeholder={"Total de la entrega"}
               props={{ ...register("total", { required: true }) }}
               type={"text"}
             />
@@ -164,7 +150,7 @@ export const ModalCuotas = ({ id, cliente }) => {
               {formatearDinero(Number(totalFinal))}
             </p>
           </div>
-          <Submit type={"submit"}>Cargar cuota</Submit>
+          <Submit type={"submit"}>Cargar entrega</Submit>
         </form>
       </div>
     </dialog>

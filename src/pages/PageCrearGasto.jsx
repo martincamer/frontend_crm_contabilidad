@@ -19,6 +19,7 @@ import { formatearDinero } from "../helpers/FormatearDinero";
 import { useGasto } from "../context/GastosContext";
 import useLoading from "../helpers/useLoading";
 import { Skeleton } from "../components/ui/Skeleton";
+import { tiposDePagos } from "../../../backend/src/data/TiposDePagos";
 
 dayjs.extend(utc);
 
@@ -210,7 +211,7 @@ export function PageCrearGasto() {
             <NavegacionLink
               link={"/gastos"}
               estilos={
-                "bg-orange-50 text-orange-400 text-white text-white font-semibold h-10 flex items-center px-5 z-[100]"
+                "bg-orange-50 text-orange-500 font-semibold h-10 flex items-center px-5 z-[100]"
               }
             >
               Gastos
@@ -391,16 +392,27 @@ export function PageCrearGasto() {
                         </label>
                         <select
                           {...register("terminos_pago", { required: true })}
-                          className="border border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold"
+                          className="border border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold capitalize"
                         >
-                          <option>Seleccionar termino</option>
-                          <option value="efectivo">Efectivo</option>
+                          <option className="capitalize font-bold text-blue-500">
+                            Seleccionar termino
+                          </option>
+                          {tiposDePagos.map((pago) => (
+                            <option
+                              className="capitalize font-semibold"
+                              key={pago.id}
+                              value={pago.nombre}
+                            >
+                              {pago.nombre}
+                            </option>
+                          ))}
+                          {/* <option value="efectivo">Efectivo</option>
                           <option value="transferencia">Transferencia</option>
                           <option value="cheque a terceros">
                             Cheque a terceros
                           </option>
                           <option value="chequeres">Cheque</option>
-                          <option value="tarjetas">Tarjeta</option>
+                          <option value="tarjetas">Tarjeta</option> */}
                         </select>
                       </div>
                       <div className="w-full mx-auto flex flex-col gap-1">

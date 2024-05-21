@@ -68,31 +68,17 @@ export const SideBar = () => {
                 </Link>
 
                 <Link
-                  to="/facturas"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Facturas
-                </Link>
-
-                <Link
-                  to="/pedidos-venta"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Pedidos de venta
-                </Link>
-
-                <Link
-                  to="/pedidos-compra"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Pedidos de compra
-                </Link>
-
-                <Link
                   to="/crear-gasto"
                   className="text-sm font-bold hover:text-blue-600"
                 >
                   Crear nuevo gasto
+                </Link>
+
+                <Link
+                  to="/crear-ingreso"
+                  className="text-sm font-bold hover:text-blue-600"
+                >
+                  Crear nuevo ingreso
                 </Link>
 
                 <Link
@@ -108,12 +94,11 @@ export const SideBar = () => {
                 >
                   Crear una nota de credito
                 </Link>
-
                 <Link
-                  to="/crear-ingreso"
+                  to="/crear-factura"
                   className="text-sm font-bold hover:text-blue-600"
                 >
-                  Crear nuevo ingreso/cuota/etc.
+                  Crear una nota de debito
                 </Link>
               </ul>
             </Disclosure.Panel>
@@ -129,7 +114,41 @@ export const SideBar = () => {
               } font-bold items-center text-base hover:text-blue-600`}
               // to={"/home"}
             >
-              <GiCash className="text-xl" /> Cajas
+              <TbUserFilled className="text-xl" /> Clientes/Contratos
+            </button>
+          </Disclosure.Button>
+          <Transition
+            enter="transition duration-100 ease-out"
+            enterFrom="transform translateY(-10%) opacity-0"
+            enterTo="transform translateY(0%) opacity-100"
+            leave="transition duration-75 ease-out"
+            leaveFrom="transform translateY(0%) opacity-100"
+            leaveTo="transform translateY(-10%) opacity-0"
+          >
+            {" "}
+            <Disclosure.Panel className="text-gray-500">
+              <ul className="flex flex-col gap-2">
+                <Link
+                  to="/clientes"
+                  className="text-sm font-bold hover:text-blue-600 capitalize"
+                >
+                  Clientes/contratos
+                </Link>
+              </ul>
+            </Disclosure.Panel>
+          </Transition>
+        </Disclosure>
+
+        <Disclosure>
+          <Disclosure.Button className="">
+            <button
+              type="button"
+              className={`flex gap-2 ${
+                location.pathname === "/" ? "text-blue-600" : "text-gray-700"
+              } font-bold items-center text-base hover:text-blue-600`}
+              // to={"/home"}
+            >
+              <GiCash className="text-xl" /> Caja/Banco
             </button>
           </Disclosure.Button>
           <Transition
@@ -147,13 +166,13 @@ export const SideBar = () => {
                   to="/caja"
                   className="text-sm font-bold hover:text-blue-600 capitalize"
                 >
-                  Caja {user.localidad}
+                  Caja {user.fabrica}
                 </Link>
                 <Link
-                  to="/caja"
+                  to="/banco"
                   className="text-sm font-bold hover:text-blue-600 capitalize"
                 >
-                  Banco {user.localidad}
+                  Banco {user.fabrica}
                 </Link>
               </ul>
             </Disclosure.Panel>
@@ -199,40 +218,6 @@ export const SideBar = () => {
                   className="text-sm font-bold hover:text-blue-600 capitalize"
                 >
                   Comprobantes
-                </Link>
-              </ul>
-            </Disclosure.Panel>
-          </Transition>
-        </Disclosure>
-
-        <Disclosure>
-          <Disclosure.Button className="">
-            <button
-              type="button"
-              className={`flex gap-2 ${
-                location.pathname === "/" ? "text-blue-600" : "text-gray-700"
-              } font-bold items-center text-base hover:text-blue-600`}
-              // to={"/home"}
-            >
-              <TbUserFilled className="text-xl" /> Clientes
-            </button>
-          </Disclosure.Button>
-          <Transition
-            enter="transition duration-100 ease-out"
-            enterFrom="transform translateY(-10%) opacity-0"
-            enterTo="transform translateY(0%) opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform translateY(0%) opacity-100"
-            leaveTo="transform translateY(-10%) opacity-0"
-          >
-            {" "}
-            <Disclosure.Panel className="text-gray-500">
-              <ul className="flex flex-col gap-2">
-                <Link
-                  to="/clientes"
-                  className="text-sm font-bold hover:text-blue-600 capitalize"
-                >
-                  Clientes/contratos
                 </Link>
               </ul>
             </Disclosure.Panel>

@@ -9,11 +9,14 @@ import { useCliente } from "../context/ClientesContext";
 import { Submit } from "../components/ui/Submit";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { SelectInput } from "../components/ui/SelectInput";
+import { tiposDePagos } from "../../../backend/src/data/TiposDePagos";
+import { formatearDinero } from "../helpers/FormatearDinero";
 
 export const PageCrearCliente = () => {
   const { createCliente } = useCliente();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch } = useForm();
 
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -94,6 +97,9 @@ export const PageCrearCliente = () => {
     setUploadedFile(null);
   };
 
+  const total_seña = watch("seña");
+  const total_vivienda = watch("total_vivienda");
+
   return (
     <section>
       <Navegacion>
@@ -101,7 +107,7 @@ export const PageCrearCliente = () => {
           <NavegacionLink
             link={"/clientes"}
             estilos={
-              "bg-orange-50 text-orange-400 text-white text-white font-semibold h-10 flex items-center px-5 z-[100]"
+              "bg-orange-50 text-orange-500 font-semibold h-10 flex items-center px-5 z-[100]"
             }
           >
             Clientes
@@ -208,6 +214,23 @@ export const PageCrearCliente = () => {
                 placeholder={"100000"}
                 props={{ ...register("seña", { required: true }) }}
               />
+              <SelectInput
+                props={{ ...register("termino_pago", { required: true }) }}
+                labelText={"Seleccionar termino de pago seña"}
+              >
+                <option className="font-bold text-blue-500">
+                  Seleccionar termino
+                </option>
+                {tiposDePagos.map((pago) => (
+                  <option
+                    className="font-semibold capitalize"
+                    key={pago.id}
+                    value={pago.nombre}
+                  >
+                    {pago.nombre}
+                  </option>
+                ))}
+              </SelectInput>
               <FormInput
                 type={"text"}
                 labelText={"Total de cuotas / valor numerico"}
@@ -221,6 +244,21 @@ export const PageCrearCliente = () => {
                 props={{ ...register("total_vivienda", { required: true }) }}
               />
             </article>
+
+            <div className="flex gap-5 mt-5">
+              <p className="bg-blue-500 py-2 px-3 text-white font-meidum">
+                Seña final{" "}
+                <span className="font-bold">
+                  {formatearDinero(Number(total_seña) || 0)}
+                </span>
+              </p>
+              <p className="bg-blue-500 py-2 px-3 text-white font-meidum">
+                Total vivienda final{" "}
+                <span className="font-bold">
+                  {formatearDinero(Number(total_vivienda) || 0)}
+                </span>
+              </p>
+            </div>
 
             <div className="mt-2">
               <Submit type={"submit"}>Crear cliente</Submit>

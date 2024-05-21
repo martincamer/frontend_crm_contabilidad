@@ -65,7 +65,7 @@ export function CajaProvider({ children }) {
       setCajas([...cajas, nuevaCaja]);
 
       showSuccessToast("Caja creada correctamente");
-      navigate("/cajas");
+      // navigate("/cajas");
     } catch (error) {
       console.error("Error al crear caja:", error);
       setError("Error al crear caja");
@@ -78,7 +78,6 @@ export function CajaProvider({ children }) {
       const cajasActualizadas = cajas.map((c) => (c._id === id ? res.data : c));
       setCajas(cajasActualizadas);
       showSuccessToast("Caja editada correctamente");
-      // navigate('/cajas');
     } catch (error) {
       console.error("Error al editar caja:", error);
       setError("Error al editar caja");
