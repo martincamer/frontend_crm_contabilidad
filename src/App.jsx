@@ -22,6 +22,7 @@ import { PageBanco } from "./pages/PageBanco";
 import { Ingresos } from "./pages/Ingresos";
 import { IngresoProvider } from "./context/IngresosContext";
 import { IngresoPage } from "./pages/IngresoPage";
+import { Empleados } from "./pages/Empleados";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route element={<ProtectedRoute />}>
                       <Route index path="/home" element={<HomeApp />} />
+                      <Route index path="/empleados" element={<Empleados />} />
                       <Route index path="/caja" element={<PageCaja />} />
                       <Route index path="/banco" element={<PageBanco />} />
                       <Route path="/gastos" element={<Gastos />} />

@@ -7,11 +7,12 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useCliente } from "../context/ClientesContext";
 import { Submit } from "../components/ui/Submit";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { SelectInput } from "../components/ui/SelectInput";
 import { tiposDePagos } from "../../../backend/src/data/TiposDePagos";
 import { formatearDinero } from "../helpers/FormatearDinero";
+import FileDropZone from "../components/ui/FileDropZone";
+import dayjs from "dayjs";
+import axios from "axios";
 
 export const PageCrearCliente = () => {
   const { createCliente } = useCliente();
@@ -52,12 +53,12 @@ export const PageCrearCliente = () => {
   const onSubmit = async (formData) => {
     try {
       // Subimos la imagen a Cloudinary y obtenemos la URL
-      //   const imageURL = await uploadFile(uploadedFile);
+      const imageURL = await uploadFile(uploadedFile);
 
       // Creamos el objeto del producto con todos los datos y la URL de la imagen
       const clienteData = {
         ...formData,
-        // comprobante: imageURL,
+        comprobante: imageURL,
         date: dayjs.utc(formData.date).format(),
       };
 
@@ -144,7 +145,7 @@ export const PageCrearCliente = () => {
             <p className="text-blue-600 text-center text-base font-bold"></p>
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="py-10 px-10">
-            <article className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <FormInput
                 type={"text"}
                 labelText={"Nombre del cliente"}
@@ -243,7 +244,21 @@ export const PageCrearCliente = () => {
                 placeholder={"14000000"}
                 props={{ ...register("total_vivienda", { required: true }) }}
               />
-            </article>
+            </div>
+
+            <div className="mt-6">
+              <FileDropZone
+                dragging={dragging}
+                handleDragLeave={handleDragLeave}
+                handleDragOver={handleDragOver}
+                handleDrop={handleDrop}
+                handleFileChange={handleFileChange}
+                handleRemoveFile={handleRemoveFile}
+                setDragging={setDragging}
+                setUploadedFile={setUploadedFile}
+                uploadedFile={uploadedFile}
+              />
+            </div>
 
             <div className="flex gap-5 mt-5">
               <p className="bg-blue-500 py-2 px-3 text-white font-meidum">

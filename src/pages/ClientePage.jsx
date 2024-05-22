@@ -64,7 +64,7 @@ export const ClientePage = () => {
         </div>
       </div>
 
-      <div className="mx-10 w-1/2">
+      <div className="mx-10 grid grid-cols-2 gap-10 items-start">
         <div className="bg-white py-5 px-5 flex flex-col gap-4">
           <p className="font-bold text-gray-600">Resumen del cliente</p>
 
@@ -176,9 +176,29 @@ export const ClientePage = () => {
             </div>
           </div>
         </div>
+        <div className="bg-white py-10 px-10 flex justify-around">
+          <p className="font-bold text-gray-500 text-xl flex flex-col gap-1">
+            Señado{" "}
+            <span className="font-extrabold text-blue-500">
+              {formatearDinero(cliente.seña)}
+            </span>
+          </p>
+          <p className="font-bold text-gray-500 text-xl flex flex-col gap-1">
+            Total de la vivienda{" "}
+            <span className="font-extrabold text-blue-500">
+              {formatearDinero(cliente.total_vivienda)}
+            </span>
+          </p>
+          <p className="font-bold text-gray-500 text-xl flex flex-col gap-1">
+            Cuotas total{" "}
+            <span className="font-extrabold text-blue-500">
+              {cliente?.cuotas_plan?.length} cuotas
+            </span>
+          </p>
+        </div>
       </div>
 
-      <div className="bg-white py-5 px-5 my-10 mx-10 w-1/2 flex gap-2">
+      <div className="bg-white py-5 px-5 my-10 mx-10 flex gap-2">
         <button
           onClick={() =>
             document.getElementById("my_modal_nueva_cuota").showModal()
@@ -197,6 +217,15 @@ export const ClientePage = () => {
         >
           Cargar nueva entrega
         </button>
+
+        <a
+          href={cliente?.comprobante}
+          target="_blank"
+          download
+          className="bg-green-500 py-2 px-8 rounded-full font-semibold text-white text-sm cursor-pointer"
+        >
+          Descargar contrato/cliente
+        </a>
       </div>
 
       <div className="bg-white py-5 px-5 mx-10 my-10">
@@ -241,9 +270,21 @@ export const ClientePage = () => {
       </div>
 
       <div className="bg-white py-5 px-5 mx-10 my-10 h-full">
-        <div className="flex">
+        <div className="flex gap-2">
           <div className="bg-blue-100/50 py-2.5 px-6 font-semibold text-blue-500">
             <p>Cuotas cargadas</p>
+          </div>
+          <div className="py-2.5 px-6 font-semibold text-gray-500">
+            <p>
+              Cuotas restantes{"  "}
+              <span className="text-red-500 font-extrabold bg-red-100 py-1 px-2 rounded">
+                {"  "}
+                {
+                  cliente?.cuotas_plan?.filter((cuota) => cuota.total === 0)
+                    .length
+                }
+              </span>
+            </p>
           </div>
         </div>
         <div className="scroll-bar h-[50vh] overflow-y-scroll px-4">

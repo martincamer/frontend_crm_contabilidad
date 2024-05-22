@@ -67,7 +67,7 @@ export const SideBar = () => {
                   Ingresos
                 </Link>
 
-                <Link
+                {/* <Link
                   to="/crear-gasto"
                   className="text-sm font-bold hover:text-blue-600"
                 >
@@ -79,7 +79,7 @@ export const SideBar = () => {
                   className="text-sm font-bold hover:text-blue-600"
                 >
                   Crear nuevo ingreso
-                </Link>
+                </Link> */}
 
                 <Link
                   to="/crear-factura"

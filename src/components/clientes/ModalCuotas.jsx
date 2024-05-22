@@ -4,11 +4,11 @@ import { FormInput } from "../ui/FormInput";
 import { useForm } from "react-hook-form";
 import { SelectInput } from "../ui/SelectInput";
 import { useCliente } from "../../context/ClientesContext";
+import { formatearDinero } from "../../helpers/FormatearDinero";
+import { tiposDePagos } from "../../../../backend/src/data/TiposDePagos";
 import FileDropZone from "../ui/FileDropZone";
 import dayjs from "dayjs";
-import { formatearDinero } from "../../helpers/FormatearDinero";
 import axios from "axios";
-import { tiposDePagos } from "../../../../backend/src/data/TiposDePagos";
 
 export const ModalCuotas = ({ id, cliente }) => {
   const { register, handleSubmit, reset, watch } = useForm();

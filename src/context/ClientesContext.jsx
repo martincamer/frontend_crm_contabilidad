@@ -96,8 +96,6 @@ export function ClienteProvider({ children }) {
       // Llamar a la función API para crear la entrega
       const res = await createEntregaRequest(clienteId, entregaData);
 
-      console.log(res);
-
       const clientesActualizados = clientes.map((c) =>
         c._id === clienteId ? res.data : c
       );
