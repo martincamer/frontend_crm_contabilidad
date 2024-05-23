@@ -67,20 +67,6 @@ export const SideBar = () => {
                   Ingresos
                 </Link>
 
-                {/* <Link
-                  to="/crear-gasto"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Crear nuevo gasto
-                </Link>
-
-                <Link
-                  to="/crear-ingreso"
-                  className="text-sm font-bold hover:text-blue-600"
-                >
-                  Crear nuevo ingreso
-                </Link> */}
-
                 <Link
                   to="/crear-factura"
                   className="text-sm font-bold hover:text-blue-600"
@@ -146,7 +132,6 @@ export const SideBar = () => {
               className={`flex gap-2 ${
                 location.pathname === "/" ? "text-blue-600" : "text-gray-700"
               } font-bold items-center text-base hover:text-blue-600`}
-              // to={"/home"}
             >
               <GiCash className="text-xl" /> Caja/Banco
             </button>
@@ -207,31 +192,18 @@ export const SideBar = () => {
                 >
                   Empleados
                 </Link>
-                <Link
-                  to="/crear-empleado"
-                  className="text-sm font-bold hover:text-blue-600 capitalize"
-                >
-                  Crear nuevo empleado
-                </Link>
-                <Link
-                  to="/comprobantes"
-                  className="text-sm font-bold hover:text-blue-600 capitalize"
-                >
-                  Comprobantes
-                </Link>
               </ul>
             </Disclosure.Panel>
           </Transition>
         </Disclosure>
 
-        <Disclosure>
+        {/* <Disclosure>
           <Disclosure.Button className="">
             <button
               type="button"
               className={`flex gap-2 ${
                 location.pathname === "/" ? "text-blue-600" : "text-gray-700"
               } font-bold items-center text-base hover:text-blue-600`}
-              // to={"/home"}
             >
               <PiSuitcaseSimpleLight className="text-xl" /> Proyectos
             </button>
@@ -248,7 +220,7 @@ export const SideBar = () => {
             <Disclosure.Panel className="text-gray-500">
               <ul className="flex flex-col gap-2">
                 <Link
-                  to="/caja"
+                  to="/pruebas-comprobantes"
                   className="text-sm font-bold hover:text-blue-600 capitalize"
                 >
                   Caja {user.localidad}
@@ -262,7 +234,7 @@ export const SideBar = () => {
               </ul>
             </Disclosure.Panel>
           </Transition>
-        </Disclosure>
+        </Disclosure> */}
       </div>
     </div>
   );
