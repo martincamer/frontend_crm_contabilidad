@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import { useGasto } from "../../context/GastosContext";
 import { Submit } from "../ui/Submit";
 import { SelectInput } from "../ui/SelectInput";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
+import { useEmpleado } from "../../context/EmpleadosContext";
 
-export const ModalEstado = ({ idObtenida }) => {
-  const { updateGastoEstado, getGasto } = useGasto();
+export const ModalEstadoEmpleados = ({ idObtenida }) => {
+  const { updateEmpleadoEstado, getEmpleado } = useEmpleado();
 
   const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
     async function loadData() {
-      const res = await getGasto(idObtenida);
+      const res = await getEmpleado(idObtenida);
 
       setValue("estado", res?.estado);
     }
@@ -23,23 +23,21 @@ export const ModalEstado = ({ idObtenida }) => {
   const onSubmit = async (formData) => {
     try {
       // Creamos el objeto del producto con todos los datos y la URL de la imagen
-      const cajaData = {
+      const estadoData = {
         ...formData,
         date: dayjs.utc(formData.date).format(),
       };
 
-      await updateGastoEstado(idObtenida, cajaData);
+      await updateEmpleadoEstado(idObtenida, estadoData);
 
-      document.getElementById("my_modal_editar_estado").close();
+      document.getElementById("my_modal_editar_estado_empleado").close();
     } catch (error) {
       console.error("Error creating product:", error);
     }
   };
 
-  console.log("id", idObtenida);
-
   return (
-    <dialog id="my_modal_editar_estado" className="modal">
+    <dialog id="my_modal_editar_estado_empleado" className="modal">
       <div className="modal-box rounded-none">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
@@ -49,25 +47,31 @@ export const ModalEstado = ({ idObtenida }) => {
         </form>
         <div>
           <h3 className="font-semibold text-sm border-b pb-2 text-left">
-            Cambiar el estado del gasto
+            Cambiar el estado del empleado
           </h3>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-3 text-left">
           <div className="flex flex-col gap-3">
             <SelectInput
-              labelText={"Estado del gasto"}
+              labelText={"Estado del empleado"}
               props={{ ...register("estado", { required: true }) }}
             >
               <option className="font-bold">Seleccionar el estado</option>
-              <option value={"pendiente"} className="font-bold">
-                Pendiente
+              <option value={"trabajando"} className="font-bold">
+                Trabajando
               </option>
-              <option value={"rechazado"} className="font-bold">
-                Rechazado
+              <option value={"enfermo"} className="font-bold">
+                Enfermo
               </option>
-              <option value={"aceptado"} className="font-bold">
-                Aceptado
+              <option value={"reposo"} className="font-bold">
+                Reposo
+              </option>
+              <option value={"accidentado"} className="font-bold">
+                Accidentado
+              </option>
+              <option value={"despedido"} className="font-bold">
+                Despedido
               </option>
             </SelectInput>
           </div>

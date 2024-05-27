@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Submit } from "../ui/Submit";
 import { SelectInput } from "../ui/SelectInput";
 import { useForm } from "react-hook-form";
-import dayjs from "dayjs";
 import { useEmpleado } from "../../context/EmpleadosContext";
+import dayjs from "dayjs";
 
 export const ModalComprobante = ({ idObtenida }) => {
   const { register, handleSubmit, reset, watch } = useForm();
@@ -41,15 +41,6 @@ export const ModalComprobante = ({ idObtenida }) => {
   const antiquity = calculateAntiquity(empleado?.fecha_ingreso);
 
   let total_antiguedad = 0;
-
-  // if (termino_pago === "mensual") {
-  // } else {
-  //   total_antiguedad =
-  //     (Number(quincena_cinco) + Number(quincena_veinte)) *
-  //     (0.01 * antiquity.years);
-
-  console.log(empleado);
-  // }
 
   const onSubmit = async (formData) => {
     try {
@@ -91,6 +82,7 @@ export const ModalComprobante = ({ idObtenida }) => {
       // Cerrar el modal y limpiar el formulario
       document.getElementById("my_modal_nuevo_comprobante").close();
       document.getElementById("my_modal_comprobante").showModal();
+      document.getElementById("my_modal_cobrado").showModal();
 
       reset();
     } catch (error) {

@@ -13,14 +13,17 @@ import { Dropdown } from "../ui/Dropdown";
 import { SearchButton } from "../ui/SearchButton";
 import { Search } from "../ui/Search";
 import { useSearch } from "../../helpers/openSearch";
-import { ModalEstado } from "../gastos/ModalEstado";
 import { useObtenerId } from "../../helpers/obtenerId";
 import { useModal } from "../../helpers/modal";
 import { useEmpleado } from "../../context/EmpleadosContext";
-import Calendar from "../ui/Calendary";
-import ModalEliminar from "../ui/ModalEliminar";
 import { ModalComprobante } from "./ModalComprobante";
 import { ModalComprobantePago } from "./ModalComprobantePago";
+import { ModalEstadoEmpleados } from "./ModalEstadoEmpleados";
+import { ModalPagado } from "./ModalPagado";
+import { EditarEmpleadoDrawer } from "./EditarEmpleadoDrawer";
+import { ModalEmpleadoObservacion } from "./ModalEmpleadoObservacion";
+import Calendar from "../ui/Calendary";
+import ModalEliminar from "../ui/ModalEliminar";
 
 export const TableEmpleados = () => {
   const { click, openSearch } = useSearch();
@@ -30,10 +33,13 @@ export const TableEmpleados = () => {
     getEmpleados();
   }, []);
 
+  console.log(empleados);
+
   //Search
   const [currentPage, setCurrentPage] = useState(1);
   const [ventasPerPage] = useState(10); // Número de elementos por página
   const [searchTerm, setSearchTerm] = useState(""); // Para la búsqueda
+  const [selectedFabricaSucursal, setSelectedFabricaSucursal] = useState("");
 
   // Índices para la paginación
   const indexOfLastVenta = currentPage * ventasPerPage;
@@ -54,12 +60,20 @@ export const TableEmpleados = () => {
     setSearchTerm(event.target.value); // Actualizar el término de búsqueda
   };
 
-  // Filtrar gastos por el término de búsqueda
   const filteredGastos = currentVentas.filter(
     (venta) =>
-      venta.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      venta.apellido.toLowerCase().includes(searchTerm.toLowerCase())
+      // venta.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      // venta.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      `${venta.nombre} ${venta.apellido}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) &&
+      (selectedFabricaSucursal === "" ||
+        venta.fabrica_sucursal === selectedFabricaSucursal)
   );
+
+  const fabricasSucursalesOptions = [
+    ...new Set(empleados.map((emp) => emp.fabrica_sucursal)),
+  ];
 
   const totalPages = Math.ceil(sortedVentas.length / ventasPerPage); // Calcular el total de páginas
 
@@ -82,14 +96,6 @@ export const TableEmpleados = () => {
     return text.substring(0, maxLength);
   };
 
-  //   const totalFinal = empleados.reduce((total, detalle) => {
-  //     return total + parseFloat(detalle.total_final);
-  //   }, 0);
-
-  //   const totalImpuestos = empleados.reduce((total, detalle) => {
-  //     return total + parseFloat(detalle.impuestos_total);
-  //   }, 0);
-
   //obtener el id
   const { handleObtenerId, idObtenida } = useObtenerId();
 
@@ -108,16 +114,6 @@ export const TableEmpleados = () => {
     return { years, months };
   };
 
-  //   let total_antiguedad = 0;
-
-  //   if (termino_pago === "mensual") {
-  //     total_antiguedad = Number(sueldo_basico) * (0.01 * antiquity.years);
-  //   } else {
-  //     total_antiguedad =
-  //       (Number(quincena_cinco) + Number(quincena_veinte)) *
-  //       (0.01 * antiquity.years);
-  //   }
-
   //estado gastado
   const getEstadoClassNames = (estado) => {
     switch (estado) {
@@ -126,9 +122,9 @@ export const TableEmpleados = () => {
       case "enfermo":
         return "bg-orange-100 text-orange-700";
       case "reposo":
-        return "bg-blue-100 text-orange-100";
+        return "bg-blue-100 text-blue-600";
       case "accidentado":
-        return "bg-rose-100 text-rose-100";
+        return "bg-rose-100 text-rose-600";
       case "despedido":
         return "bg-red-100 text-red-700";
       default:
@@ -136,9 +132,117 @@ export const TableEmpleados = () => {
     }
   };
 
+  // Función para calcular el ingreso neto
+  const calcularIngresoNeto = (empleados) => {
+    const ingresosNetos = empleados.reduce((total, empleado) => {
+      // Verificar si el empleado tiene termino_pago = 'sueldo'
+      if (empleado.termino_pago === "mensual") {
+        // Obtener el sueldo básico, comida, banco y descuentos
+        const sueldoBasico = Number(empleado.sueldo[0]?.sueldo_basico || 0);
+        const comida = Number(empleado.sueldo[0]?.comida || 0);
+        const premio_produccion = Number(
+          empleado.sueldo[0]?.premio_produccion || 0
+        );
+        const premio_asistencia = Number(
+          empleado.sueldo[0]?.premio_asistencia || 0
+        );
+
+        const otros = Number(empleado.sueldo[0]?.otros || 0);
+        const banco = Number(empleado.sueldo[0]?.banco || 0);
+        const descuento = Number(empleado.sueldo[0]?.descuento_del_cinco || 0);
+
+        // Calcular ingreso neto
+        const ingresoNeto =
+          sueldoBasico +
+          premio_produccion +
+          premio_asistencia +
+          otros +
+          comida -
+          banco -
+          descuento;
+
+        // Sumar al total
+        total += ingresoNeto;
+      }
+      return total;
+    }, 0); // Iniciar el total en 0
+
+    return ingresosNetos;
+  };
+
+  const calcularIngresoQuincenaDelCinco = (empleados) => {
+    const ingresosNetos = empleados.reduce((total, empleado) => {
+      // Verificar si el empleado tiene termino_pago = 'sueldo'
+      if (empleado.termino_pago === "quincenal") {
+        // Obtener el sueldo básico, comida, banco y descuentos
+        const quincenaCinco = Number(
+          empleado.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
+        );
+
+        const banco = Number(empleado.sueldo[0]?.quincena_cinco[0].banco || 0);
+
+        const produccion = Number(
+          empleado.sueldo[0]?.quincena_cinco[0].premio_produccion || 0
+        );
+        const asistencia = Number(
+          empleado.sueldo[0]?.quincena_cinco[0].asistencia || 0
+        );
+
+        const otros = Number(empleado.sueldo[0]?.quincena_cinco[0].otros || 0);
+        const descuento = Number(
+          empleado.sueldo[0]?.quincena_cinco[0].descuento_del_cinco || 0
+        );
+
+        // Calcular ingreso neto
+        const ingresoNeto =
+          quincenaCinco + produccion + asistencia + otros - descuento - banco;
+
+        // Sumar al total
+        total += ingresoNeto;
+      }
+      return total;
+    }, 0); // Iniciar el total en 0
+
+    return ingresosNetos;
+  };
+
+  const calcularIngresoQuincenaDelVeinte = (empleados) => {
+    const ingresosNetos = empleados.reduce((total, empleado) => {
+      // Verificar si el empleado tiene termino_pago = 'sueldo'
+      if (empleado.termino_pago === "quincenal") {
+        // Obtener el sueldo básico, comida, banco y descuentos
+        const quincenaCinco = Number(
+          empleado.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0
+        );
+
+        const comida = Number(
+          empleado.sueldo[1]?.quincena_veinte[0]?.comida || 0
+        );
+        const descuento = Number(
+          empleado.sueldo[1]?.quincena_veinte[0].descuento_del_veinte || 0
+        );
+
+        // Calcular ingreso neto
+        const ingresoNeto = quincenaCinco + comida - descuento;
+
+        // Sumar al total
+        total += ingresoNeto;
+      }
+      return total;
+    }, 0); // Iniciar el total en 0
+
+    return ingresosNetos;
+  };
+
+  // Ejemplo de uso
+  const ingresoTotal = calcularIngresoNeto(empleados);
+  const ingresoTotalQuincenaCinco = calcularIngresoQuincenaDelCinco(empleados);
+  const ingresoTotalQuincenaVeinte =
+    calcularIngresoQuincenaDelVeinte(empleados);
+
   return (
     <div>
-      <div className="bg-white py-2 px-5 my-5 mx-3 max-w-lg justify-between flex items-center">
+      <div className="bg-white py-2 px-5 my-5 mx-3 max-w-xl justify-between flex items-center">
         <p className="text-xs font-bold text-blue-500">
           Mas opciones empleados
         </p>
@@ -168,8 +272,35 @@ export const TableEmpleados = () => {
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-52 cursor-pointer mt-2"
-            ></ul>
+              className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-82 cursor-pointer mt-2"
+            >
+              <div className="">
+                <label htmlFor="" className="uppercase font-bold text-xs">
+                  Filtrar por fabrica
+                </label>
+                <select
+                  className="uppercase text-xs font-semibold outline-none border py-3 px-2 focus:border-blue-500"
+                  value={selectedFabricaSucursal}
+                  onChange={(e) => setSelectedFabricaSucursal(e.target.value)}
+                >
+                  <option
+                    className="uppercase text-xs font-extrabold text-blue-500"
+                    value=""
+                  >
+                    Todas las fábricas/sucursales
+                  </option>
+                  {fabricasSucursalesOptions.map((fab, index) => (
+                    <option
+                      className="uppercase text-xs font-bold"
+                      key={index}
+                      value={fab}
+                    >
+                      {fab}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </ul>
           </div>
           <div className="dropdown">
             <div
@@ -181,30 +312,32 @@ export const TableEmpleados = () => {
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-[800px] cursor-pointer flex mt-2 gap-2"
+              className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 cursor-pointer flex flex-col gap-2 w-auto mt-2"
             >
-              {/* <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                <p className="text-sm font-semibold text-gray-700">
-                  Importes cargados
-                </p>
-                <p className="text-blue-500 text-lg font-bold">
-                  {formatearDinero(totalFinal)}
-                </p>
-              </div>
               <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                <p className="text-sm font-semibold text-gray-700">Impuestos</p>
+                <p className="text-sm font-semibold text-gray-700">
+                  Total a pagar quicena del 5 / efectivo
+                </p>
                 <p className="text-blue-500 text-lg font-bold">
-                  {formatearDinero(totalImpuestos)}
+                  {formatearDinero(ingresoTotalQuincenaCinco)}
                 </p>
               </div>
               <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                 <p className="text-sm font-semibold text-gray-700">
-                  Gastos generados
+                  Total a pagar quincena del 20 / efectivo
                 </p>
                 <p className="text-blue-500 text-lg font-bold">
-                  {gastos.length}
+                  {formatearDinero(ingresoTotalQuincenaVeinte)}
                 </p>
-              </div> */}
+              </div>
+              <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+                <p className="text-sm font-semibold text-gray-700">
+                  Total a pagar mensual / efectivo
+                </p>
+                <p className="text-blue-500 text-lg font-bold">
+                  {formatearDinero(ingresoTotal)}
+                </p>
+              </div>
             </ul>
           </div>
         </div>
@@ -216,41 +349,57 @@ export const TableEmpleados = () => {
               <th>Referencia</th>
               <th>Empleado</th>
               <th>Fecha ingreso</th>
+              <th>Fabricas/Sucursal</th>
               <th>Antigüedad trabajando</th>
               <th>Sueldo</th>
               <th>Estado</th>
-              <th>Total</th>
             </tr>
           </thead>
           <tbody className="text-xs capitalize">
             {filteredGastos?.map((g) => {
               // Calcular la antigüedad
               const { years, months } = calculateAntiquity(g.fecha_ingreso);
+
+              const antiquity = calculateAntiquity(g.fecha_ingreso);
+
+              let total_antiguedad = 0;
+
+              if (g.termino_pago === "mensual") {
+                total_antiguedad =
+                  Number(g.sueldo[0]?.sueldo_basico) * (0.01 * antiquity.years);
+              } else {
+                total_antiguedad =
+                  (Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
+                    Number(g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte)) *
+                  (0.01 * antiquity.years);
+              }
+
               let sueldo = "";
+
               if (g.termino_pago === "quincenal") {
                 // Si es quincenal, obtener el sueldo correspondiente
                 sueldo =
                   Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
                     Number(g.sueldo[0]?.quincena_cinco[0]?.otros) +
                     Number(g.sueldo[0]?.quincena_cinco[0]?.premio_produccion) +
-                    Number(g.sueldo[0]?.quincena_cinco[0]?.otros) +
+                    Number(g.sueldo[0]?.quincena_cinco[0]?.premio_asistencia) +
                     Number(g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte) +
-                    Number(g.sueldo[1]?.quincena_veinte[0]?.comida) -
+                    Number(g.sueldo[1]?.quincena_veinte[0]?.comida) +
+                    Number(total_antiguedad) -
                     Number(
-                      g.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte
+                      g.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0
                     ) -
                     Number(
-                      g.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco
-                    ) || "";
+                      g.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0
+                    ) || 0;
               } else if (g.termino_pago === "mensual") {
                 // Si es mensual, obtener el sueldo mensual
                 sueldo =
                   Number(g.sueldo[0]?.sueldo_basico) +
-                    Number(g.sueldo[0]?.comida) +
+                    Number(total_antiguedad) +
                     Number(g.sueldo[0]?.comida) +
                     Number(g.sueldo[0]?.premio_produccion) +
                     Number(g.sueldo[0]?.premio_asistencia) +
-                    Number(g.sueldo[0]?.comida) +
                     Number(g.sueldo[0]?.otros) -
                     Number(g.sueldo[0]?.descuento_del_cinco) || "";
               }
@@ -262,6 +411,7 @@ export const TableEmpleados = () => {
                     {g.nombre} {g.apellido}
                   </th>
                   <th>{updateFecha(g.fecha_ingreso)}</th>{" "}
+                  <th>{g.fabrica_sucursal}</th>{" "}
                   {/* Aquí puedes formatear la fecha como desees */}
                   <th>{`${years} años, ${months} meses`}</th>{" "}
                   {/* Mostrar la antigüedad */}
@@ -292,7 +442,37 @@ export const TableEmpleados = () => {
                           onClick={() => {
                             handleObtenerId(g._id);
                             document
-                              .getElementById("my_modal_editar_estado")
+                              .getElementById("my_modal_observacion_empleado")
+                              .showModal();
+                          }}
+                          className="hover:text-blue-500 font-bold"
+                          type="button"
+                        >
+                          {/* Editar empleado */}
+                          Observación empleado
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="hover:text-blue-500 font-bold"
+                          type="button"
+                        >
+                          {/* Editar empleado */}
+                          <label
+                            onClick={() => handleObtenerId(g._id)}
+                            htmlFor="my-drawer-editar"
+                            className="hover:text-blue-500 font-bold"
+                          >
+                            Editar empleado
+                          </label>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            handleObtenerId(g._id);
+                            document
+                              .getElementById("my_modal_editar_estado_empleado")
                               .showModal();
                           }}
                           className="hover:text-blue-500 font-bold"
@@ -315,7 +495,17 @@ export const TableEmpleados = () => {
                           Generar comprobante
                         </button>
                       </li>
-                      {/* Resto de opciones del dropdown */}
+                      <li>
+                        <button
+                          onClick={() => {
+                            handleObtenerId(g._id), openModal();
+                          }}
+                          className="hover:text-blue-500 font-bold"
+                          type="button"
+                        >
+                          Eliminar el empleado
+                        </button>
+                      </li>{" "}
                     </Dropdown>
                   </td>
                 </tr>
@@ -333,53 +523,55 @@ export const TableEmpleados = () => {
           placeholder={"Buscar gastó por proveedor o categoria"}
         />
       )}
-      {totalPages > 1 && (
-        <div className="flex pb-12 justify-center items-center space-x-2">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-          >
-            <FaArrowLeft /> {/* Icono para la flecha izquierda */}
-          </button>
-          <ul className="flex space-x-2">
-            {getPageNumbers().map((number) => (
-              <li key={number} className="cursor-pointer">
-                <button
-                  onClick={() => paginate(number)}
-                  className={`${
-                    currentPage === number ? "bg-white" : "bg-gray-300"
-                  } py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100`}
-                >
-                  {number} {/* Número de página */}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-            className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-          >
-            <FaArrowRight />
-          </button>
-        </div>
-      )}
+
+      <div className="flex pb-12 justify-center items-center space-x-2">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
+        >
+          <FaArrowLeft /> {/* Icono para la flecha izquierda */}
+        </button>
+        <ul className="flex space-x-2">
+          {getPageNumbers().map((number) => (
+            <li key={number} className="cursor-pointer">
+              <button
+                onClick={() => paginate(number)}
+                className={`${
+                  currentPage === number ? "bg-white" : "bg-gray-300"
+                } py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100`}
+              >
+                {number} {/* Número de página */}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
+        >
+          <FaArrowRight />
+        </button>
+      </div>
 
       {/* Modal editar estado */}
-      <ModalEstado idObtenida={idObtenida} />
+      <ModalEstadoEmpleados idObtenida={idObtenida} />
       <ModalComprobante idObtenida={idObtenida} />
       <ModalComprobantePago idObtenida={idObtenida} />
+      <ModalPagado />
 
       <ModalEliminar
         isOpen={isOpen}
         closeModal={closeModal}
         deleteTodo={deleteEmpleado}
         idObtenida={idObtenida}
-        message={"¿Deseas eliminar el gasto?"}
+        message={"¿Deseas eliminar el empleado?"}
       />
+      <EditarEmpleadoDrawer idObtenida={idObtenida} />
+      <ModalEmpleadoObservacion idObtenida={idObtenida} />
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useEmpleado } from "../../context/EmpleadosContext";
 import { updateFecha } from "../../helpers/FechaUpdate";
 import { formatearDinero } from "../../helpers/FormatearDinero";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { ComprobantePago } from "../comprobantes/ComprobantePago";
 
 export const ModalComprobantePago = () => {
   const { recibo } = useEmpleado();
@@ -30,12 +32,41 @@ export const ModalComprobantePago = () => {
             ✕
           </button>
         </form>
-        <div>
-          <h3 className="font-semibold text-sm border-b pb-2 text-left">
-            Descargar o imprimir comprobante
-          </h3>
+        <div className="flex gap-2 items-center">
+          <div>
+            <PDFDownloadLink
+              document={<ComprobantePago recibo={recibo} />}
+              className="font-semibold bg-blue-500 py-2 px-5 text-white rounded-full text-sm"
+            >
+              Descargar o imprimir comprobante
+            </PDFDownloadLink>
+          </div>
+          <button
+            type="button"
+            className="font-semibold bg-blue-500 py-2 px-5 text-white rounded-full text-sm"
+            onClick={() => document.getElementById("my_modal_pdf").showModal()}
+          >
+            Ver comprobante e imprimir
+          </button>
         </div>
-
+        <dialog id="my_modal_pdf" className="modal">
+          <div className="modal-box max-w-full rounded-none">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                ✕
+              </button>
+            </form>
+            <PDFViewer
+              style={{
+                width: "100%",
+                height: "100vh",
+              }}
+            >
+              <ComprobantePago recibo={recibo} />
+            </PDFViewer>
+          </div>
+        </dialog>
         {/* Mostrar nombre del empleado seleccionado */}
         <div className="mt-5 bg-blue-500 py-5 px-5 text-white font-medium">
           Empleado del recibo{" "}
@@ -166,59 +197,79 @@ export const ModalComprobantePago = () => {
                     : recibo?.recibo?.descuento_del_cinco
                 )
               )}{" "}
-              Descuento por faltas
+              Descuento por faltas/prestamos/otros/etc
             </p>
             <p className="text-sm font-semibold uppercase">
-              {recibo?.sueldo === "quincenal"
+              {recibo?.sueldo === "quincenal" && recibo?.recibo?.banco
                 ? recibo?.recibo?.termino_pago === "quincena_veinte"
-                  ? `-  ${formatearDinero(
+                  ? `- ${formatearDinero(
                       Number(recibo?.recibo?.banco)
                     )} COBRADO EN EL BANCO`
-                  : `-  ${formatearDinero(
+                  : `- ${formatearDinero(
                       Number(recibo?.recibo?.banco)
                     )} COBRADO EN EL BANCO`
-                : ` - ${formatearDinero(
+                : recibo?.recibo?.banco
+                ? `- ${formatearDinero(
                     Number(recibo?.recibo?.banco)
-                  )} COBRADO EN EL BANCO`}
+                  )} COBRADO EN EL BANCO`
+                : ""}
             </p>
             <p className="text-sm font-semibold uppercase">
-              {recibo?.sueldo === "quincenal"
+              {recibo?.sueldo === "quincenal" &&
+              recibo?.recibo?.premio_produccion
                 ? recibo?.recibo?.termino_pago === "quincena_veinte"
-                  ? `+  ${formatearDinero(
+                  ? `+ ${formatearDinero(
                       Number(recibo?.recibo?.premio_produccion)
                     )} PREMIO PRODUCCIÓN`
-                  : `+  ${formatearDinero(
+                  : `+ ${formatearDinero(
                       Number(recibo?.recibo?.premio_produccion)
                     )} PREMIO PRODUCCIÓN`
-                : ` + ${formatearDinero(
+                : recibo?.recibo?.premio_produccion
+                ? `+ ${formatearDinero(
                     Number(recibo?.recibo?.premio_produccion)
-                  )}`}
+                  )} PREMIO PRODUCCIÓN`
+                : ""}
             </p>
-
             <p className="text-sm font-semibold uppercase">
-              {recibo?.sueldo === "quincenal"
+              {recibo?.sueldo === "quincenal" &&
+              recibo?.recibo?.premio_asistencia
                 ? recibo?.recibo?.termino_pago === "quincena_veinte"
-                  ? `+  ${formatearDinero(
+                  ? `+ ${formatearDinero(
                       Number(recibo?.recibo?.premio_asistencia)
                     )} PREMIO ASISTENCIA`
-                  : `+  ${formatearDinero(
+                  : `+ ${formatearDinero(
                       Number(recibo?.recibo?.premio_asistencia)
                     )} PREMIO ASISTENCIA`
-                : ` + ${formatearDinero(
+                : recibo?.recibo?.premio_asistencia
+                ? `+ ${formatearDinero(
                     Number(recibo?.recibo?.premio_asistencia)
-                  )} PREMIO ASISTENCIA`}
+                  )} PREMIO ASISTENCIA`
+                : ""}
+            </p>
+            <p className="text-sm font-semibold uppercase">
+              {recibo?.sueldo === "quincenal" && recibo?.recibo?.comida
+                ? recibo?.recibo?.termino_pago === "quincena_veinte"
+                  ? `+ ${formatearDinero(
+                      Number(recibo?.recibo?.comida)
+                    )} COMIDA`
+                  : `+ ${formatearDinero(
+                      Number(recibo?.recibo?.comida)
+                    )} COMIDA`
+                : recibo?.recibo?.comida
+                ? `+ ${formatearDinero(Number(recibo?.recibo?.comida))} COMIDA`
+                : ""}
             </p>
             <p className="text-sm font-semibold uppercase">
               {recibo?.sueldo === "quincenal"
                 ? recibo?.recibo?.termino_pago === "quincena_veinte"
                   ? `+  ${formatearDinero(
-                      Number(recibo?.recibo?.otros)
+                      Number(recibo?.recibo?.otros || 0)
                     )} OTRO IMPORTE`
                   : `+  ${formatearDinero(
-                      Number(recibo?.recibo?.otros)
+                      Number(recibo?.recibo?.otros || 0)
                     )} OTRO IMPORTE`
                 : ` + ${formatearDinero(
-                    Number(recibo?.recibo?.otros)
+                    Number(recibo?.recibo?.otros || 0)
                   )} OTRO IMPORTE`}
             </p>
             {recibo.termino_pago === "sueldo" ||
@@ -247,7 +298,8 @@ export const ModalComprobantePago = () => {
                       Number(recibo?.recibo?.premio_produccion) +
                       Number(recibo?.recibo?.premio_asistencia) +
                       Number(recibo?.recibo?.otros) +
-                      -Number(recibo?.recibo?.descuento_del_cinco)
+                      Number(recibo.antiguedad_total) -
+                      Number(recibo?.recibo?.descuento_del_cinco)
                   : Number(recibo?.recibo?.sueldo_basico) +
                       Number(recibo?.recibo?.premio_produccion) +
                       Number(recibo?.recibo?.premio_asistencia) +
@@ -269,7 +321,8 @@ export const ModalComprobantePago = () => {
                     : Number(recibo?.recibo?.quincena_cinco) +
                       Number(recibo?.recibo?.premio_produccion) +
                       Number(recibo?.recibo?.premio_asistencia) +
-                      Number(recibo?.recibo?.otros) -
+                      Number(recibo?.recibo?.otros) +
+                      Number(recibo.antiguedad_total) -
                       Number(recibo?.recibo?.banco) -
                       Number(recibo?.recibo?.descuento_del_cinco)
                   : Number(recibo?.recibo?.sueldo_basico) +

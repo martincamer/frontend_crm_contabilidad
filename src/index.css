@@ -38,6 +38,7 @@ body {
 .scroll-bar {
   &::-webkit-scrollbar {
     width: 10px; /* Ancho de la barra de desplazamiento */
+    height: 10px;
     border-radius: 2px; /* Bordes redondeados */
   }
   &::-webkit-scrollbar-track {

@@ -27,10 +27,10 @@ export const SideBar = () => {
           } font-bold items-center text-base`}
           to={"/home"}
         >
-          <BsClipboardData /> Analisis
+          <BsClipboardData /> Analisis/estadisticas
         </Link>
 
-        <Disclosure>
+        {/* <Disclosure>
           <Disclosure.Button className="">
             <button
               type="button"
@@ -162,7 +162,7 @@ export const SideBar = () => {
               </ul>
             </Disclosure.Panel>
           </Transition>
-        </Disclosure>
+        </Disclosure> */}
 
         <Disclosure>
           <Disclosure.Button className="">

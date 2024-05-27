@@ -10,6 +10,9 @@ export const createEmpleadoRequest = async (empleado) =>
 export const updateEmpleadoRequest = async (id, empleado) =>
   axios.put(`/empleados/${id}`, empleado);
 
+export const updateEmpleadoEstadoRequest = async (id, empleado) =>
+  axios.patch(`/empleados/estado/${id}`, empleado);
+
 export const createReciboRequest = async (id, recibo) =>
   axios.post(`/${id}/recibo`, recibo);
 

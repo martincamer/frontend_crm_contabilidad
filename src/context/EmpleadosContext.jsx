@@ -6,6 +6,7 @@ import {
   deleteEmpleadoRequest,
   updateEmpleadoRequest,
   createReciboRequest,
+  updateEmpleadoEstadoRequest,
 } from "../api/empleados"; // Asegúrate de importar las funciones API correctas
 import { showSuccessToast } from "../helpers/toast";
 
@@ -84,13 +85,27 @@ export function EmpleadoProvider({ children }) {
     }
   };
 
+  const updateEmpleadoEstado = async (id, empleado) => {
+    try {
+      const res = await updateEmpleadoEstadoRequest(id, empleado);
+      const empleadosActualizados = empleados.map((e) =>
+        e._id === id ? res.data : e
+      );
+      setEmpleados(empleadosActualizados);
+      showSuccessToast("Empleado editado correctamente");
+    } catch (error) {
+      console.error("Error al editar empleado:", error);
+      setError("Error al editar empleado");
+    }
+  };
+
   const crearRecibo = async (id, recibo) => {
     try {
       const res = await createReciboRequest(id, recibo);
 
       setRecibo(res.data);
       console.log("recibo", recibo);
-      showSuccessToast("Recibo creado correctamente");
+      // showSuccessToast("Recibo creado correctamente");
     } catch (error) {
       console.error("Error al crear empleado:", error);
       setError("Error al crear empleado");
@@ -108,6 +123,7 @@ export function EmpleadoProvider({ children }) {
         createEmpleado,
         updateEmpleado,
         crearRecibo,
+        updateEmpleadoEstado,
         recibo,
       }}
     >

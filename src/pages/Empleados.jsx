@@ -9,8 +9,8 @@ import { Submit } from "../components/ui/Submit";
 import { useEmpleado } from "../context/EmpleadosContext";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { Texto } from "../components/ui/Texto";
-import dayjs from "dayjs";
 import { TableEmpleados } from "../components/empleados/TableEmpleados";
+import dayjs from "dayjs";
 
 export const Empleados = () => {
   const { register, handleSubmit, watch } = useForm();
@@ -66,7 +66,7 @@ export const Empleados = () => {
   } else {
     total_antiguedad =
       (Number(quincena_cinco) + Number(quincena_veinte)) *
-      (0.01 * antiquity.years);
+      (0.01 * Number(antiquity.years));
   }
 
   //totales
@@ -89,8 +89,28 @@ export const Empleados = () => {
     Number(premio_asistencia) +
     Number(total_antiguedad) +
     Number(comida) -
+    Number(descuento_del_cinco);
+
+  const totalSueldoNetoConDescuentos =
+    Number(sueldo_basico) +
+    Number(otros) +
+    Number(premio_produccion) +
+    Number(premio_asistencia) +
+    Number(total_antiguedad) +
+    Number(comida) -
     Number(descuento_del_cinco) -
     Number(banco);
+
+  const totalSueldo =
+    Number(quincena_cinco) +
+    Number(otros) +
+    Number(premio_produccion) +
+    Number(premio_asistencia) +
+    Number(total_antiguedad) +
+    Number(quincena_veinte) +
+    Number(comida) -
+    Number(descuento_del_veinte) -
+    Number(descuento_del_cinco);
 
   //Crear nuevo empleado
   const onSubmit = async (formData) => {
@@ -99,7 +119,6 @@ export const Empleados = () => {
 
       // Creamos el objeto del producto con todos los datos y la URL de la imagen
       const clienteData = {
-        // ...formData,
         nombre,
         apellido,
         dni,
@@ -114,37 +133,37 @@ export const Empleados = () => {
                 {
                   quincena_cinco: [
                     {
-                      quincena_cinco: quincena_cinco,
-                      otros: otros,
-                      premio_produccion: premio_produccion,
-                      premio_asistencia: premio_asistencia,
-                      banco: banco,
-                      descuento_del_cinco: descuento_del_cinco,
-                      observacion_cinco: observacion_cinco,
+                      quincena_cinco: quincena_cinco || 0,
+                      otros: otros || 0,
+                      premio_produccion: premio_produccion || 0,
+                      premio_asistencia: premio_asistencia || 0,
+                      banco: banco || 0,
+                      descuento_del_cinco: descuento_del_cinco || 0,
+                      observacion_cinco: observacion_cinco || "",
                     },
                   ],
                 },
                 {
                   quincena_veinte: [
                     {
-                      quincena_veinte: quincena_veinte,
-                      comida: comida,
-                      descuento_del_veinte: descuento_del_veinte,
-                      observacion_veinte: observacion_veinte,
+                      quincena_veinte: quincena_veinte || 0,
+                      comida: comida || 0,
+                      descuento_del_veinte: descuento_del_veinte || 0,
+                      observacion_veinte: observacion_veinte || 0,
                     },
                   ],
                 },
               ]
             : [
                 {
-                  sueldo_basico: sueldo_basico,
-                  otros: otros,
-                  premio_produccion: premio_produccion,
-                  premio_asistencia: premio_asistencia,
-                  comida: comida,
-                  banco: banco,
-                  descuento_del_cinco: descuento_del_cinco,
-                  observacion: observacion,
+                  sueldo_basico: sueldo_basico || 0,
+                  otros: otros || 0,
+                  premio_produccion: premio_produccion || 0,
+                  premio_asistencia: premio_asistencia || 0,
+                  comida: comida || 0,
+                  banco: banco || 0,
+                  descuento_del_cinco: descuento_del_cinco || 0,
+                  observacion: observacion || "",
                 },
               ],
         date: dayjs.utc(formData.date).format(),
@@ -181,7 +200,7 @@ export const Empleados = () => {
                 Crear empleado
               </label>
             </div>
-            <div className="drawer-side">
+            <div className="drawer-side scroll-bar">
               <label
                 htmlFor="my-drawer-4"
                 aria-label="close sidebar"
@@ -193,7 +212,6 @@ export const Empleados = () => {
                     Registra un nuevo empleado
                   </p>
                 </div>
-
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="font-bold text-sm mb-3">
                     <p>Datos del empleador</p>
@@ -253,7 +271,7 @@ export const Empleados = () => {
                       labelText={"Sector de trabajo"}
                       type={"text"}
                       props={{
-                        ...register("sector", { required: true }),
+                        ...register("sector_trabajo", { required: true }),
                       }}
                     >
                       <option className="font-bold text-blue-500">
@@ -285,7 +303,7 @@ export const Empleados = () => {
                       labelText={"Fabrica o sucursal"}
                       type={"text"}
                       props={{
-                        ...register("fabrica", { required: true }),
+                        ...register("fabrica_sucursal", { required: true }),
                       }}
                     >
                       <option className="font-bold text-blue-500">
@@ -596,6 +614,28 @@ export const Empleados = () => {
                           labelText={"Observación"}
                         />
                       </div>
+
+                      <div className="font-semibold bg-blue-100/50 text-blue-500 py-5 px-5 flex flex-col gap-2">
+                        <p className="flex gap-2 items-center">
+                          Total a cobrar quincena del 5{" "}
+                          <span className="font-extrabold bg-white py-1 px-2">
+                            {formatearDinero(totalQuincenaCinco || 0)}
+                          </span>
+                        </p>
+                        <p className="flex gap-2 items-center">
+                          Total a cobrar quincena del 20{" "}
+                          <span className="font-extrabold bg-white py-1 px-2">
+                            {formatearDinero(totalQuincenaVeinte || 0)}
+                          </span>
+                        </p>
+                        <p className="flex gap-2 items-center">
+                          Sueldo neto
+                          <span className="font-extrabold bg-white py-1 px-2">
+                            {" "}
+                            {formatearDinero(totalSueldo || 0)}
+                          </span>
+                        </p>
+                      </div>
                     </>
                   ) : (
                     <>
@@ -808,6 +848,22 @@ export const Empleados = () => {
                           labelText={"Observación"}
                         />
                       </div>
+
+                      <div className="font-semibold bg-blue-100/50 text-blue-500 py-5 px-5 flex flex-col gap-2">
+                        <p className="flex gap-2 items-center">
+                          Total a cobrar{" "}
+                          <span className="font-extrabold bg-white py-1 px-2">
+                            {formatearDinero(totalSueldoNetoConDescuentos || 0)}
+                          </span>
+                        </p>
+                        <p className="flex gap-2 items-center">
+                          Sueldo neto
+                          <span className="font-extrabold bg-white py-1 px-2">
+                            {" "}
+                            {formatearDinero(totalSueldoNeto || 0)}
+                          </span>
+                        </p>
+                      </div>
                     </>
                   )}
 
@@ -821,6 +877,7 @@ export const Empleados = () => {
         </div>
       </Navegacion>
       <TableEmpleados />
+      {/* <TableEmpleadosDos /> */}
     </section>
   );
 };
