@@ -74,8 +74,6 @@ export const ComprobantePago = ({ recibo }) => {
 
   const { years, months } = calculateAntiquity(recibo.fecha_ingreso);
 
-  console.log("recibo 01", recibo);
-
   return (
     <Document
       style={{

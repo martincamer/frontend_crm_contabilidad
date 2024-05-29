@@ -27,8 +27,6 @@ export const Empleado = () => {
     loadData();
   }, [params.id]);
 
-  console.log(empleado);
-
   const truncateText = (text, maxLength) => {
     if (text?.length <= maxLength) {
       return text;
@@ -49,10 +47,6 @@ export const Empleado = () => {
   };
 
   const { years, months } = calculateAntiquity(empleado.fecha_ingreso);
-
-  console.log("empleado", empleado);
-  // console.log("0", empleado?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco);
-  // console.log("0", empleado?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte);
 
   let sueldo;
 
@@ -341,6 +335,21 @@ export const Empleado = () => {
                   Number(empleado?.sueldo?.[0]?.premio_produccion)
                 ) || "N/A"}
               </p>
+              <div className="flex mt-1 gap-2 items-center font-semibold">
+                Saldo final:{" "}
+                <p className="font-semibold bg-orange-500 py-1 px-2 text-white rounded-xl">
+                  {formatearDinero(
+                    Number(empleado?.sueldo?.[0]?.sueldo_basico) +
+                      Number(total_antiguedad) +
+                      Number(empleado?.sueldo?.[0]?.comida) +
+                      Number(empleado?.sueldo?.[0]?.otros) +
+                      Number(empleado?.sueldo?.[0]?.premio_asistencia) +
+                      Number(empleado?.sueldo?.[0]?.premio_produccion) -
+                      Number(empleado?.sueldo?.[0]?.banco) -
+                      Number(empleado?.sueldo?.[0]?.descuento_del_cinco)
+                  ) || "N/A"}
+                </p>
+              </div>
             </div>
           ) : (
             <div>
@@ -392,6 +401,36 @@ export const Empleado = () => {
                   {empleado?.sueldo?.[0]?.quincena_cinco?.[0]
                     ?.observacion_cinco || "N/A"}
                 </p>
+                <div className="flex mt-1 gap-2 items-center font-semibold">
+                  Saldo del 5:{" "}
+                  <p className="font-semibold bg-orange-500 py-1 px-2 text-white rounded-xl">
+                    {formatearDinero(
+                      Number(
+                        empleado?.sueldo?.[0]?.quincena_cinco?.[0]
+                          ?.quincena_cinco
+                      ) +
+                        Number(total_antiguedad) +
+                        Number(
+                          empleado?.sueldo?.[0]?.quincena_cinco?.[0]
+                            ?.premio_asistencia
+                        ) +
+                        Number(
+                          empleado?.sueldo?.[0]?.quincena_cinco?.[0]
+                            ?.premio_produccion
+                        ) +
+                        Number(
+                          empleado?.sueldo?.[0]?.quincena_cinco?.[0]?.otros
+                        ) -
+                        Number(
+                          empleado?.sueldo?.[0]?.quincena_cinco?.[0]?.banco
+                        ) -
+                        Number(
+                          empleado?.sueldo?.[0]?.quincena_cinco?.[0]
+                            ?.descuento_del_cinco
+                        )
+                    ) || "N/A"}
+                  </p>
+                </div>
               </div>
 
               <div className="bg-white py-2 px-5 mt-5 border">
@@ -425,6 +464,25 @@ export const Empleado = () => {
                   {empleado?.sueldo?.[1]?.quincena_veinte?.[0]
                     ?.observacion_veinte || "N/A"}
                 </p>
+
+                <div className="flex mt-1 gap-2 items-center font-semibold">
+                  Saldo del 20:{" "}
+                  <p className="font-semibold bg-orange-500 py-1 px-2 text-white rounded-xl">
+                    {formatearDinero(
+                      Number(
+                        empleado?.sueldo?.[1]?.quincena_veinte?.[0]
+                          ?.quincena_veinte
+                      ) +
+                        Number(
+                          empleado?.sueldo?.[1]?.quincena_veinte?.[0]?.comida
+                        ) -
+                        Number(
+                          empleado?.sueldo?.[1]?.quincena_veinte?.[0]
+                            ?.descuento_del_veinte
+                        )
+                    ) || "N/A"}
+                  </p>
+                </div>
               </div>
             </div>
           )}

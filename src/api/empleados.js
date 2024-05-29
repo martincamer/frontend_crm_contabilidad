@@ -18,3 +18,13 @@ export const createReciboRequest = async (id, recibo) =>
 
 export const deleteEmpleadoRequest = async (id) =>
   axios.delete(`/empleados/${id}`);
+
+export const createEmpleadoDatosRequest = async (empleado) =>
+  axios.post("/empleados-datos", empleado);
+
+export const getEmpleadosRequestDatosMensuales = async (id, datos) =>
+  axios.get(`/empleados-datos/${id}`, datos);
+
+// Nueva función para aumentar sueldo
+export const aumentarSueldoRequest = async (data) =>
+  axios.post("/empleados/aumentar-sueldo", data);

@@ -7,6 +7,8 @@ import {
   updateEmpleadoRequest,
   createReciboRequest,
   updateEmpleadoEstadoRequest,
+  createEmpleadoDatosRequest,
+  aumentarSueldoRequest,
 } from "../api/empleados"; // Asegúrate de importar las funciones API correctas
 import { showSuccessToast } from "../helpers/toast";
 
@@ -22,6 +24,7 @@ export const useEmpleado = () => {
 
 export function EmpleadoProvider({ children }) {
   const [empleados, setEmpleados] = useState([]);
+  const [empleadosDatos, setEmpleadosDatos] = useState([]);
   const [recibo, setRecibo] = useState([]);
   const [error, setError] = useState("");
 
@@ -71,6 +74,30 @@ export function EmpleadoProvider({ children }) {
     }
   };
 
+  const aumentarSueldo = async (data) => {
+    try {
+      const empleadosActualizados = await aumentarSueldoRequest(data);
+
+      console.log(empleadosActualizados);
+
+      // Actualiza el estado de empleados si es necesario
+      setEmpleados((prevEmpleados) =>
+        prevEmpleados.map(
+          (empleado) =>
+            empleadosActualizados.data.find((e) => e._id === empleado._id) ||
+            empleado
+        )
+      );
+
+      // console.log("Respuesta del servidor:", empleadosActualizados);
+
+      showSuccessToast("Aumento de sueldo aplicado correctamente");
+    } catch (error) {
+      console.error("Error al aumentar el sueldo:", error);
+      setError("Error al aumentar el sueldo");
+    }
+  };
+
   const updateEmpleado = async (id, empleado) => {
     try {
       const res = await updateEmpleadoRequest(id, empleado);
@@ -112,6 +139,22 @@ export function EmpleadoProvider({ children }) {
     }
   };
 
+  const createEmpleadoDatos = async (empleado) => {
+    try {
+      const res = await createEmpleadoDatosRequest(empleado);
+      const nuevosDatos = res.data;
+
+      setEmpleadosDatos([...empleadosDatos, nuevosDatos]);
+
+      showSuccessToast(
+        "Datos guardados correctamente, no guardes dos veces el mismo mes.."
+      );
+    } catch (error) {
+      console.error("Error al crear empleado:", error);
+      setError("Error al crear empleado");
+    }
+  };
+
   return (
     <EmpleadoContext.Provider
       value={{
@@ -124,7 +167,9 @@ export function EmpleadoProvider({ children }) {
         updateEmpleado,
         crearRecibo,
         updateEmpleadoEstado,
+        createEmpleadoDatos,
         recibo,
+        aumentarSueldo,
       }}
     >
       {children}

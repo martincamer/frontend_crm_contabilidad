@@ -22,7 +22,7 @@ export const ModalComprobante = ({ idObtenida }) => {
       }
     }
     loadData();
-  }, [idObtenida, getEmpleado]);
+  }, [idObtenida]);
 
   const termino_pago = watch("termino_pago");
 

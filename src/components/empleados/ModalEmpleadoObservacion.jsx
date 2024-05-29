@@ -10,6 +10,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 export const ModalEmpleadoObservacion = ({ idObtenida }) => {
   const { getEmpleado } = useEmpleado();
   const [empleado, setEmpleado] = useState([]);
+
   useEffect(() => {
     async function obtenerEmpleado() {
       const res = await getEmpleado(idObtenida);
@@ -17,7 +18,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
       setEmpleado(res);
     }
     obtenerEmpleado();
-  }, [idObtenida, getEmpleado]);
+  }, [idObtenida]);
 
   const calculateAntiquity = (startDate) => {
     const start = new Date(startDate);
@@ -33,6 +34,25 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
 
   const edad_empleado = calculateAntiquity(empleado?.fecha_nacimiento);
   const antiguedad_empleado = calculateAntiquity(empleado?.fecha_ingreso);
+
+  let total_antiguedad = 0;
+  if (empleado?.termino_pago === "mensual") {
+    total_antiguedad =
+      Number(empleado?.sueldo[0]?.sueldo_basico) *
+      (0.01 * antiguedad_empleado.years);
+  } else {
+    const quincenaCinco = empleado?.sueldo?.[0]?.quincena_cinco?.[0]
+      ?.quincena_cinco
+      ? Number(empleado.sueldo[0].quincena_cinco[0].quincena_cinco)
+      : 0;
+    const quincenaVeinte = empleado?.sueldo?.[1]?.quincena_veinte?.[0]
+      ?.quincena_veinte
+      ? Number(empleado.sueldo[1].quincena_veinte[0].quincena_veinte)
+      : 0;
+
+    total_antiguedad =
+      (quincenaCinco + quincenaVeinte) * (0.01 * antiguedad_empleado.years);
+  }
 
   const [selectedRecibo, setSelectedRecibo] = useState(null);
 
@@ -91,6 +111,20 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
     }
     return pageNumbers;
   };
+
+  const sueldoBasico = Number(empleado?.sueldo?.[0]?.sueldo_basico || 0);
+  const banco = Number(empleado?.sueldo?.[0]?.banco || 0);
+  const descuento = Number(empleado?.sueldo?.[0]?.descuento_del_cinco || 0);
+
+  const comida = Number(empleado?.sueldo?.[0]?.comida || 0);
+  const premio_asistencia = Number(
+    empleado?.sueldo?.[0]?.premio_asistencia || 0
+  );
+  const premio_produccion = Number(
+    empleado?.sueldo?.[0]?.premio_produccion || 0
+  );
+  const otros = Number(empleado?.sueldo?.[0]?.otros || 0);
+  const obs = empleado?.sueldo?.[0]?.observacion || "";
 
   return (
     <dialog id="my_modal_observacion_empleado" className="modal">
@@ -194,7 +228,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                         {formatearDinero(
                           Number(
                             empleado?.sueldo[0]?.quincena_cinco[0]
-                              .quincena_cinco
+                              ?.quincena_cinco
                           )
                         )}
                       </span>
@@ -204,7 +238,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                       <span className="capitalize text-red-600">
                         -
                         {formatearDinero(
-                          Number(empleado?.sueldo[0]?.quincena_cinco[0].banco)
+                          Number(empleado?.sueldo[0]?.quincena_cinco[0]?.banco)
                         )}
                       </span>
                     </p>
@@ -215,7 +249,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                         {formatearDinero(
                           Number(
                             empleado?.sueldo[0]?.quincena_cinco[0]
-                              .descuento_del_cinco
+                              ?.descuento_del_cinco
                           )
                         )}
                       </span>
@@ -227,7 +261,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                         {formatearDinero(
                           Number(
                             empleado?.sueldo[0]?.quincena_cinco[0]
-                              .premio_asistencia
+                              ?.premio_asistencia
                           )
                         )}
                       </span>
@@ -239,7 +273,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                         {formatearDinero(
                           Number(
                             empleado?.sueldo[0]?.quincena_cinco[0]
-                              .premio_produccion
+                              ?.premio_produccion
                           )
                         )}
                       </span>
@@ -249,7 +283,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                       <span className="capitalize text-gray-600 text-wrap border py-2 px-3 text-sm">
                         {
                           empleado?.sueldo[0]?.quincena_cinco[0]
-                            .observacion_cinco
+                            ?.observacion_cinco
                         }
                       </span>
                     </p>
@@ -268,7 +302,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                         {formatearDinero(
                           Number(
                             empleado?.sueldo[1]?.quincena_veinte[0]
-                              .quincena_veinte
+                              ?.quincena_veinte
                           )
                         )}
                       </span>
@@ -278,7 +312,9 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                       <span className="capitalize text-gray-600">
                         +
                         {formatearDinero(
-                          Number(empleado?.sueldo[1]?.quincena_veinte[0].comida)
+                          Number(
+                            empleado?.sueldo[1]?.quincena_veinte[0]?.comida
+                          )
                         )}
                       </span>
                     </p>
@@ -289,7 +325,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                         {formatearDinero(
                           Number(
                             empleado?.sueldo[1]?.quincena_veinte[0]
-                              .descuento_del_veinte
+                              ?.descuento_del_veinte
                           )
                         )}
                       </span>
@@ -299,7 +335,7 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                       <span className="capitalize text-gray-600 text-wrap border py-2 px-3 text-sm">
                         {
                           empleado?.sueldo[1]?.quincena_veinte[0]
-                            .observacion_veinte
+                            ?.observacion_veinte
                         }
                       </span>
                     </p>
@@ -307,7 +343,79 @@ export const ModalEmpleadoObservacion = ({ idObtenida }) => {
                 </div>
               </div>
             ) : (
-              ""
+              <div className="flex justify-between">
+                <div className="flex flex-col gap-2">
+                  <div className="flex">
+                    <p className="font-bold text-orange-500 border-b-[2px] border-orange-500">
+                      Sueldo mensual
+                    </p>
+                  </div>
+                  <p className="font-semibold text-blue-500">
+                    Sueldo basico sin aumentos:{" "}
+                    <span className="capitalize text-gray-600">
+                      {formatearDinero(sueldoBasico)}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-blue-500">
+                    Comida:{" "}
+                    <span className="capitalize text-gray-600">
+                      +{formatearDinero(comida)}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-blue-500">
+                    Otros:{" "}
+                    <span className="capitalize text-gray-600">
+                      +{formatearDinero(otros)}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-blue-500">
+                    Premio asistencia:{" "}
+                    <span className="capitalize text-gray-600">
+                      +{formatearDinero(Number(premio_asistencia))}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-blue-500">
+                    Premio producción:{" "}
+                    <span className="capitalize text-gray-600">
+                      +{formatearDinero(Number(premio_produccion))}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-blue-500">
+                    Banco:{" "}
+                    <span className="capitalize text-gray-600">
+                      -{formatearDinero(Number(banco))}
+                    </span>
+                  </p>
+                  <p className="font-semibold text-blue-500">
+                    Descuento:{" "}
+                    <span className="capitalize text-gray-600">
+                      -{formatearDinero(Number(descuento))}
+                    </span>
+                  </p>
+                  <div className="flex mt-1 gap-2 items-center font-semibold text-blue-500">
+                    Saldo final:{" "}
+                    <p className="font-semibold bg-orange-500 py-1 px-2 text-white rounded-xl">
+                      {formatearDinero(
+                        Number(sueldoBasico) +
+                          Number(comida) +
+                          Number(otros) +
+                          Number(premio_asistencia) +
+                          Number(total_antiguedad) +
+                          Number(premio_produccion) -
+                          Number(banco) -
+                          Number(descuento)
+                      ) || "N/A"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 w-1/3">
+                  <p className="font-semibold text-blue-500">Observación</p>
+                  <span className="capitalize text-gray-600 text-wrap border py-4 px-3 text-sm">
+                    {obs}
+                  </span>
+                </div>
+              </div>
             )}
           </div>
         </div>

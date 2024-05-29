@@ -24,6 +24,8 @@ import { EditarEmpleadoDrawer } from "./EditarEmpleadoDrawer";
 import { ModalEmpleadoObservacion } from "./ModalEmpleadoObservacion";
 import Calendar from "../ui/Calendary";
 import ModalEliminar from "../ui/ModalEliminar";
+import { ModalGuardarDatos } from "./ModalGuardarDatos";
+import { ModalAumentoSueldo } from "./ModalAumentoSueldo";
 
 export const TableEmpleados = () => {
   const { click, openSearch } = useSearch();
@@ -32,8 +34,6 @@ export const TableEmpleados = () => {
   useEffect(() => {
     getEmpleados();
   }, []);
-
-  console.log(empleados);
 
   //Search
   const [currentPage, setCurrentPage] = useState(1);
@@ -242,104 +242,133 @@ export const TableEmpleados = () => {
 
   return (
     <div>
-      <div className="bg-white py-2 px-5 my-5 mx-3 max-w-xl justify-between flex items-center">
-        <p className="text-xs font-bold text-blue-500">
-          Mas opciones empleados
-        </p>
-        <div className="flex gap-2">
-          <div className="dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
-            >
-              <FaRegCalendar className="text-lg" /> Fecha
+      <div className="flex items-center">
+        <div className="bg-white py-2 px-5 my-5 mx-3 max-w-3xl gap-10 flex items-center">
+          <p className="text-xs font-bold text-blue-500">
+            Mas opciones empleados
+          </p>
+          <div className="flex gap-2">
+            <div className="dropdown">
+              <div
+                tabIndex={0}
+                role="button"
+                className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
+              >
+                <FaRegCalendar className="text-lg" /> Fecha
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-[600px] cursor-pointer mt-2"
+              >
+                <Calendar />
+              </ul>
             </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-[600px] cursor-pointer mt-2"
-            >
-              <Calendar />
-            </ul>
-          </div>
-          <div className="dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
-            >
-              <FaFilter className="text-base" /> Mas filtrós
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-82 cursor-pointer mt-2"
-            >
-              <div className="">
-                <label htmlFor="" className="uppercase font-bold text-xs">
-                  Filtrar por fabrica
-                </label>
-                <select
-                  className="uppercase text-xs font-semibold outline-none border py-3 px-2 focus:border-blue-500"
-                  value={selectedFabricaSucursal}
-                  onChange={(e) => setSelectedFabricaSucursal(e.target.value)}
-                >
-                  <option
-                    className="uppercase text-xs font-extrabold text-blue-500"
-                    value=""
+            <div className="dropdown">
+              <div
+                tabIndex={0}
+                role="button"
+                className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
+              >
+                <FaFilter className="text-base" /> Mas filtrós
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-82 cursor-pointer mt-2"
+              >
+                <div className="">
+                  <label htmlFor="" className="uppercase font-bold text-xs">
+                    Filtrar por fabrica
+                  </label>
+                  <select
+                    className="uppercase text-xs font-semibold outline-none border py-3 px-2 focus:border-blue-500"
+                    value={selectedFabricaSucursal}
+                    onChange={(e) => setSelectedFabricaSucursal(e.target.value)}
                   >
-                    Todas las fábricas/sucursales
-                  </option>
-                  {fabricasSucursalesOptions.map((fab, index) => (
                     <option
-                      className="uppercase text-xs font-bold"
-                      key={index}
-                      value={fab}
+                      className="uppercase text-xs font-extrabold text-blue-500"
+                      value=""
                     >
-                      {fab}
+                      Todas las fábricas/sucursales
                     </option>
-                  ))}
-                </select>
-              </div>
-            </ul>
-          </div>
-          <div className="dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
-            >
-              <FaSignal className="text-base" /> Estadisticas
+                    {fabricasSucursalesOptions.map((fab, index) => (
+                      <option
+                        className="uppercase text-xs font-bold"
+                        key={index}
+                        value={fab}
+                      >
+                        {fab}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </ul>
             </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 cursor-pointer flex flex-col gap-2 w-auto mt-2"
-            >
-              <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                <p className="text-sm font-semibold text-gray-700">
-                  Total a pagar quicena del 5 / efectivo
-                </p>
-                <p className="text-blue-500 text-lg font-bold">
-                  {formatearDinero(ingresoTotalQuincenaCinco)}
-                </p>
+            <div className="dropdown">
+              <div
+                tabIndex={0}
+                role="button"
+                className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
+              >
+                <FaSignal className="text-base" /> Estadisticas
               </div>
-              <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                <p className="text-sm font-semibold text-gray-700">
-                  Total a pagar quincena del 20 / efectivo
-                </p>
-                <p className="text-blue-500 text-lg font-bold">
-                  {formatearDinero(ingresoTotalQuincenaVeinte)}
-                </p>
-              </div>
-              <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                <p className="text-sm font-semibold text-gray-700">
-                  Total a pagar mensual / efectivo
-                </p>
-                <p className="text-blue-500 text-lg font-bold">
-                  {formatearDinero(ingresoTotal)}
-                </p>
-              </div>
-            </ul>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 cursor-pointer grid grid-cols-2 gap-2 w-[700px] mt-2"
+              >
+                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+                  <p className="text-sm font-semibold text-gray-700">
+                    Total a pagar quicena del 5 / efectivo
+                  </p>
+                  <p className="text-blue-500 text-lg font-bold">
+                    {formatearDinero(ingresoTotalQuincenaCinco)}
+                  </p>
+                </div>
+                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+                  <p className="text-sm font-semibold text-gray-700">
+                    Total a pagar quincena del 20 / efectivo
+                  </p>
+                  <p className="text-blue-500 text-lg font-bold">
+                    {formatearDinero(ingresoTotalQuincenaVeinte)}
+                  </p>
+                </div>
+                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+                  <p className="text-sm font-semibold text-gray-700">
+                    Total a pagar mensual / efectivo
+                  </p>
+                  <p className="text-blue-500 text-lg font-bold">
+                    {formatearDinero(ingresoTotal)}
+                  </p>
+                </div>
+              </ul>
+            </div>
           </div>
+        </div>
+        <div className="bg-white py-2 px-6 flex gap-2">
+          <Link
+            className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
+            to={"/datos-empleados"}
+          >
+            Buscar sueldos mensuales
+          </Link>
+          <button
+            type="button"
+            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
+            onClick={() => {
+              document.getElementById("my_modal_guardar_datos").showModal();
+            }}
+          >
+            Guardar tabla mensual
+          </button>
+
+          <button
+            type="button"
+            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
+            onClick={() => {
+              document.getElementById("my_modal_aumento_sueldo").showModal();
+            }}
+          >
+            Aumentar sueldos
+          </button>
         </div>
       </div>
       <div className="bg-white my-2 mx-3">
@@ -572,6 +601,8 @@ export const TableEmpleados = () => {
       />
       <EditarEmpleadoDrawer idObtenida={idObtenida} />
       <ModalEmpleadoObservacion idObtenida={idObtenida} />
+      <ModalGuardarDatos empleados={empleados} />
+      <ModalAumentoSueldo />
     </div>
   );
 };

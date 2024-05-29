@@ -23,9 +23,11 @@ import { Ingresos } from "./pages/Ingresos";
 import { IngresoProvider } from "./context/IngresosContext";
 import { IngresoPage } from "./pages/IngresoPage";
 import { Empleados } from "./pages/Empleados";
-import InvoicePage from "./pages/PruebasComprobantes";
 import { EmpleadoProvider } from "./context/EmpleadosContext";
 import { Empleado } from "./pages/Empleado";
+import { EmpleadosDatos } from "./pages/EmpleadosDatos";
+import { EmpleadosDato } from "./pages/EmpleadosDato";
+import InvoicePage from "./pages/PruebasComprobantes";
 
 function App() {
   return (
@@ -44,6 +46,14 @@ function App() {
                       <Route element={<ProtectedRoute />}>
                         <Route index path="/home" element={<HomeApp />} />
                         <Route path="/empleados" element={<Empleados />} />
+                        <Route
+                          path="/datos-empleados"
+                          element={<EmpleadosDatos />}
+                        />
+                        <Route
+                          path="/empleados-datos/:id"
+                          element={<EmpleadosDato />}
+                        />
                         <Route path="/empleado/:id" element={<Empleado />} />
                         <Route
                           path="/pruebas-comprobantes"

@@ -109,7 +109,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
       setValue("estado", res?.estado);
     }
     obtenerEmpleado();
-  }, [idObtenida, getEmpleado]);
+  }, [idObtenida]);
 
   const quincena_cinco = watch("quincena_del_cinco");
   const quincena_veinte = watch("quincena_del_veinte");

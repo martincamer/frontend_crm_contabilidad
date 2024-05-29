@@ -21,14 +21,14 @@ export const SideBar = () => {
       } transition-all ease-linear flex flex-col bg-white min-h-screen max-h-full h-full `}
     >
       <div className="flex flex-col gap-5 py-5 px-6">
-        <Link
+        {/* <Link
           className={`flex gap-2 ${
             location.pathname === "/home" ? "text-blue-600" : "text-gray-700"
           } font-bold items-center text-base`}
           to={"/home"}
         >
           <BsClipboardData /> Analisis/estadisticas
-        </Link>
+        </Link> */}
 
         {/* <Disclosure>
           <Disclosure.Button className="">
@@ -163,18 +163,17 @@ export const SideBar = () => {
             </Disclosure.Panel>
           </Transition>
         </Disclosure> */}
-
-        <Disclosure>
-          <Disclosure.Button className="">
-            <button
-              type="button"
-              className={`flex gap-2 ${
-                location.pathname === "/" ? "text-blue-600" : "text-gray-700"
-              } font-bold items-center text-base hover:text-blue-600`}
-            >
-              <MdOutlinePersonPin className="text-xl" /> Empleados
-            </button>
-          </Disclosure.Button>
+        <button
+          type="button"
+          className={`flex gap-2 ${
+            location.pathname === "/" ? "text-blue-600" : "text-gray-700"
+          } font-bold items-center text-base hover:text-blue-600`}
+        >
+          <MdOutlinePersonPin className="text-xl" />{" "}
+          <Link to={"/empleados"}>Empleados</Link>
+        </button>
+        {/* <Disclosure>
+          <Disclosure.Button className=""></Disclosure.Button>
           <Transition
             enter="transition duration-100 ease-out"
             enterFrom="transform translateY(-10%) opacity-0"
@@ -195,7 +194,7 @@ export const SideBar = () => {
               </ul>
             </Disclosure.Panel>
           </Transition>
-        </Disclosure>
+        </Disclosure> */}
 
         {/* <Disclosure>
           <Disclosure.Button className="">
