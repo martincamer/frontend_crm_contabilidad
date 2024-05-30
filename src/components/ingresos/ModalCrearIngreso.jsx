@@ -4,7 +4,7 @@ import { FormInput } from "../ui/FormInput";
 import { useForm } from "react-hook-form";
 import { SelectInput } from "../ui/SelectInput";
 import { useIngreso } from "../../context/IngresosContext";
-import { tiposDePagos } from "../../../../backend/src/data/TiposDePagos";
+import { tiposDePagos } from "../../../src/data/TiposDePagos";
 import FileDropZone from "../ui/FileDropZone";
 import dayjs from "dayjs";
 import axios from "axios";
