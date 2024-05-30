@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEmpleado } from "../../context/EmpleadosContext";
 import { useForm } from "react-hook-form";
-import dayjs from "dayjs";
+import { formatearDinero } from "../../helpers/FormatearDinero";
 
 export const ModalAumentoSueldo = () => {
   const { aumentarSueldo } = useEmpleado();
 
+  const [isEditable, setIsEditable] = useState(false);
+
+  const handleInputClick = () => {
+    setIsEditable(true);
+  };
+
   const { register, handleSubmit, reset, watch } = useForm();
 
   const termino_pago = watch("termino_pago");
+  const aumento = watch("aumento");
 
   const onSubmit = async (formData) => {
     try {
@@ -16,7 +23,6 @@ export const ModalAumentoSueldo = () => {
 
       const datos = {
         ...formData,
-        // date: dayjs.utc(formData.date).format(),
       };
 
       await aumentarSueldo(datos);
@@ -58,18 +64,15 @@ export const ModalAumentoSueldo = () => {
               className="text- bg-white placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 capitalize text-sm"
               {...register("termino_pago", { required: true })}
             >
-              <option value="mensual">Mensual</option>
-              <option value="quincenal">Quincenal</option>
+              <option className="font-semibold" value="mensual">
+                Mensual si el empleado es mensual
+              </option>
+              <option className="font-semibold" value="quincenal">
+                Quincenal si el empleado es quincenal
+              </option>
             </select>
           </label>
-          <label className="flex gap-2 items-center">
-            <span className="font-bold">Aumento</span>
-            <input
-              className="text- bg-white placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 capitalize text-sm"
-              type="text"
-              {...register("aumento", { required: true })}
-            />
-          </label>
+
           {termino_pago === "quincenal" && (
             <div>
               <label className="flex gap-2 items-center">
@@ -78,13 +81,40 @@ export const ModalAumentoSueldo = () => {
                   className="text- bg-white placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 capitalize text-sm"
                   {...register("tipo_quincena", { required: true })}
                 >
-                  <option value="">Seleccionar tipo de quincena</option>
-                  <option value="quincena_cinco">Quincena del 5</option>
-                  <option value="quincena_veinte">Quincena del 20</option>
+                  <option className="font-semibold" value="">
+                    Seleccionar tipo de quincena
+                  </option>
+                  <option className="font-semibold" value="quincena_cinco">
+                    Quincena del 5
+                  </option>
+                  <option className="font-semibold" value="quincena_veinte">
+                    Quincena del 20
+                  </option>
                 </select>
               </label>
             </div>
           )}
+
+          <div onClick={handleInputClick}>
+            {isEditable ? (
+              <label className="flex gap-2 items-center">
+                <span className="font-bold">Aumento</span>
+                <input
+                  className="text- bg-white placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 capitalize text-sm"
+                  type="text"
+                  {...register("aumento", { required: true })}
+                  onBlur={() => setIsEditable(false)}
+                />
+              </label>
+            ) : (
+              <label className="flex gap-2 items-center">
+                <span className="font-bold">Aumento</span>
+                <p className="text- bg-white placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 capitalize text-sm w-1/3">
+                  {formatearDinero(Number(aumento) || 0)}
+                </p>
+              </label>
+            )}
+          </div>
           <div>
             <button
               className="bg-blue-500 py-3 px-8 text-sm rounded-full font-semibold text-white mt-3 hover:bg-orange-500 transition-all cursor-pointer"

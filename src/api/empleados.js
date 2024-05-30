@@ -28,3 +28,13 @@ export const getEmpleadosRequestDatosMensuales = async (id, datos) =>
 // Nueva función para aumentar sueldo
 export const aumentarSueldoRequest = async (data) =>
   axios.post("/empleados/aumentar-sueldo", data);
+
+export const createSectorRequest = async (sector) =>
+  axios.post("/crear-sector", sector);
+
+export const createFabricaRequest = async (fabrica) =>
+  axios.post("/crear-fabrica", fabrica);
+
+export const getSectoresRequest = async () => axios.get("/sectores");
+
+export const getFabricasRequest = async () => axios.get("/fabricas");

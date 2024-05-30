@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navegacion } from "../components/ui/Navegacion";
 import { NavegacionLink } from "../components/ui/NavegacionLink";
 import { FormInput } from "../components/ui/FormInput";
@@ -10,12 +10,21 @@ import { useEmpleado } from "../context/EmpleadosContext";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { Texto } from "../components/ui/Texto";
 import { TableEmpleados } from "../components/empleados/TableEmpleados";
+import { CrearNuevosSectores } from "../components/empleados/CrearNuevosSectores";
+import { CrearNuevaFabrica } from "../components/empleados/CrearNuevaFabrica";
+import { IoAdd } from "react-icons/io5";
 import dayjs from "dayjs";
 
 export const Empleados = () => {
   const { register, handleSubmit, watch } = useForm();
 
-  const { createEmpleado } = useEmpleado();
+  const { createEmpleado, sectores, getSectores, fabricas, getFabricas } =
+    useEmpleado();
+
+  useEffect(() => {
+    getSectores();
+    getFabricas();
+  }, []);
 
   const [isEditable, setIsEditable] = useState(false);
 
@@ -115,8 +124,6 @@ export const Empleados = () => {
   //Crear nuevo empleado
   const onSubmit = async (formData) => {
     try {
-      // Subimos la imagen a Cloudinary y obtenemos la URL
-
       // Creamos el objeto del producto con todos los datos y la URL de la imagen
       const clienteData = {
         nombre,
@@ -267,67 +274,70 @@ export const Empleados = () => {
                         Mensual
                       </option>
                     </SelectInput>
-                    <SelectInput
-                      labelText={"Sector de trabajo"}
-                      type={"text"}
-                      props={{
-                        ...register("sector_trabajo", { required: true }),
-                      }}
-                    >
-                      <option className="font-bold text-blue-500">
-                        Seleccionar sector
-                      </option>
-                      <option className="font-semibold" value={"armado"}>
-                        Armado
-                      </option>
-                      <option className="font-semibold" value={"producción"}>
-                        Producción
-                      </option>
-                      <option className="font-semibold" value={"ventas"}>
-                        Ventas
-                      </option>
-                      <option className="font-semibold" value={"contabilidad"}>
-                        Contabilidad
-                      </option>
-                      <option
-                        className="font-semibold"
-                        value={"administración"}
+                    <div className="flex gap-2 items-center">
+                      <SelectInput
+                        labelText={"Sector de trabajo"}
+                        type={"text"}
+                        props={{
+                          ...register("sector_trabajo", { required: true }),
+                        }}
                       >
-                        Administración
-                      </option>
-                      <option className="font-semibold" value={"gerencia"}>
-                        Gerencia
-                      </option>
-                    </SelectInput>
-                    <SelectInput
-                      labelText={"Fabrica o sucursal"}
-                      type={"text"}
-                      props={{
-                        ...register("fabrica_sucursal", { required: true }),
-                      }}
-                    >
-                      <option className="font-bold text-blue-500">
-                        Seleccionar sector
-                      </option>
-                      <option className="font-semibold" value={"long"}>
-                        Long
-                      </option>
-                      <option
-                        className="font-semibold"
-                        value={"parque industrial"}
+                        <option className="font-bold text-blue-500">
+                          Seleccionar sector
+                        </option>
+                        {sectores.map((s, index) => (
+                          <option
+                            key={index}
+                            className="font-semibold text-black"
+                            value={s.nombre}
+                          >
+                            {s.nombre}
+                          </option>
+                        ))}
+                      </SelectInput>
+                      <div
+                        onClick={() => {
+                          document
+                            .getElementById("my_modal_crear_sectores")
+                            .showModal();
+                        }}
+                        className="flex justify-center items-center h-auto"
                       >
-                        Parque industrial
-                      </option>
-                      <option
-                        className="font-semibold"
-                        value={"marcos ciani 255"}
+                        <IoAdd className="text-3xl bg-blue-100/30 py-1 px-1 text-blue-500 cursor-pointer border" />
+                      </div>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <SelectInput
+                        labelText={"Fabrica o sucursal"}
+                        type={"text"}
+                        props={{
+                          ...register("fabrica_sucursal", { required: true }),
+                        }}
                       >
-                        Marcos ciani 255
-                      </option>
-                      <option className="font-semibold" value={"aberturas"}>
-                        Aberturas
-                      </option>
-                    </SelectInput>
+                        <option className="font-bold text-blue-500">
+                          Seleccionar fabrica/sucursal
+                        </option>
+                        {fabricas.map((s, index) => (
+                          <option
+                            key={index}
+                            className="font-semibold text-black"
+                            value={s.nombre}
+                          >
+                            {s.nombre}
+                          </option>
+                        ))}
+                      </SelectInput>
+                      <div
+                        onClick={() => {
+                          document
+                            .getElementById("my_modal_crear_fabrica")
+                            .showModal();
+                        }}
+                        className="flex justify-center items-center h-auto"
+                      >
+                        <IoAdd className="text-3xl bg-blue-100/30 py-1 px-1 text-blue-500 cursor-pointer border" />
+                      </div>
+                    </div>
                   </div>
                   {termino_pago === "quincenal" ? (
                     <>
@@ -877,7 +887,8 @@ export const Empleados = () => {
         </div>
       </Navegacion>
       <TableEmpleados />
-      {/* <TableEmpleadosDos /> */}
+      <CrearNuevosSectores />
+      <CrearNuevaFabrica />
     </section>
   );
 };

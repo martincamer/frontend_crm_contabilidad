@@ -1,13 +1,7 @@
 import React from "react";
 import { useAuth } from "../../context/authContext";
 import { Link, useLocation } from "react-router-dom";
-import { BsClipboardData } from "react-icons/bs";
-import { FaFileAlt } from "react-icons/fa";
-import { GiCash } from "react-icons/gi";
-import { PiSuitcaseSimpleLight } from "react-icons/pi";
-import { TbUserFilled } from "react-icons/tb";
 import { MdOutlinePersonPin } from "react-icons/md";
-import { Disclosure, Transition } from "@headlessui/react";
 
 export const SideBar = () => {
   const { user, isOpen } = useAuth();
@@ -17,7 +11,7 @@ export const SideBar = () => {
   return (
     <div
       className={`${
-        isOpen ? "w-64 opacity-1 shadow-lg" : "w-0 opacity-0"
+        !isOpen ? "w-64 opacity-1 shadow-lg" : "w-0 opacity-0"
       } transition-all ease-linear flex flex-col bg-white min-h-screen max-h-full h-full `}
     >
       <div className="flex flex-col gap-5 py-5 px-6">

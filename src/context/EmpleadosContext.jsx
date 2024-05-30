@@ -9,6 +9,10 @@ import {
   updateEmpleadoEstadoRequest,
   createEmpleadoDatosRequest,
   aumentarSueldoRequest,
+  getFabricasRequest,
+  getSectoresRequest,
+  createSectorRequest,
+  createFabricaRequest,
 } from "../api/empleados"; // Asegúrate de importar las funciones API correctas
 import { showSuccessToast } from "../helpers/toast";
 
@@ -26,6 +30,8 @@ export function EmpleadoProvider({ children }) {
   const [empleados, setEmpleados] = useState([]);
   const [empleadosDatos, setEmpleadosDatos] = useState([]);
   const [recibo, setRecibo] = useState([]);
+  const [fabricas, setFabricas] = useState([]);
+  const [sectores, setSectores] = useState([]);
   const [error, setError] = useState("");
 
   const getEmpleados = async () => {
@@ -155,6 +161,54 @@ export function EmpleadoProvider({ children }) {
     }
   };
 
+  const getFabricas = async () => {
+    try {
+      const res = await getFabricasRequest();
+      setFabricas(res.data);
+    } catch (error) {
+      console.error("Error al obtener empleados:", error);
+      setError("Error al obtener empleados");
+    }
+  };
+
+  const getSectores = async () => {
+    try {
+      const res = await getSectoresRequest();
+      setSectores(res.data);
+    } catch (error) {
+      console.error("Error al obtener empleados:", error);
+      setError("Error al obtener empleados");
+    }
+  };
+
+  const createSectores = async (sector) => {
+    try {
+      const res = await createSectorRequest(sector);
+      const nuevoSector = res.data;
+
+      setSectores([...sectores, nuevoSector]);
+
+      showSuccessToast("Sector creado correctamente");
+    } catch (error) {
+      console.error("Error al crear empleado:", error);
+      setError("Error al crear empleado");
+    }
+  };
+
+  const createFabricas = async (fabrica) => {
+    try {
+      const res = await createFabricaRequest(fabrica);
+      const nuevaFabrica = res.data;
+
+      setFabricas([...empleados, nuevaFabrica]);
+
+      showSuccessToast("Fabrica creada correctamente");
+    } catch (error) {
+      console.error("Error al crear empleado:", error);
+      setError("Error al crear empleado");
+    }
+  };
+
   return (
     <EmpleadoContext.Provider
       value={{
@@ -170,6 +224,12 @@ export function EmpleadoProvider({ children }) {
         createEmpleadoDatos,
         recibo,
         aumentarSueldo,
+        fabricas,
+        getFabricas,
+        getSectores,
+        sectores,
+        createSectores,
+        createFabricas,
       }}
     >
       {children}

@@ -44,8 +44,12 @@ function App() {
                       <Route index path="/" element={<LoginPage />} />
                       <Route path="/register" element={<RegisterPage />} />
                       <Route element={<ProtectedRoute />}>
-                        <Route index path="/home" element={<HomeApp />} />
-                        <Route path="/empleados" element={<Empleados />} />
+                        <Route path="/home" element={<HomeApp />} />
+                        <Route
+                          index
+                          path="/empleados"
+                          element={<Empleados />}
+                        />
                         <Route
                           path="/datos-empleados"
                           element={<EmpleadosDatos />}

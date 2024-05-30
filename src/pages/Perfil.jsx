@@ -5,8 +5,6 @@ import { useModal } from "../helpers/modal";
 export const Perfil = () => {
   const { user } = useAuth();
 
-  const { closeModal, isOpen, openModal } = useModal();
-
   const {
     closeModal: closeModalImagen,
     isOpen: isOpenImagen,
@@ -44,7 +42,7 @@ export const Perfil = () => {
             <button
               onClick={() => openModalImagen()}
               type="button"
-              className="border-[1px] border-sky-700 py-2 px-5 rounded-full text-sky-700 font-bold text-sm shadow"
+              className="border-[1px] border-blue-700 py-2 px-5 rounded-full text-blue-700 font-bold text-sm shadow"
             >
               Cargar imagen usuario
             </button>
@@ -53,13 +51,19 @@ export const Perfil = () => {
       </div>
       <div className="bg-white rounded-xl shadow-xl w-1/2 mx-auto mt-5">
         <div className="bg-gray-100 py-8 px-5 rounded-t-xl">
-          <p className="text-sky-500 font-semibold text-sm">Mi Perfil</p>
+          <p className="text-blue-500 font-semibold text-sm">Mi Perfil</p>
         </div>
-        <div className="bg-white py-8 px-8 grid grid-cols-3 rounded-xl">
+        <div className="bg-white py-8 px-8 gap-2 grid grid-cols-3 rounded-xl">
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
-            Nombre y apellido{" "}
+            Usuario{" "}
             <span className="font-semibold text-slate-400">
               {user.username}
+            </span>
+          </p>
+          <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
+            Nombre y Apellido{" "}
+            <span className="font-semibold text-slate-400 capitalize">
+              {user.nombre} {user.apellido}
             </span>
           </p>
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
@@ -67,15 +71,35 @@ export const Perfil = () => {
             <span className="font-semibold text-slate-400">{user.email}</span>
           </p>
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
-            Identificación{" "}
-            <span className="font-semibold text-slate-400"></span>
+            Fabrica/suc{" "}
+            <span className="font-semibold text-slate-400 capitalize">
+              {user.fabrica}
+            </span>
+          </p>
+          <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
+            Puesto/Sector{" "}
+            <span className="font-semibold text-slate-400 capitalize">
+              {user.puesto_sector}
+            </span>
+          </p>
+          <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
+            Localidad{" "}
+            <span className="font-semibold text-slate-400 capitalize">
+              {user.localidad}
+            </span>
+          </p>
+          <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
+            Provincia{" "}
+            <span className="font-semibold text-slate-400 capitalize">
+              {user.provincia}
+            </span>
           </p>
         </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-xl w-1/2 mx-auto mt-5">
         <div className="bg-gray-100 py-8 px-5 rounded-t-xl">
-          <p className="text-sky-500 font-semibold text-sm">Seguridad</p>
+          <p className="text-blue-500 font-semibold text-sm">Seguridad</p>
         </div>
         <div className="bg-white py-8 px-8  rounded-xl flex justify-between">
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
@@ -94,7 +118,7 @@ export const Perfil = () => {
             <div className="flex justify-end">
               <button
                 type="button"
-                className="border-[1px] border-sky-700 py-2 px-5 rounded-full text-sky-700 font-bold text-sm shadow"
+                className="border-[1px] border-blue-700 py-2 px-5 rounded-full text-blue-700 font-bold text-sm shadow"
               >
                 Cambiar contraseña
               </button>

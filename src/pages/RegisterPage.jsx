@@ -15,7 +15,7 @@ function Register() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/home");
+    if (isAuthenticated) navigate("/empleados");
   }, [isAuthenticated]);
 
   return (
