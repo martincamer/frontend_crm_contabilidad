@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useCliente } from "../context/ClientesContext";
 import { Submit } from "../components/ui/Submit";
 import { SelectInput } from "../components/ui/SelectInput";
-import { tiposDePagos } from "../../../backend/src/data/TiposDePagos";
+import { tiposDePagos } from "../../src/data/TiposDePagos";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import FileDropZone from "../components/ui/FileDropZone";
 import dayjs from "dayjs";
