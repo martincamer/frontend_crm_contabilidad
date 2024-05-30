@@ -8,13 +8,26 @@ import { useEmpleado } from "../../context/EmpleadosContext";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 import { Texto } from "../../components/ui/Texto";
 import dayjs from "dayjs";
+import { IoAdd } from "react-icons/io5";
 
 export const EditarEmpleadoDrawer = ({ idObtenida }) => {
   const { register, handleSubmit, watch, setValue } = useForm();
 
-  const { updateEmpleado, getEmpleado } = useEmpleado();
+  const {
+    updateEmpleado,
+    getEmpleado,
+    getSectores,
+    getFabricas,
+    fabricas,
+    sectores,
+  } = useEmpleado();
 
   const [isEditable, setIsEditable] = useState(false);
+
+  useEffect(() => {
+    getSectores();
+    getFabricas();
+  }, []);
 
   const handleInputClick = () => {
     setIsEditable(true);
@@ -265,7 +278,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
     }
   };
   return (
-    <div className="drawer drawer-end z-[999]">
+    <div className="drawer drawer-end z-[1001]">
       <input id="my-drawer-editar" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">{/* Page content here */}</div>
       <div className="drawer-side">
@@ -336,58 +349,70 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                   Mensual
                 </option>
               </SelectInput>
-              <SelectInput
-                labelText={"Sector de trabajo"}
-                type={"text"}
-                props={{
-                  ...register("sector_trabajo", { required: true }),
-                }}
-              >
-                <option className="font-bold text-blue-500">
-                  Seleccionar sector
-                </option>
-                <option className="font-semibold" value={"armado"}>
-                  Armado
-                </option>
-                <option className="font-semibold" value={"producción"}>
-                  Producción
-                </option>
-                <option className="font-semibold" value={"ventas"}>
-                  Ventas
-                </option>
-                <option className="font-semibold" value={"contabilidad"}>
-                  Contabilidad
-                </option>
-                <option className="font-semibold" value={"administración"}>
-                  Administración
-                </option>
-                <option className="font-semibold" value={"gerencia"}>
-                  Gerencia
-                </option>
-              </SelectInput>
-              <SelectInput
-                labelText={"Fabrica o sucursal"}
-                type={"text"}
-                props={{
-                  ...register("fabrica_sucursal", { required: true }),
-                }}
-              >
-                <option className="font-bold text-blue-500">
-                  Seleccionar sector
-                </option>
-                <option className="font-semibold" value={"long"}>
-                  Long
-                </option>
-                <option className="font-semibold" value={"parque industrial"}>
-                  Parque industrial
-                </option>
-                <option className="font-semibold" value={"marcos ciani 255"}>
-                  Marcos ciani 255
-                </option>
-                <option className="font-semibold" value={"aberturas"}>
-                  Aberturas
-                </option>
-              </SelectInput>
+              <div className="flex gap-2 items-center">
+                <SelectInput
+                  labelText={"Sector de trabajo"}
+                  type={"text"}
+                  props={{
+                    ...register("sector_trabajo", { required: true }),
+                  }}
+                >
+                  <option className="font-bold text-blue-500">
+                    Seleccionar sector
+                  </option>
+                  {sectores.map((s, index) => (
+                    <option
+                      key={index}
+                      className="font-semibold text-black"
+                      value={s.nombre}
+                    >
+                      {s.nombre}
+                    </option>
+                  ))}
+                </SelectInput>
+                <div
+                  onClick={() => {
+                    document
+                      .getElementById("my_modal_crear_sectores")
+                      .showModal();
+                  }}
+                  className="flex justify-center items-center h-auto"
+                >
+                  <IoAdd className="text-3xl bg-blue-100/30 py-1 px-1 text-blue-500 cursor-pointer border" />
+                </div>
+              </div>
+              <div className="flex gap-2 items-center">
+                <SelectInput
+                  labelText={"Fabrica o sucursal"}
+                  type={"text"}
+                  props={{
+                    ...register("fabrica_sucursal", { required: true }),
+                  }}
+                >
+                  <option className="font-bold text-blue-500">
+                    Seleccionar fabrica/sucursal
+                  </option>
+                  {fabricas.map((s, index) => (
+                    <option
+                      key={index}
+                      className="font-semibold text-black"
+                      value={s.nombre}
+                    >
+                      {s.nombre}
+                    </option>
+                  ))}
+                </SelectInput>
+                <div
+                  onClick={() => {
+                    document
+                      .getElementById("my_modal_crear_fabrica")
+                      .showModal();
+                  }}
+                  className="flex justify-center items-center h-auto"
+                >
+                  <IoAdd className="text-3xl bg-blue-100/30 py-1 px-1 text-blue-500 cursor-pointer border" />
+                </div>
+              </div>
             </div>
             {termino_pago === "quincenal" ? (
               <>

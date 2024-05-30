@@ -29,10 +29,12 @@ import { ModalAumentoSueldo } from "./ModalAumentoSueldo";
 
 export const TableEmpleados = () => {
   const { click, openSearch } = useSearch();
-  const { deleteEmpleado, getEmpleados, empleados } = useEmpleado();
+  const { deleteEmpleado, getEmpleados, empleados, getFabricas, fabricas } =
+    useEmpleado();
 
   useEffect(() => {
     getEmpleados();
+    getFabricas();
   }, []);
 
   //Search
@@ -60,7 +62,7 @@ export const TableEmpleados = () => {
     setSearchTerm(event.target.value); // Actualizar el término de búsqueda
   };
 
-  const filteredGastos = currentVentas.filter(
+  const filteredGastos = empleados.filter(
     (venta) =>
       // venta.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
       // venta.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -290,13 +292,13 @@ export const TableEmpleados = () => {
                     >
                       Todas las fábricas/sucursales
                     </option>
-                    {fabricasSucursalesOptions.map((fab, index) => (
+                    {fabricas.map((fab, index) => (
                       <option
                         className="uppercase text-xs font-bold"
                         key={index}
-                        value={fab}
+                        value={fab.nombre}
                       >
-                        {fab}
+                        {fab.nombre}
                       </option>
                     ))}
                   </select>
@@ -552,14 +554,14 @@ export const TableEmpleados = () => {
           placeholder={"Buscar gastó por proveedor o categoria"}
         />
       )}
-
+      {/* 
       <div className="flex pb-12 justify-center items-center space-x-2">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
           className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
         >
-          <FaArrowLeft /> {/* Icono para la flecha izquierda */}
+          <FaArrowLeft />
         </button>
         <ul className="flex space-x-2">
           {getPageNumbers().map((number) => (
@@ -570,7 +572,7 @@ export const TableEmpleados = () => {
                   currentPage === number ? "bg-white" : "bg-gray-300"
                 } py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100`}
               >
-                {number} {/* Número de página */}
+                {number}
               </button>
             </li>
           ))}
@@ -584,7 +586,7 @@ export const TableEmpleados = () => {
         >
           <FaArrowRight />
         </button>
-      </div>
+      </div> */}
 
       {/* Modal editar estado */}
       <ModalEstadoEmpleados idObtenida={idObtenida} />
@@ -599,6 +601,7 @@ export const TableEmpleados = () => {
         idObtenida={idObtenida}
         message={"¿Deseas eliminar el empleado?"}
       />
+
       <EditarEmpleadoDrawer idObtenida={idObtenida} />
       <ModalEmpleadoObservacion idObtenida={idObtenida} />
       <ModalGuardarDatos empleados={empleados} />
