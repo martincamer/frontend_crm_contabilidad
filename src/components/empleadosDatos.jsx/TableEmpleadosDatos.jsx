@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaFilter, FaRegCalendar, FaSignal } from "react-icons/fa";
 import { updateFechaMes } from "../../helpers/FechaUpdateMes";
 import { Dropdown } from "../ui/Dropdown";
-import { useModal } from "../../helpers/modal";
-import Calendar from "../ui/Calendary";
-import instance from "../../api/axios";
-import ModalEliminar from "../ui/ModalEliminar";
 import { useObtenerId } from "../../helpers/obtenerId";
 import { showSuccessToast } from "../../helpers/toast";
+import { useModal } from "../../helpers/modal";
+import instance from "../../api/axios";
+import ModalEliminar from "../ui/ModalEliminar";
 
 export const TableEmpleadosDatos = () => {
   const [startDate, setStartDate] = useState("");

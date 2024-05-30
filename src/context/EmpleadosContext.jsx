@@ -158,6 +158,7 @@ export function EmpleadoProvider({ children }) {
     } catch (error) {
       console.error("Error al crear empleado:", error);
       setError("Error al crear empleado");
+      console.log(error);
     }
   };
 

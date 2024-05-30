@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Submit } from "../ui/Submit";
 import { useForm } from "react-hook-form";
-import dayjs from "dayjs";
 import { useEmpleado } from "../../context/EmpleadosContext";
+import dayjs from "dayjs";
 
 export const ModalGuardarDatos = ({ empleados }) => {
   const { handleSubmit, reset } = useForm();
+
   const { createEmpleadoDatos } = useEmpleado();
 
   const onSubmit = async (formData) => {
@@ -18,7 +19,6 @@ export const ModalGuardarDatos = ({ empleados }) => {
     try {
       await createEmpleadoDatos(reciboData);
 
-      // Cerrar el modal y limpiar el formulario
       document.getElementById("my_modal_guardar_datos").close();
       reset();
     } catch (error) {

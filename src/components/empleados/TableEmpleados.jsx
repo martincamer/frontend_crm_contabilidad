@@ -243,7 +243,7 @@ export const TableEmpleados = () => {
     calcularIngresoQuincenaDelVeinte(empleados);
 
   return (
-    <div>
+    <div className="overflow-y-scroll h-[100vh] scroll-bar">
       <div className="flex items-center">
         <div className="bg-white py-2 px-5 my-5 mx-3 max-w-3xl gap-10 flex items-center">
           <p className="text-xs font-bold text-blue-500">
@@ -373,11 +373,16 @@ export const TableEmpleados = () => {
           </button>
         </div>
       </div>
+      <Search
+        value={searchTerm}
+        onChange={handleSearch}
+        placeholder={"Buscar el empleado por el nombre y apellido.."}
+      />
       <div className="bg-white my-2 mx-3">
         <table className="table">
           <thead>
             <tr className="text-gray-800">
-              <th>Referencia</th>
+              {/* <th>Referencia</th> */}
               <th>Empleado</th>
               <th>Fecha ingreso</th>
               <th>Fabricas/Sucursal</th>
@@ -437,7 +442,7 @@ export const TableEmpleados = () => {
 
               return (
                 <tr key={g._id}>
-                  <th>{truncateText(g._id, 6)}</th>
+                  {/* <th>{truncateText(g._id, 6)}</th> */}
                   <th>
                     {g.nombre} {g.apellido}
                   </th>
@@ -546,14 +551,10 @@ export const TableEmpleados = () => {
         </table>
       </div>
 
-      <SearchButton open={() => openSearch()} />
-      {click && (
-        <Search
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder={"Buscar gastó por proveedor o categoria"}
-        />
-      )}
+      {/* <SearchButton open={() => openSearch()} /> */}
+      {/* {click && (
+     
+      )} */}
       {/* 
       <div className="flex pb-12 justify-center items-center space-x-2">
         <button
@@ -589,6 +590,7 @@ export const TableEmpleados = () => {
       </div> */}
 
       {/* Modal editar estado */}
+      <ModalGuardarDatos empleados={empleados} />
       <ModalEstadoEmpleados idObtenida={idObtenida} />
       <ModalComprobante idObtenida={idObtenida} />
       <ModalComprobantePago idObtenida={idObtenida} />
@@ -604,7 +606,6 @@ export const TableEmpleados = () => {
 
       <EditarEmpleadoDrawer idObtenida={idObtenida} />
       <ModalEmpleadoObservacion idObtenida={idObtenida} />
-      <ModalGuardarDatos empleados={empleados} />
       <ModalAumentoSueldo />
     </div>
   );

@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useEmpleado } from "../../context/EmpleadosContext";
 import { useForm } from "react-hook-form";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 
 export const ModalAumentoSueldo = () => {
-  const { aumentarSueldo } = useEmpleado();
+  const { aumentarSueldo, getFabricas, fabricas } = useEmpleado();
 
   const [isEditable, setIsEditable] = useState(false);
+
+  useEffect(() => {
+    getFabricas();
+  }, []);
 
   const handleInputClick = () => {
     setIsEditable(true);
@@ -54,8 +58,11 @@ export const ModalAumentoSueldo = () => {
               {...register("fabrica", { required: true })}
             >
               <option value="">Seleccionar fabrica</option>
-              <option value="marcos ciani 255">Marcos ciani 255</option>
-              <option value="long">Long</option>
+              {/* <option value="marcos ciani 255">Marcos ciani 255</option>
+              <option value="long">Long</option> */}
+              {fabricas.map((f) => (
+                <option key={f._id}>{f.nombre}</option>
+              ))}
             </select>
           </label>
           <label className="flex gap-2 items-center">
