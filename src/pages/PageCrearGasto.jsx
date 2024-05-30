@@ -19,7 +19,7 @@ import { formatearDinero } from "../helpers/FormatearDinero";
 import { useGasto } from "../context/GastosContext";
 import useLoading from "../helpers/useLoading";
 import { Skeleton } from "../components/ui/Skeleton";
-import { tiposDePagos } from "../../../backend/src/data/TiposDePagos";
+import { tiposDePagos } from "../../src/data/TiposDePagos";
 
 dayjs.extend(utc);
 

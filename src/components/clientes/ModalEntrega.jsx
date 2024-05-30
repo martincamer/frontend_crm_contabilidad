@@ -6,9 +6,9 @@ import { SelectInput } from "../ui/SelectInput";
 import { useCliente } from "../../context/ClientesContext";
 import FileDropZone from "../ui/FileDropZone";
 import dayjs from "dayjs";
+import { tiposDePagos } from "../../../src/data/TiposDePagos";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 import axios from "axios";
-import { tiposDePagos } from "../../../../backend/src/data/TiposDePagos";
 
 export const ModalEntrega = ({ id }) => {
   const { register, handleSubmit, reset, watch } = useForm();
