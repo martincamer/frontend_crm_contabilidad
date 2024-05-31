@@ -8,10 +8,12 @@ export const CrearNuevaFabrica = () => {
 
   const { register, handleSubmit, reset } = useForm();
 
+  // getFabricas
   useEffect(() => {
     getFabricas();
   }, []);
 
+  // onSubmit
   const onSubmit = async (formData) => {
     try {
       const datos = {

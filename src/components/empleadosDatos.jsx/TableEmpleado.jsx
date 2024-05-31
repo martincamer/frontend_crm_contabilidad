@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Dropdown } from "../ui/Dropdown";
-import instance from "../../api/axios";
+import { useParams } from "react-router-dom";
 import { updateFecha } from "../../helpers/FechaUpdate";
 import { formatearDinero } from "../../helpers/FormatearDinero";
-import { ModalEmpleadoObservacion } from "../empleados/ModalEmpleadoObservacion";
-import { useObtenerId } from "../../helpers/obtenerId";
+import instance from "../../api/axios";
 
 export const TableEmpleado = () => {
   const params = useParams();
@@ -41,7 +38,7 @@ export const TableEmpleado = () => {
         }
 
         // Agregar empleado al arreglo correspondiente
-        agrupados[fabrica]?.empleados.push({
+        agrupados[fabrica]?.empleados?.push({
           nombre: empleado?.nombre,
           apellido: empleado?.apellido,
           dni: empleado?.dni,
@@ -203,106 +200,109 @@ export const TableEmpleado = () => {
 
                 return (
                   <div className="flex flex-col gap-1 text-xs" key={index}>
-                    {empleado.termino_pago === "mensual" ? (
-                      index === 0 && (
-                        <div
-                          key={index}
-                          className="flex gap-5 border py-2 px-2"
-                        >
-                          <p className="font-bold text-blue-500 w-[15%]">
-                            Empleado
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Sector/puesto
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Fecha de ingreso
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Tipo de sueldo
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Sueldo basico
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Total antiguedad
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Banco
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Premio asistencia
-                          </p>
-                          {empleado.sueldo.premio_produccion === "" ? (
-                            ""
-                          ) : (
+                    {empleado.termino_pago === "mensual"
+                      ? index === 0 && (
+                          <div
+                            key={index}
+                            className="flex gap-5 border py-2 px-2"
+                          >
+                            <p className="font-bold text-blue-500 w-[15%]">
+                              Empleado
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Sector/puesto
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Fecha de ingreso
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Tipo de sueldo
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Sueldo basico
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Total antiguedad
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Banco
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Premio asistencia
+                            </p>
+                            {empleado.sueldo.premio_produccion === "" ? (
+                              ""
+                            ) : (
+                              <p className="font-bold text-blue-500 w-[15%] ">
+                                Premio producción
+                              </p>
+                            )}
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Comida
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Descuento por faltas
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%]">
+                              Total sueldo
+                            </p>
+                          </div>
+                        )
+                      : index === 0 && (
+                          <div
+                            key={index}
+                            className="flex gap-5 border py-2 px-2"
+                          >
+                            <p className="font-bold text-blue-500 w-[15%]">
+                              Empleado
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Sector/puesto
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Fecha de ingreso
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Tipo de sueldo
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Quincena del 5
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Quincena del 20
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Total antiguedad
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Banco
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Premio asistencia
+                            </p>
                             <p className="font-bold text-blue-500 w-[15%] ">
                               Premio producción
                             </p>
-                          )}
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Comida
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%] ">
-                            Descuento por faltas
-                          </p>
-                          <p className="font-bold text-blue-500 w-[15%]">
-                            Total sueldo
-                          </p>
-                        </div>
-                      )
-                    ) : (
-                      <div key={index} className="flex gap-5 border py-2 px-2">
-                        <p className="font-bold text-blue-500 w-[15%]">
-                          Empleado
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Sector/puesto
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Fecha de ingreso
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Tipo de sueldo
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Quincena del 5
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Quincena del 20
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Total antiguedad
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Banco
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Premio asistencia
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Premio producción
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Comida producción
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Otros
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Descuento por faltas
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Saldo 5
-                        </p>
-                        <p className="font-bold text-blue-500 w-[15%] ">
-                          Saldo 20
-                        </p>
-                        <p className="font-bold text-blue-500 w-[30%] ">
-                          Sueldo neto
-                        </p>
-                      </div>
-                    )}
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Comida producción
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Otros
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Descuento por faltas
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Saldo 5
+                            </p>
+                            <p className="font-bold text-blue-500 w-[15%] ">
+                              Saldo 20
+                            </p>
+                            <p className="font-bold text-blue-500 w-[30%] ">
+                              Sueldo neto
+                            </p>
+                          </div>
+                        )}
                     {empleado.termino_pago === "mensual" ? (
                       <div className="flex gap-5 border py-1 px-2">
                         <p className="capitalize font-bold text-gray-700 w-[15%]">

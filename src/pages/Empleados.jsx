@@ -32,6 +32,7 @@ export const Empleados = () => {
     setIsEditable(true);
   };
 
+  // Totales
   const quincena_cinco = watch("quincena_del_cinco");
   const quincena_veinte = watch("quincena_del_veinte");
   const otros = watch("otros");
@@ -54,6 +55,7 @@ export const Empleados = () => {
   const sector_trabajo = watch("sector_trabajo");
   const fabrica_sucursal = watch("fabrica_sucursal");
 
+  // Calcular la edad
   const calculateAntiquity = (startDate) => {
     const start = new Date(startDate);
     const now = new Date();
@@ -78,7 +80,7 @@ export const Empleados = () => {
       (0.01 * Number(antiquity.years));
   }
 
-  //totales
+  // Totales
   const totalQuincenaCinco =
     Number(quincena_cinco) +
     Number(otros) +
@@ -87,10 +89,12 @@ export const Empleados = () => {
     Number(total_antiguedad) -
     Number(descuento_del_cinco) -
     Number(banco);
-  //totales
+
+  // Totales
   const totalQuincenaVeinte =
     Number(quincena_veinte) + Number(comida) - Number(descuento_del_veinte);
 
+  // Totales
   const totalSueldoNeto =
     Number(sueldo_basico) +
     Number(otros) +
@@ -100,6 +104,7 @@ export const Empleados = () => {
     Number(comida) -
     Number(descuento_del_cinco);
 
+  // Totales
   const totalSueldoNetoConDescuentos =
     Number(sueldo_basico) +
     Number(otros) +
@@ -110,6 +115,7 @@ export const Empleados = () => {
     Number(descuento_del_cinco) -
     Number(banco);
 
+  // Totales
   const totalSueldo =
     Number(quincena_cinco) +
     Number(otros) +
@@ -121,7 +127,7 @@ export const Empleados = () => {
     Number(descuento_del_veinte) -
     Number(descuento_del_cinco);
 
-  //Crear nuevo empleado
+  // Crear nuevo empleado
   const onSubmit = async (formData) => {
     try {
       // Creamos el objeto del producto con todos los datos y la URL de la imagen

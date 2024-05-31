@@ -117,8 +117,8 @@ export const TableEmpleadosDatos = () => {
             {empleados?.map((g) => (
               <tr key={g._id}>
                 <th>{truncateText(g._id, 6)}</th>
-                <th>{g?.empleados[0]?.length}</th>
-                <th>{updateFechaMes(g.date)}</th>
+                <th>{g?.empleados?.length}</th>
+                <th>{updateFechaMes(g?.date)}</th>
                 <td>
                   <Dropdown>
                     <li>

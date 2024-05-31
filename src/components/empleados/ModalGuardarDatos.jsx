@@ -1,18 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Submit } from "../ui/Submit";
 import { useForm } from "react-hook-form";
 import { useEmpleado } from "../../context/EmpleadosContext";
 import dayjs from "dayjs";
 
-export const ModalGuardarDatos = ({ empleados }) => {
+export const ModalGuardarDatos = () => {
   const { handleSubmit, reset } = useForm();
 
-  const { createEmpleadoDatos } = useEmpleado();
+  const { createEmpleadoDatos, empleados, getEmpleados } = useEmpleado();
 
+  useEffect(() => {
+    getEmpleados();
+  }, []);
+
+  console.log(empleados);
   const onSubmit = async (formData) => {
     let reciboData = {
       ...formData,
-      empleados: [empleados],
+      empleados: empleados,
       date: dayjs.utc(formData.date).format(),
     };
 
