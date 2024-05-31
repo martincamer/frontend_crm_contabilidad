@@ -26,6 +26,7 @@ import Calendar from "../ui/Calendary";
 import ModalEliminar from "../ui/ModalEliminar";
 import { ModalGuardarDatos } from "./ModalGuardarDatos";
 import { ModalAumentoSueldo } from "./ModalAumentoSueldo";
+import { ModalSeleccionarQuincena } from "./ModalSeleccionarQuincena";
 
 export const TableEmpleados = () => {
   const { click, openSearch } = useSearch();
@@ -141,6 +142,7 @@ export const TableEmpleados = () => {
       if (empleado.termino_pago === "mensual") {
         // Obtener el sueldo básico, comida, banco y descuentos
         const sueldoBasico = Number(empleado.sueldo[0]?.sueldo_basico || 0);
+
         const comida = Number(empleado.sueldo[0]?.comida || 0);
         const premio_produccion = Number(
           empleado.sueldo[0]?.premio_produccion || 0
@@ -151,6 +153,7 @@ export const TableEmpleados = () => {
 
         const otros = Number(empleado.sueldo[0]?.otros || 0);
         const banco = Number(empleado.sueldo[0]?.banco || 0);
+
         const descuento = Number(empleado.sueldo[0]?.descuento_del_cinco || 0);
 
         // Calcular ingreso neto
@@ -172,6 +175,26 @@ export const TableEmpleados = () => {
     return ingresosNetos;
   };
 
+  // Función para calcular el ingreso neto
+  const calcularIngresoNetoBanco = (empleados) => {
+    const ingresosNetos = empleados.reduce((total, empleado) => {
+      // Verificar si el empleado tiene termino_pago = 'sueldo'
+      if (empleado.termino_pago === "mensual") {
+        const banco = Number(empleado.sueldo[0]?.banco || 0);
+
+        // Calcular ingreso neto
+        const ingresoNeto = banco;
+
+        // Sumar al total
+        total += ingresoNeto;
+      }
+      return total;
+    }, 0); // Iniciar el total en 0
+
+    return ingresosNetos;
+  };
+
+  // Calcular ingreso quincena del 5
   const calcularIngresoQuincenaDelCinco = (empleados) => {
     const ingresosNetos = empleados.reduce((total, empleado) => {
       // Verificar si el empleado tiene termino_pago = 'sueldo'
@@ -186,18 +209,21 @@ export const TableEmpleados = () => {
         const produccion = Number(
           empleado.sueldo[0]?.quincena_cinco[0].premio_produccion || 0
         );
+
         const asistencia = Number(
-          empleado.sueldo[0]?.quincena_cinco[0].asistencia || 0
+          empleado.sueldo[0]?.quincena_cinco[0].premio_asistencia || 0
         );
 
         const otros = Number(empleado.sueldo[0]?.quincena_cinco[0].otros || 0);
+        console.log("otross", otros);
+
         const descuento = Number(
           empleado.sueldo[0]?.quincena_cinco[0].descuento_del_cinco || 0
         );
 
         // Calcular ingreso neto
         const ingresoNeto =
-          quincenaCinco + produccion + asistencia + otros - descuento - banco;
+          quincenaCinco + produccion + asistencia + banco - otros - descuento;
 
         // Sumar al total
         total += ingresoNeto;
@@ -208,6 +234,28 @@ export const TableEmpleados = () => {
     return ingresosNetos;
   };
 
+  // Calcular ingreso quincena del 5
+  const calcularIngresoQuincenaDelCincoBanco = (empleados) => {
+    const ingresosNetos = empleados.reduce((total, empleado) => {
+      // Verificar si el empleado tiene termino_pago = 'sueldo'
+      if (empleado.termino_pago === "quincenal") {
+        // Obtener el sueldo básico, comida, banco y descuentos
+
+        const banco = Number(empleado.sueldo[0]?.quincena_cinco[0].banco || 0);
+
+        // Calcular ingreso neto
+        const ingresoNeto = banco;
+
+        // Sumar al total
+        total += ingresoNeto;
+      }
+      return total;
+    }, 0); // Iniciar el total en 0
+
+    return ingresosNetos;
+  };
+
+  // Calcular ingreso quincena del veinte
   const calcularIngresoQuincenaDelVeinte = (empleados) => {
     const ingresosNetos = empleados.reduce((total, empleado) => {
       // Verificar si el empleado tiene termino_pago = 'sueldo'
@@ -238,9 +286,91 @@ export const TableEmpleados = () => {
 
   // Ejemplo de uso
   const ingresoTotal = calcularIngresoNeto(empleados);
+
   const ingresoTotalQuincenaCinco = calcularIngresoQuincenaDelCinco(empleados);
+
+  const ingresoTotalQuincenaCincoBanco = calcularIngresoNetoBanco(empleados);
+  const ingresoTotalQuincenaBanco =
+    calcularIngresoQuincenaDelCincoBanco(empleados);
+
   const ingresoTotalQuincenaVeinte =
     calcularIngresoQuincenaDelVeinte(empleados);
+
+  // const totalQuincenaCinco = empleados.reduce((acc, empleado) => {
+  //   const quincenaCincoSueldo = empleado?.sueldo?.reduce(
+  //     (sueldoAcc, sueldoItem) => {
+  //       if (sueldoItem.quincena_cinco) {
+  //         const quincenaCincoTotal = sueldoItem.quincena_cinco.reduce(
+  //           (cincoAcc, quincena) => {
+  //             return (
+  //               cincoAcc +
+  //               parseFloat(quincena.quincena_cinco) +
+  //               parseFloat(quincena.otros) +
+  //               parseFloat(quincena.premio_produccion) +
+  //               parseFloat(quincena.premio_asistencia) -
+  //               parseFloat(quincena.descuento_del_cinco) -
+  //               parseFloat(quincena.banco)
+  //             );
+  //           },
+  //           0
+  //         );
+  //         return sueldoAcc + quincenaCincoTotal;
+  //       }
+  //       return sueldoAcc;
+  //     },
+  //     0
+  //   );
+  //   return acc + quincenaCincoSueldo;
+  // }, 0);
+
+  const totalSueldoMensual = empleados.reduce((acc, empleado) => {
+    if (empleado.termino_pago === "mensual") {
+      const sueldoMensual = empleado?.sueldo?.reduce(
+        (sueldoAcc, sueldoItem) => {
+          const sueldoTotal =
+            parseFloat(sueldoItem.sueldo_basico || 0) +
+            parseFloat(sueldoItem.comida || 0) +
+            parseFloat(sueldoItem.premio_produccion || 0) +
+            parseFloat(sueldoItem.premio_asistencia || 0) -
+            parseFloat(sueldoItem.descuento_del_cinco || 0);
+          return sueldoAcc + sueldoTotal;
+        },
+        0
+      );
+      return acc + sueldoMensual;
+    }
+    return acc;
+  }, 0);
+
+  console.log("ingeeso total mensual", totalSueldoMensual);
+  console.log("ingreso total", ingresoTotal);
+  console.log(empleados);
+
+  // const totalQuincenaVeinte = empleados.reduce((acc, empleado) => {
+  //   const quincenaVeinteSueldo = empleado.sueldo.reduce(
+  //     (sueldoAcc, sueldoItem) => {
+  //       if (sueldoItem.quincena_veinte) {
+  //         const quincenaVeinteTotal = sueldoItem.quincena_veinte.reduce(
+  //           (veinteAcc, quincena) => {
+  //             return (
+  //               veinteAcc +
+  //               parseFloat(quincena.quincena_veinte) +
+  //               parseFloat(quincena.comida) -
+  //               parseFloat(quincena.descuento_del_veinte)
+  //             );
+  //           },
+  //           0
+  //         );
+  //         return sueldoAcc + quincenaVeinteTotal;
+  //       }
+  //       return sueldoAcc;
+  //     },
+  //     0
+  //   );
+  //   return acc + quincenaVeinteSueldo;
+  // }, 0);
+
+  // console.log(totalQuincenaCinco);
 
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
@@ -322,9 +452,10 @@ export const TableEmpleados = () => {
                     Total a pagar quicena del 5 / efectivo
                   </p>
                   <p className="text-blue-500 text-lg font-bold">
-                    {formatearDinero(ingresoTotalQuincenaCinco)}
+                    {formatearDinero(ingresoTotalQuincenaCinco + ingresoTotal)}
                   </p>
                 </div>
+
                 <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                   <p className="text-sm font-semibold text-gray-700">
                     Total a pagar quincena del 20 / efectivo
@@ -335,12 +466,22 @@ export const TableEmpleados = () => {
                 </div>
                 <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                   <p className="text-sm font-semibold text-gray-700">
+                    Total a pagar quicena del 5 / banco
+                  </p>
+                  <p className="text-blue-500 text-lg font-bold">
+                    {formatearDinero(
+                      ingresoTotalQuincenaCincoBanco + ingresoTotalQuincenaBanco
+                    )}
+                  </p>
+                </div>
+                {/* <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+                  <p className="text-sm font-semibold text-gray-700">
                     Total a pagar mensual / efectivo
                   </p>
                   <p className="text-blue-500 text-lg font-bold">
                     {formatearDinero(ingresoTotal)}
                   </p>
-                </div>
+                </div> */}
               </ul>
             </div>
           </div>
@@ -370,6 +511,18 @@ export const TableEmpleados = () => {
             }}
           >
             Aumentar sueldos
+          </button>
+
+          <button
+            type="button"
+            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
+            onClick={() => {
+              document
+                .getElementById("my_modal_seleccionar_quincena")
+                .showModal();
+            }}
+          >
+            Imprimir quincenas
           </button>
         </div>
       </div>
@@ -607,6 +760,7 @@ export const TableEmpleados = () => {
       <EditarEmpleadoDrawer idObtenida={idObtenida} />
       <ModalEmpleadoObservacion idObtenida={idObtenida} />
       <ModalAumentoSueldo />
+      <ModalSeleccionarQuincena />
     </div>
   );
 };

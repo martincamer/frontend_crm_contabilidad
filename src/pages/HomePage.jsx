@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "../../src/index.css";
 import imagen_uno from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-33-46.png";
 import imagen_dos from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-34-04.png";
 import imagen_tres from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-34-35.png";
@@ -8,6 +7,7 @@ import imagen_cinco from "../assets/imagenes_sistema/Captura desde 2024-05-09 00
 import imagen_seis from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-35-06.png";
 import imagen_siete from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-35-18.png";
 import video from "../assets/video/producto.mp4";
+import "../../src/index.css";
 
 function HomePage() {
   window.addEventListener("scroll", function () {
