@@ -101,7 +101,7 @@ export const ModalComprobantePago = () => {
           <div className="border mt-5 py-5 px-5 rounded-xl grid grid-cols-3 gap-5">
             <div className="bg-gray-200 py-5 px-5 rounded-xl">
               <p className="font-medium uppercase">
-                Empleador{" "}
+                Empleado{" "}
                 <span className="font-extrabold">
                   {recibo.nombre} {recibo.apellido}
                 </span>

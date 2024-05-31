@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useEmpleado } from "../../context/EmpleadosContext";
+import instance from "../../api/axios";
 
 export const ModalSeleccionarQuincena = () => {
   const { getEmpleados, getFabricas, fabricas, empleados } = useEmpleado();
-
-  // getFabricas
-  useEffect(() => {
-    getEmpleados();
-    getFabricas();
-  }, []);
-
   const [selectedFabrica, setSelectedFabrica] = useState("");
   const [selectedTerminoPago, setSelectedTerminoPago] = useState("");
   const [selectedQuincena, setSelectedQuincena] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Llamar a getFabricas y getEmpleados al montar el componente
+  useEffect(() => {
+    getFabricas();
+    getEmpleados();
+  }, []);
 
   // Manejar el cambio de selección de fábrica
-  const handleFabricaChange = (e) => {
-    setSelectedFabrica(e.target.value);
+  const handleFabricaChange = async (e) => {
+    const fabricaSeleccionada = e.target.value;
+
+    setSelectedFabrica(fabricaSeleccionada);
   };
 
   // Manejar el cambio de selección de término de pago
@@ -29,6 +32,24 @@ export const ModalSeleccionarQuincena = () => {
   // Manejar el cambio de selección de quincena
   const handleQuincenaChange = (e) => {
     setSelectedQuincena(e.target.value);
+  };
+
+  // Función para generar comprobantes para todos los empleados de la fábrica seleccionada
+  const generarComprobantes = async () => {
+    try {
+      setLoading(true);
+      // Realizar la llamada al backend para generar los comprobantes
+      const response = await instance.post(`/empleados/comprobantes`, {
+        fabrica: selectedFabrica,
+        termino_pago: selectedTerminoPago,
+        quincena: selectedQuincena,
+      });
+      console.log(response.data); // Verificar la respuesta del backend
+    } catch (error) {
+      console.error("Error al generar comprobantes:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,8 +120,12 @@ export const ModalSeleccionarQuincena = () => {
             </div>
           )}
 
-          <button className="bg-blue-500 py-2 rounded-full text-white font-bold mt-3 px-5 text-sm">
-            Imprimir ahora
+          <button
+            className="btn btn-primary mt-4"
+            onClick={generarComprobantes}
+            disabled={!selectedFabrica || !selectedTerminoPago}
+          >
+            Generar Comprobantes
           </button>
         </div>
       </div>

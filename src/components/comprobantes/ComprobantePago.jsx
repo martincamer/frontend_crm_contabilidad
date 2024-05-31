@@ -143,6 +143,19 @@ export const ComprobantePago = ({ recibo }) => {
                 : "mensual"}
             </Text>
           </View>
+          <Text
+            style={{
+              fontFamily: "Roboto",
+              fontWeight: "bold",
+              fontSize: "13px",
+              textTransform: "uppercase",
+              backgroundColor: "#000",
+              padding: 6,
+              color: "white",
+            }}
+          >
+            Empleado: {recibo.nombre} {recibo.apellido}
+          </Text>
           <View
             style={{
               display: "flex",
@@ -151,19 +164,6 @@ export const ComprobantePago = ({ recibo }) => {
               gap: "10px",
             }}
           >
-            <Text
-              style={{
-                fontFamily: "Roboto",
-                fontWeight: "bold",
-                fontSize: "10px",
-                textTransform: "uppercase",
-                backgroundColor: "#000",
-                padding: 5,
-                color: "white",
-              }}
-            >
-              Empleador: {recibo.nombre} {recibo.apellido}
-            </Text>
             <Text
               style={{
                 fontFamily: "Roboto",
