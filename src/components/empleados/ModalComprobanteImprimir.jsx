@@ -8,6 +8,8 @@ import { ComprobantePago } from "../comprobantes/ComprobantePago";
 export const ModalComprobantePago = () => {
   const { recibo } = useEmpleado();
 
+  console.log("empleado", recibo);
+
   const calculateAntiquity = (startDate) => {
     const start = new Date(startDate);
     const now = new Date();

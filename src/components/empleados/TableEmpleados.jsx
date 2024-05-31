@@ -296,33 +296,6 @@ export const TableEmpleados = () => {
   const ingresoTotalQuincenaVeinte =
     calcularIngresoQuincenaDelVeinte(empleados);
 
-  // const totalQuincenaCinco = empleados.reduce((acc, empleado) => {
-  //   const quincenaCincoSueldo = empleado?.sueldo?.reduce(
-  //     (sueldoAcc, sueldoItem) => {
-  //       if (sueldoItem.quincena_cinco) {
-  //         const quincenaCincoTotal = sueldoItem.quincena_cinco.reduce(
-  //           (cincoAcc, quincena) => {
-  //             return (
-  //               cincoAcc +
-  //               parseFloat(quincena.quincena_cinco) +
-  //               parseFloat(quincena.otros) +
-  //               parseFloat(quincena.premio_produccion) +
-  //               parseFloat(quincena.premio_asistencia) -
-  //               parseFloat(quincena.descuento_del_cinco) -
-  //               parseFloat(quincena.banco)
-  //             );
-  //           },
-  //           0
-  //         );
-  //         return sueldoAcc + quincenaCincoTotal;
-  //       }
-  //       return sueldoAcc;
-  //     },
-  //     0
-  //   );
-  //   return acc + quincenaCincoSueldo;
-  // }, 0);
-
   const totalSueldoMensual = empleados.reduce((acc, empleado) => {
     if (empleado.termino_pago === "mensual") {
       const sueldoMensual = empleado?.sueldo?.reduce(
@@ -341,36 +314,6 @@ export const TableEmpleados = () => {
     }
     return acc;
   }, 0);
-
-  console.log("ingeeso total mensual", totalSueldoMensual);
-  console.log("ingreso total", ingresoTotal);
-  console.log(empleados);
-
-  // const totalQuincenaVeinte = empleados.reduce((acc, empleado) => {
-  //   const quincenaVeinteSueldo = empleado.sueldo.reduce(
-  //     (sueldoAcc, sueldoItem) => {
-  //       if (sueldoItem.quincena_veinte) {
-  //         const quincenaVeinteTotal = sueldoItem.quincena_veinte.reduce(
-  //           (veinteAcc, quincena) => {
-  //             return (
-  //               veinteAcc +
-  //               parseFloat(quincena.quincena_veinte) +
-  //               parseFloat(quincena.comida) -
-  //               parseFloat(quincena.descuento_del_veinte)
-  //             );
-  //           },
-  //           0
-  //         );
-  //         return sueldoAcc + quincenaVeinteTotal;
-  //       }
-  //       return sueldoAcc;
-  //     },
-  //     0
-  //   );
-  //   return acc + quincenaVeinteSueldo;
-  // }, 0);
-
-  // console.log(totalQuincenaCinco);
 
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">

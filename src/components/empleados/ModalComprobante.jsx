@@ -1,5 +1,3 @@
-// components/empleados/ModalComprobante.jsx
-
 import React, { useEffect, useState } from "react";
 import { Submit } from "../ui/Submit";
 import { SelectInput } from "../ui/SelectInput";
@@ -9,7 +7,7 @@ import dayjs from "dayjs";
 
 export const ModalComprobante = ({ idObtenida }) => {
   const { register, handleSubmit, reset, watch } = useForm();
-  const { getEmpleado, crearRecibo } = useEmpleado();
+  const { getEmpleado, crearRecibo, empleados } = useEmpleado();
   const [empleado, setEmpleado] = useState(null);
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export const ModalComprobante = ({ idObtenida }) => {
       }
     }
     loadData();
-  }, [idObtenida]);
+  }, [idObtenida, empleados]);
 
   const termino_pago = watch("termino_pago");
 

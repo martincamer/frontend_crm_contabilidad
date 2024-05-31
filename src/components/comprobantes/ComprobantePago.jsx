@@ -296,19 +296,43 @@ export const ComprobantePago = ({ recibo }) => {
                   fontWeight: "medium",
                   fontSize: "10px",
                   textTransform: "uppercase",
+                  marginBottom: 2,
+                }}
+              >
+                Observación:{" "}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "Roboto",
+                  fontWeight: "medium",
+                  fontSize: "10px",
+                  textTransform: "uppercase",
                   marginBottom: 6,
                   paddingBottom: 6,
                   borderBottom: "0.5px solid #000",
                 }}
               >
-                {/* {recibo?.sueldo === "quincenal"
-                  ? recibo?.recibo?.termino_pago == "quincena_veinte"
-                    ? recibo?.recibo?.observacion_veinte
-                    : recibo?.recibo?.observacion_cinco
-                  : recibo?.recibo?.observacion} */}
                 {recibo?.termino_pago === "quincena_veinte"
                   ? recibo?.recibo?.observacion_veinte
                   : ""}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "Roboto",
+                  fontWeight: "medium",
+                  fontSize: "10px",
+                  textTransform: "uppercase",
+                  marginBottom: 2,
+                }}
+              >
+                Remuneración asignada: +
+                {formatearDinero(
+                  recibo.sueldo === "quincenal"
+                    ? recibo.termino_pago === "quincena_veinte"
+                      ? Number(recibo?.recibo?.quincena_veinte)
+                      : Number(recibo?.recibo?.quincena_cinco)
+                    : Number(recibo?.recibo?.sueldo_basico)
+                )}
               </Text>
               <Text
                 style={{
@@ -543,7 +567,7 @@ export const ComprobantePago = ({ recibo }) => {
               fontFamily: "Roboto",
             }}
           >
-            Firma o aclaración del empleador
+            Firma o aclaración del empleado
           </Text>
           <View
             style={{
