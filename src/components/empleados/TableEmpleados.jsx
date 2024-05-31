@@ -223,7 +223,7 @@ export const TableEmpleados = () => {
 
         // Calcular ingreso neto
         const ingresoNeto =
-          quincenaCinco + produccion + asistencia + banco - otros - descuento;
+          quincenaCinco + produccion + asistencia + otros - banco - descuento;
 
         // Sumar al total
         total += ingresoNeto;
