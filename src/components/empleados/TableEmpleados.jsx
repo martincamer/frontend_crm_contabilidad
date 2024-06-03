@@ -439,14 +439,6 @@ export const TableEmpleados = () => {
                     )}
                   </p>
                 </div>
-                {/* <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Total a pagar mensual / efectivo
-                  </p>
-                  <p className="text-blue-500 text-lg font-bold">
-                    {formatearDinero(ingresoTotal)}
-                  </p>
-                </div> */}
               </ul>
             </div>
           </div>
@@ -487,7 +479,7 @@ export const TableEmpleados = () => {
                 .showModal();
             }}
           >
-            Imprimir quincenas
+            Imprimir sueldos en cantidad
           </button>
         </div>
       </div>
