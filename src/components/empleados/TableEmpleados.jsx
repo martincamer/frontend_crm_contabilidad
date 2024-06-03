@@ -530,66 +530,74 @@ export const TableEmpleados = () => {
               <tbody className="text-xs capitalize">
                 {empleadosPorFabrica[fabrica].map((g) => {
                   // Calcular la antigüedad
-                  const { years, months } = calculateAntiquity(g.fecha_ingreso);
+                  const { years, months } = calculateAntiquity(
+                    g?.fecha_ingreso
+                  );
 
                   let total_antiguedad = 0;
 
-                  if (g.termino_pago === "mensual") {
+                  if (g?.termino_pago === "mensual") {
                     total_antiguedad =
-                      Number(g.sueldo[0]?.sueldo_basico) * (0.01 * years);
+                      Number(g?.sueldo[0]?.sueldo_basico || 0) * (0.01 * years);
                   } else {
                     total_antiguedad =
-                      (Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
+                      (Number(
+                        g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
+                      ) +
                         Number(
-                          g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte
+                          g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0
                         )) *
                       (0.01 * years);
                   }
 
                   let sueldo = 0;
 
-                  if (g.termino_pago === "quincenal") {
+                  if (g?.termino_pago === "quincenal") {
                     // Calcular sueldo quincenal
                     sueldo =
-                      Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
-                        Number(g.sueldo[0]?.quincena_cinco[0]?.otros) +
+                      Number(
+                        g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
+                      ) +
+                        Number(g?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
                         Number(
-                          g.sueldo[0]?.quincena_cinco[0]?.premio_produccion
+                          g?.sueldo[0]?.quincena_cinco[0]?.premio_produccion ||
+                            0
                         ) +
                         Number(
-                          g.sueldo[0]?.quincena_cinco[0]?.premio_asistencia
+                          g?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia ||
+                            0
                         ) +
                         Number(
-                          g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte
+                          g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0
                         ) +
-                        Number(g.sueldo[1]?.quincena_veinte[0]?.comida) +
-                        Number(total_antiguedad) -
+                        Number(g?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
+                        Number(total_antiguedad || 0) -
                         Number(
-                          g.sueldo[1]?.quincena_veinte[0]
+                          g?.sueldo[1]?.quincena_veinte[0]
                             ?.descuento_del_veinte || 0
                         ) -
                         Number(
-                          g.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco ||
-                            0
+                          g?.sueldo[0]?.quincena_cinco[0]
+                            ?.descuento_del_cinco || 0
                         ) || 0;
-                  } else if (g.termino_pago === "mensual") {
+                  } else if (g?.termino_pago === "mensual") {
                     // Calcular sueldo mensual
                     sueldo =
-                      Number(g.sueldo[0]?.sueldo_basico) +
-                        Number(total_antiguedad) +
-                        Number(g.sueldo[0]?.comida) +
-                        Number(g.sueldo[0]?.premio_produccion) +
-                        Number(g.sueldo[0]?.premio_asistencia) +
-                        Number(g.sueldo[0]?.otros) -
-                        Number(g.sueldo[0]?.descuento_del_cinco) || 0;
+                      Number(g?.sueldo[0]?.sueldo_basico || 0) +
+                        Number(total_antiguedad || 0) +
+                        Number(g?.sueldo[0]?.comida || 0) +
+                        Number(g?.sueldo[0]?.premio_produccion || 0) +
+                        Number(g?.sueldo[0]?.premio_asistencia || 0) +
+                        Number(g?.sueldo[0]?.otros || 0) -
+                        Number(g?.sueldo[0]?.descuento_del_cinco || 0) || 0;
                   }
 
                   return (
-                    <tr key={g._id}>
+                    <tr key={g?._id}>
                       <td className="font-semibold">
-                        {g.nombre} {g.apellido}
+                        {g?.nombre} {g?.apellido}
                       </td>
-                      <td>{updateFecha(g.fecha_ingreso)}</td>
+                      <td>{updateFecha(g?.fecha_ingreso)}</td>
                       <td>{`${years} años, ${months} meses`}</td>
                       <td className="font-semibold">
                         {formatearDinero(sueldo)}
