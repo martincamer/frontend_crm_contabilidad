@@ -140,10 +140,17 @@ export const TableEmpleados = () => {
     const ingresosNetos = empleados.reduce((total, empleado) => {
       // Verificar si el empleado tiene termino_pago = 'sueldo'
       if (empleado.termino_pago === "mensual") {
+        const antiquity = calculateAntiquity(empleado.fecha_ingreso);
+
+        let total_antiguedad = 0;
+
+        total_antiguedad =
+          Number(empleado.sueldo[0]?.sueldo_basico) * (0.01 * antiquity.years);
         // Obtener el sueldo básico, comida, banco y descuentos
         const sueldoBasico = Number(empleado.sueldo[0]?.sueldo_basico || 0);
 
         const comida = Number(empleado.sueldo[0]?.comida || 0);
+
         const premio_produccion = Number(
           empleado.sueldo[0]?.premio_produccion || 0
         );
@@ -160,6 +167,7 @@ export const TableEmpleados = () => {
         const ingresoNeto =
           sueldoBasico +
           premio_produccion +
+          total_antiguedad +
           premio_asistencia +
           otros +
           comida -
@@ -199,6 +207,14 @@ export const TableEmpleados = () => {
     const ingresosNetos = empleados.reduce((total, empleado) => {
       // Verificar si el empleado tiene termino_pago = 'sueldo'
       if (empleado.termino_pago === "quincenal") {
+        const antiquity = calculateAntiquity(empleado.fecha_ingreso);
+
+        let total_antiguedad = 0;
+
+        total_antiguedad =
+          (Number(empleado.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
+            Number(empleado.sueldo[1]?.quincena_veinte[0]?.quincena_veinte)) *
+          (0.01 * antiquity.years);
         // Obtener el sueldo básico, comida, banco y descuentos
         const quincenaCinco = Number(
           empleado.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
@@ -223,7 +239,13 @@ export const TableEmpleados = () => {
 
         // Calcular ingreso neto
         const ingresoNeto =
-          quincenaCinco + produccion + asistencia + otros - banco - descuento;
+          quincenaCinco +
+          produccion +
+          total_antiguedad +
+          asistencia +
+          otros -
+          banco -
+          descuento;
 
         // Sumar al total
         total += ingresoNeto;

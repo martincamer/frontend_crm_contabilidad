@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useEmpleado } from "../../context/EmpleadosContext";
+import { ModalViewerEmpleados } from "./ModalViewerEmpleados";
 import instance from "../../api/axios";
 
 export const ModalSeleccionarQuincena = () => {
@@ -14,6 +15,94 @@ export const ModalSeleccionarQuincena = () => {
     getFabricas();
     getEmpleados();
   }, []);
+
+  // const filtrarEmpleados = (
+  //   empleados,
+  //   selectedQuincena,
+  //   selectedFabrica,
+  //   selectedTerminoPago
+  // ) => {
+  //   // Filtrar por fábrica seleccionada
+  //   const empleadosFiltrados = empleados?.filter(
+  //     (empleado) => empleado?.fabrica_sucursal === selectedFabrica
+  //   );
+
+  //   // Filtrar por término de pago (quincenal o mensual)
+  //   if (selectedTerminoPago === "quincenal") {
+  //     // Filtrar por quincena seleccionada si está definida
+  //     if (selectedQuincena) {
+  //       return empleadosFiltrados
+  //         .filter((empleado) => {
+  //           // Verificar si el empleado tiene sueldo en la quincena seleccionada
+  //           return empleado?.sueldo.some((sueldo) => sueldo[selectedQuincena]);
+  //         })
+  //         .map((empleado) => {
+  //           // Crear una copia del empleado con solo el sueldo de la quincena seleccionada
+  //           const sueldoFiltrado = empleado.sueldo
+  //             .map((sueldo) => {
+  //               if (sueldo[selectedQuincena]) {
+  //                 return { [selectedQuincena]: sueldo[selectedQuincena] };
+  //               }
+  //               return null;
+  //             })
+  //             .filter(Boolean);
+
+  //           return { ...empleado, sueldo: sueldoFiltrado };
+  //         });
+  //     } else {
+  //       // Si no hay quincena seleccionada, devolver todos los quincenales
+  //       return empleadosFiltrados.filter(
+  //         (empleado) => empleado?.termino_pago === "quincenal"
+  //       );
+  //     }
+  //   } else if (selectedTerminoPago === "mensual") {
+  //     // Filtrar por empleados que tienen término de pago mensual
+  //     return empleadosFiltrados.filter(
+  //       (empleado) => empleado?.termino_pago === "mensual"
+  //     );
+  //   } else {
+  //     // Si no se seleccionó ningún término de pago específico, devolver todos los empleados de la fábrica seleccionada
+  //     return empleadosFiltrados;
+  //   }
+  // };
+
+  const filtrarEmpleados = (
+    empleados,
+    selectedFabrica,
+    selectedTerminoPago
+  ) => {
+    // Filtrar por fábrica seleccionada
+    const empleadosFiltrados = empleados?.filter(
+      (empleado) => empleado?.fabrica_sucursal === selectedFabrica
+    );
+
+    // Filtrar por término de pago (quincenal o mensual)
+    if (selectedTerminoPago === "quincenal") {
+      return empleadosFiltrados
+        .filter((empleado) => empleado?.termino_pago === "quincenal")
+        .map((empleado) => {
+          // Crear una copia del empleado con solo el sueldo de los pagos quincenales
+          const sueldoQuincenal = empleado.sueldo?.filter((sueldo) => sueldo);
+
+          return { ...empleado, sueldo: sueldoQuincenal };
+        });
+    } else if (selectedTerminoPago === "mensual") {
+      // Filtrar por empleados que tienen término de pago mensual
+      return empleadosFiltrados.filter(
+        (empleado) => empleado?.termino_pago === "mensual"
+      );
+    } else {
+      // Si no se seleccionó ningún término de pago específico, devolver todos los empleados de la fábrica seleccionada
+      return empleadosFiltrados;
+    }
+  };
+
+  const empleadosFiltrados = filtrarEmpleados(
+    empleados,
+    // selectedQuincena,
+    selectedFabrica,
+    selectedTerminoPago
+  );
 
   // Manejar el cambio de selección de fábrica
   const handleFabricaChange = async (e) => {
@@ -34,23 +123,25 @@ export const ModalSeleccionarQuincena = () => {
     setSelectedQuincena(e.target.value);
   };
 
-  // Función para generar comprobantes para todos los empleados de la fábrica seleccionada
-  const generarComprobantes = async () => {
-    try {
-      setLoading(true);
-      // Realizar la llamada al backend para generar los comprobantes
-      const response = await instance.post(`/empleados/comprobantes`, {
-        fabrica: selectedFabrica,
-        termino_pago: selectedTerminoPago,
-        quincena: selectedQuincena,
-      });
-      console.log(response.data); // Verificar la respuesta del backend
-    } catch (error) {
-      console.error("Error al generar comprobantes:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Función para generar comprobantes para todos los empleados
+  // const generarComprobantes = async () => {
+  //   try {
+  //     setLoading(true);
+  //     // Realizar la llamada al backend para generar los comprobantes
+  //     const response = await instance.post(`/empleados/comprobantes`, {
+  //       fabrica: selectedFabrica,
+  //       termino_pago: selectedTerminoPago,
+  //       quincena: selectedQuincena,
+  //     });
+  //     console.log(response.data); // Verificar la respuesta del backend
+  //   } catch (error) {
+  //     console.error("Error al generar comprobantes:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  console.log("fabrica", empleadosFiltrados);
 
   return (
     <dialog id="my_modal_seleccionar_quincena" className="modal">
@@ -60,7 +151,6 @@ export const ModalSeleccionarQuincena = () => {
             ✕
           </button>
         </form>
-
         <div>
           <div className="flex flex-col gap-1 w-full">
             <label className="font-semibold text-xs text-gray-700">
@@ -121,13 +211,22 @@ export const ModalSeleccionarQuincena = () => {
           )}
 
           <button
-            className="btn btn-primary mt-4"
-            onClick={generarComprobantes}
+            onClick={() => {
+              document.getElementById("my_modal_comprobantes").showModal();
+            }}
+            className="bg-blue-500 py-2 px-5 rounded-full text-white font-bold text-sm mt-4"
+            // onClick={generarComprobantes}
             disabled={!selectedFabrica || !selectedTerminoPago}
           >
             Generar Comprobantes
           </button>
         </div>
+        <ModalViewerEmpleados
+          selectedQuincena={selectedQuincena}
+          selectedFabrica={selectedFabrica}
+          selectedTerminoPago={selectedTerminoPago}
+          empleados={empleadosFiltrados}
+        />
       </div>
     </dialog>
   );

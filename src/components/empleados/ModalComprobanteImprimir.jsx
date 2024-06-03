@@ -4,6 +4,7 @@ import { updateFecha } from "../../helpers/FechaUpdate";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { ComprobantePago } from "../comprobantes/ComprobantePago";
+import { ModalViewerEmpleados } from "./ModalViewerEmpleados";
 
 export const ModalComprobantePago = () => {
   const { recibo } = useEmpleado();
@@ -337,6 +338,7 @@ export const ModalComprobantePago = () => {
           </p>
         </div>
       </div>
+      <ModalViewerEmpleados />
     </dialog>
   );
 };
