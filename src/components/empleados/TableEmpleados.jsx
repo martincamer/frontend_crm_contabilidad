@@ -27,6 +27,7 @@ import ModalEliminar from "../ui/ModalEliminar";
 import { ModalGuardarDatos } from "./ModalGuardarDatos";
 import { ModalAumentoSueldo } from "./ModalAumentoSueldo";
 import { ModalSeleccionarQuincena } from "./ModalSeleccionarQuincena";
+import { ModalDocumentoRecursosHumanos } from "./ModalDocumentoRecursosHumanos";
 
 export const TableEmpleados = () => {
   const { click, openSearch } = useSearch();
@@ -337,6 +338,16 @@ export const TableEmpleados = () => {
     return acc;
   }, 0);
 
+  // Agrupar empleados por fabrica_sucursal
+  const empleadosPorFabrica = filteredGastos.reduce((acc, empleado) => {
+    const fabrica = empleado.fabrica_sucursal;
+    if (!acc[fabrica]) {
+      acc[fabrica] = [];
+    }
+    acc[fabrica].push(empleado);
+    return acc;
+  }, {});
+
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
       <div className="flex items-center">
@@ -443,7 +454,7 @@ export const TableEmpleados = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white py-2 px-6 flex gap-2">
+        <div className="bg-white py-2 px-6 flex gap-3">
           <Link
             className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
             to={"/datos-empleados"}
@@ -483,182 +494,207 @@ export const TableEmpleados = () => {
           </button>
         </div>
       </div>
-      <Search
-        value={searchTerm}
-        onChange={handleSearch}
-        placeholder={"Buscar el empleado por el nombre y apellido.."}
-      />
+      <div className="flex">
+        <Search
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder={"Buscar el empleado por el nombre y apellido.."}
+        />
+        <button
+          type="button"
+          className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-blue-600 transition-all"
+          onClick={() => {
+            document.getElementById("my_modal_recursos_humanos").showModal();
+          }}
+        >
+          Imprimir documento recursos humanos/mensual datos
+        </button>
+      </div>
       <div className="bg-white my-2 mx-3">
-        <table className="table">
-          <thead>
-            <tr className="text-gray-800">
-              {/* <th>Referencia</th> */}
-              <th>Empleado</th>
-              <th>Fecha ingreso</th>
-              <th>Fabricas/Sucursal</th>
-              <th>Antigüedad trabajando</th>
-              <th>Sueldo</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody className="text-xs capitalize">
-            {filteredGastos?.map((g) => {
-              // Calcular la antigüedad
-              const { years, months } = calculateAntiquity(g.fecha_ingreso);
-
-              const antiquity = calculateAntiquity(g.fecha_ingreso);
-
-              let total_antiguedad = 0;
-
-              if (g.termino_pago === "mensual") {
-                total_antiguedad =
-                  Number(g.sueldo[0]?.sueldo_basico) * (0.01 * antiquity.years);
-              } else {
-                total_antiguedad =
-                  (Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
-                    Number(g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte)) *
-                  (0.01 * antiquity.years);
-              }
-
-              let sueldo = "";
-
-              if (g.termino_pago === "quincenal") {
-                // Si es quincenal, obtener el sueldo correspondiente
-                sueldo =
-                  Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
-                    Number(g.sueldo[0]?.quincena_cinco[0]?.otros) +
-                    Number(g.sueldo[0]?.quincena_cinco[0]?.premio_produccion) +
-                    Number(g.sueldo[0]?.quincena_cinco[0]?.premio_asistencia) +
-                    Number(g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte) +
-                    Number(g.sueldo[1]?.quincena_veinte[0]?.comida) +
-                    Number(total_antiguedad) -
-                    Number(
-                      g.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0
-                    ) -
-                    Number(
-                      g.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0
-                    ) || 0;
-              } else if (g.termino_pago === "mensual") {
-                // Si es mensual, obtener el sueldo mensual
-                sueldo =
-                  Number(g.sueldo[0]?.sueldo_basico) +
-                    Number(total_antiguedad) +
-                    Number(g.sueldo[0]?.comida) +
-                    Number(g.sueldo[0]?.premio_produccion) +
-                    Number(g.sueldo[0]?.premio_asistencia) +
-                    Number(g.sueldo[0]?.otros) -
-                    Number(g.sueldo[0]?.descuento_del_cinco) || "";
-              }
-
-              return (
-                <tr key={g._id}>
-                  {/* <th>{truncateText(g._id, 6)}</th> */}
-                  <th>
-                    {g.nombre} {g.apellido}
-                  </th>
-                  <th>{updateFecha(g.fecha_ingreso)}</th>{" "}
-                  <th>{g.fabrica_sucursal}</th>{" "}
-                  {/* Aquí puedes formatear la fecha como desees */}
-                  <th>{`${years} años, ${months} meses`}</th>{" "}
-                  {/* Mostrar la antigüedad */}
-                  <th>{formatearDinero(sueldo)}</th>{" "}
-                  <td>
-                    <span
-                      className={`${getEstadoClassNames(
-                        g?.estado
-                      )} font-bold py-1 px-2 rounded`}
-                    >
-                      {g?.estado}
-                    </span>
-                  </td>
-                  {/* Mostrar el sueldo correspondiente */}
-                  <td>
-                    <Dropdown>
-                      <li>
-                        <Link
-                          to={`/empleado/${g?._id}`}
-                          className="hover:text-blue-500 font-bold"
-                          type="button"
-                        >
-                          Ver empleado completo
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => {
-                            handleObtenerId(g._id);
-                            document
-                              .getElementById("my_modal_observacion_empleado")
-                              .showModal();
-                          }}
-                          className="hover:text-blue-500 font-bold"
-                          type="button"
-                        >
-                          {/* Editar empleado */}
-                          Observación empleado
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="hover:text-blue-500 font-bold"
-                          type="button"
-                        >
-                          {/* Editar empleado */}
-                          <label
-                            onClick={() => handleObtenerId(g._id)}
-                            htmlFor="my-drawer-editar"
-                            className="hover:text-blue-500 font-bold"
-                          >
-                            Editar empleado
-                          </label>
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => {
-                            handleObtenerId(g._id);
-                            document
-                              .getElementById("my_modal_editar_estado_empleado")
-                              .showModal();
-                          }}
-                          className="hover:text-blue-500 font-bold"
-                          type="button"
-                        >
-                          Cambiar el estado
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => {
-                            handleObtenerId(g._id);
-                            document
-                              .getElementById("my_modal_nuevo_comprobante")
-                              .showModal();
-                          }}
-                          className="hover:text-blue-500 font-bold"
-                          type="button"
-                        >
-                          Generar comprobante
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => {
-                            handleObtenerId(g._id), openModal();
-                          }}
-                          className="hover:text-blue-500 font-bold"
-                          type="button"
-                        >
-                          Eliminar el empleado
-                        </button>
-                      </li>{" "}
-                    </Dropdown>
-                  </td>
+        {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
+          <div key={index}>
+            <h2 className="px-5 py-4 uppercase text-sm font-bold text-blue-500">
+              <span className="text-gray-600">Fabrica/sucursal</span> {fabrica}
+            </h2>
+            <table className="table">
+              <thead>
+                <tr className="text-gray-800">
+                  <th>Empleado</th>
+                  <th>Fecha ingreso</th>
+                  <th>Antigüedad trabajando</th>
+                  <th>Sueldo</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              </thead>
+              <tbody className="text-xs capitalize">
+                {empleadosPorFabrica[fabrica].map((g) => {
+                  // Calcular la antigüedad
+                  const { years, months } = calculateAntiquity(g.fecha_ingreso);
+
+                  let total_antiguedad = 0;
+
+                  if (g.termino_pago === "mensual") {
+                    total_antiguedad =
+                      Number(g.sueldo[0]?.sueldo_basico) * (0.01 * years);
+                  } else {
+                    total_antiguedad =
+                      (Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
+                        Number(
+                          g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte
+                        )) *
+                      (0.01 * years);
+                  }
+
+                  let sueldo = 0;
+
+                  if (g.termino_pago === "quincenal") {
+                    // Calcular sueldo quincenal
+                    sueldo =
+                      Number(g.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
+                        Number(g.sueldo[0]?.quincena_cinco[0]?.otros) +
+                        Number(
+                          g.sueldo[0]?.quincena_cinco[0]?.premio_produccion
+                        ) +
+                        Number(
+                          g.sueldo[0]?.quincena_cinco[0]?.premio_asistencia
+                        ) +
+                        Number(
+                          g.sueldo[1]?.quincena_veinte[0]?.quincena_veinte
+                        ) +
+                        Number(g.sueldo[1]?.quincena_veinte[0]?.comida) +
+                        Number(total_antiguedad) -
+                        Number(
+                          g.sueldo[1]?.quincena_veinte[0]
+                            ?.descuento_del_veinte || 0
+                        ) -
+                        Number(
+                          g.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco ||
+                            0
+                        ) || 0;
+                  } else if (g.termino_pago === "mensual") {
+                    // Calcular sueldo mensual
+                    sueldo =
+                      Number(g.sueldo[0]?.sueldo_basico) +
+                        Number(total_antiguedad) +
+                        Number(g.sueldo[0]?.comida) +
+                        Number(g.sueldo[0]?.premio_produccion) +
+                        Number(g.sueldo[0]?.premio_asistencia) +
+                        Number(g.sueldo[0]?.otros) -
+                        Number(g.sueldo[0]?.descuento_del_cinco) || 0;
+                  }
+
+                  return (
+                    <tr key={g._id}>
+                      <td className="font-semibold">
+                        {g.nombre} {g.apellido}
+                      </td>
+                      <td>{updateFecha(g.fecha_ingreso)}</td>
+                      <td>{`${years} años, ${months} meses`}</td>
+                      <td className="font-semibold">
+                        {formatearDinero(sueldo)}
+                      </td>
+                      <td>
+                        <span
+                          className={`${getEstadoClassNames(
+                            g?.estado
+                          )} font-bold py-1 px-2 rounded`}
+                        >
+                          {g?.estado}
+                        </span>
+                      </td>
+                      <td>
+                        <Dropdown>
+                          <li>
+                            <Link
+                              to={`/empleado/${g?._id}`}
+                              className="hover:text-blue-500 font-bold"
+                              type="button"
+                            >
+                              Ver empleado completo
+                            </Link>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                handleObtenerId(g._id);
+                                document
+                                  .getElementById(
+                                    "my_modal_observacion_empleado"
+                                  )
+                                  .showModal();
+                              }}
+                              className="hover:text-blue-500 font-bold"
+                              type="button"
+                            >
+                              Observación empleado
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                handleObtenerId(g._id);
+                                document
+                                  .getElementById("my-drawer-editar")
+                                  .showModal();
+                              }}
+                              className="hover:text-blue-500 font-bold"
+                              type="button"
+                            >
+                              Editar empleado
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                handleObtenerId(g._id);
+                                document
+                                  .getElementById(
+                                    "my_modal_editar_estado_empleado"
+                                  )
+                                  .showModal();
+                              }}
+                              className="hover:text-blue-500 font-bold"
+                              type="button"
+                            >
+                              Cambiar el estado
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                handleObtenerId(g._id);
+                                document
+                                  .getElementById("my_modal_nuevo_comprobante")
+                                  .showModal();
+                              }}
+                              className="hover:text-blue-500 font-bold"
+                              type="button"
+                            >
+                              Generar comprobante
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                handleObtenerId(g._id);
+                                openModal();
+                              }}
+                              className="hover:text-blue-500 font-bold"
+                              type="button"
+                            >
+                              Eliminar el empleado
+                            </button>
+                          </li>
+                        </Dropdown>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
 
       {/* <SearchButton open={() => openSearch()} /> */}
@@ -718,6 +754,7 @@ export const TableEmpleados = () => {
       <ModalEmpleadoObservacion idObtenida={idObtenida} />
       <ModalAumentoSueldo />
       <ModalSeleccionarQuincena />
+      <ModalDocumentoRecursosHumanos empleados={empleados} />
     </div>
   );
 };
