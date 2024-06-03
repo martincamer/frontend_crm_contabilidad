@@ -357,7 +357,15 @@ export const ComprobantesTodos = ({
                       paddingBottom: 6,
                       borderBottom: "0.5px solid #000",
                     }}
-                  ></Text>
+                  >
+                    {e?.termino_pago === "mensual"
+                      ? e?.sueldo[0]?.observacion
+                      : ""}
+                    {selectedQuincena === "quincena_cinco"
+                      ? e?.sueldo[0]?.quincena_cinco[0].observacion_cinco
+                      : e?.sueldo[1]?.quincena_veinte[0].observacion_veinte ||
+                        ""}
+                  </Text>
                   <Text
                     style={{
                       fontFamily: "Roboto",
