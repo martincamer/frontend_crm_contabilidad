@@ -13,18 +13,58 @@ export const TableEmpleado = () => {
     async function loadData() {
       const res = await instance.get(`/empleados-datos/${params.id}`);
       setDatos(res.data);
+
+      console.log("datos", datos);
     }
 
     loadData();
   }, [params.id]);
 
+  // function agruparEmpleados(datos) {
+  //   // Objeto para almacenar los datos agrupados
+  //   let agrupados = {};
+
+  //   // Recorrer los grupos de empleados
+  //   datos?.empleados?.forEach((grupo) => {
+  //     grupo?.forEach((empleado) => {
+  //       // Obtener la fábrica y el tipo de pago del empleado
+  //       const fabrica = empleado?.fabrica_sucursal;
+  //       const tipoPago = empleado?.termino_pago;
+
+  //       // Verificar si la fábrica ya está en el objeto agrupados
+  //       if (!agrupados[fabrica]) {
+  //         agrupados[fabrica] = {
+  //           fabrica_sucursal: fabrica,
+  //           empleados: [],
+  //         };
+  //       }
+
+  //       // Agregar empleado al arreglo correspondiente
+  //       agrupados[fabrica]?.empleados?.push({
+  //         nombre: empleado?.nombre,
+  //         apellido: empleado?.apellido,
+  //         dni: empleado?.dni,
+  //         fecha_ingreso: empleado?.fecha_ingreso,
+  //         sector_trabajo: empleado?.sector_trabajo,
+  //         termino_pago: tipoPago,
+  //         fecha: empleado.date,
+  //         sueldo:
+  //           tipoPago === "mensual" ? empleado?.sueldo[0] : empleado?.sueldo,
+  //       });
+  //     });
+  //   });
+
+  //   // Convertir el objeto agrupados a un array
+  //   return Object.values(agrupados);
+  // }
+
   function agruparEmpleados(datos) {
     // Objeto para almacenar los datos agrupados
     let agrupados = {};
 
-    // Recorrer los grupos de empleados
-    datos?.empleados?.forEach((grupo) => {
-      grupo?.forEach((empleado) => {
+    // Verificar si datos?.empleados es un array y si tiene elementos
+    if (Array.isArray(datos?.empleados) && datos.empleados.length > 0) {
+      datos.empleados.forEach((empleado) => {
         // Obtener la fábrica y el tipo de pago del empleado
         const fabrica = empleado?.fabrica_sucursal;
         const tipoPago = empleado?.termino_pago;
@@ -38,7 +78,7 @@ export const TableEmpleado = () => {
         }
 
         // Agregar empleado al arreglo correspondiente
-        agrupados[fabrica]?.empleados?.push({
+        agrupados[fabrica].empleados.push({
           nombre: empleado?.nombre,
           apellido: empleado?.apellido,
           dni: empleado?.dni,
@@ -50,14 +90,16 @@ export const TableEmpleado = () => {
             tipoPago === "mensual" ? empleado?.sueldo[0] : empleado?.sueldo,
         });
       });
-    });
+    }
 
-    // Convertir el objeto agrupados a un array
+    // Convertir el objeto agrupados a un array y retornarlo
     return Object.values(agrupados);
   }
 
   // Llamar a la función y obtener el resultado
   const resultado = agruparEmpleados(datos);
+  console.log("resultado", resultado);
+
   const [filtroFabrica, setFiltroFabrica] = useState("");
   const [filtroNombreApellido, setFiltroNombreApellido] = useState("");
   const [resultadosFiltrados, setResultadosFiltrados] = useState(resultado);
@@ -106,7 +148,7 @@ export const TableEmpleado = () => {
   // Usar useEffect para aplicar filtros
   useEffect(() => {
     filtrarResultados();
-  }, [filtroFabrica, filtroNombreApellido, resultado]);
+  }, [filtroFabrica, filtroNombreApellido, datos]);
 
   return (
     <div>
