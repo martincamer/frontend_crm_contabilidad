@@ -780,30 +780,32 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       </div>
                     )}
                   </div>
-                  <div onClick={handleInputClick}>
-                    {isEditable ? (
-                      <FormInput
-                        labelText={"Premio producción"}
-                        placeholder={"Escribe el valor"}
-                        type={"text"}
-                        props={{
-                          ...register("premio_produccion", {
-                            required: true,
-                          }),
-                          onBlur: () => setIsEditable(false), // Save the value and set back to display mode
-                        }}
-                      />
-                    ) : (
-                      <div className="flex flex-col gap-1 w-full">
-                        <label className="font-semibold text-xs text-gray-700">
-                          Premio producción
-                        </label>
-                        <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
-                          {formatearDinero(Number(premio_produccion) || 0)}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                  {sector_trabajo === "gerencia" && (
+                    <div onClick={handleInputClick}>
+                      {isEditable ? (
+                        <FormInput
+                          labelText={"Premio producción"}
+                          placeholder={"Escribe el valor"}
+                          type={"text"}
+                          props={{
+                            ...register("premio_produccion", {
+                              required: true,
+                            }),
+                            onBlur: () => setIsEditable(false), // Save the value and set back to display mode
+                          }}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1 w-full">
+                          <label className="font-semibold text-xs text-gray-700">
+                            Premio producción
+                          </label>
+                          <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
+                            {formatearDinero(Number(premio_produccion) || 0)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <div onClick={handleInputClick}>
                     {isEditable ? (
