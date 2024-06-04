@@ -44,7 +44,7 @@ function App() {
                       <Route index path="/" element={<LoginPage />} />
                       <Route path="/register" element={<RegisterPage />} />
                       <Route element={<ProtectedRoute />}>
-                        <Route path="/home" element={<HomeApp />} />
+                        <Route path="/presupuesto" element={<HomeApp />} />
                         <Route
                           index
                           path="/empleados"

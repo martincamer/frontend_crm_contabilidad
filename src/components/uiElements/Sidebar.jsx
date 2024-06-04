@@ -1,7 +1,8 @@
 import React from "react";
 import { useAuth } from "../../context/authContext";
 import { Link, useLocation } from "react-router-dom";
-import { MdOutlinePersonPin } from "react-icons/md";
+import { MdEvStation, MdOutlinePersonPin } from "react-icons/md";
+import { FaDatabase } from "react-icons/fa";
 
 export const SideBar = () => {
   const { user, isOpen } = useAuth();
@@ -157,6 +158,17 @@ export const SideBar = () => {
             </Disclosure.Panel>
           </Transition>
         </Disclosure> */}
+        <button
+          type="button"
+          className={`flex gap-2 ${
+            location.pathname === "/presupuesto"
+              ? "text-blue-600"
+              : "text-gray-700"
+          } font-bold items-center text-base hover:text-blue-600`}
+        >
+          <FaDatabase className="text-xl" />{" "}
+          <Link to={"/presupuesto"}>Presupuesto</Link>
+        </button>
         <button
           type="button"
           className={`flex gap-2 ${

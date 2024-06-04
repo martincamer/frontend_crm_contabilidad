@@ -523,7 +523,7 @@ export const ComprobanteRecursosHumanos = ({ empleados }) => {
                                   fontSize: "8px",
                                 }}
                               >
-                                Sueldo del cinco:
+                                Quincena del cinco:
                               </Text>{" "}
                               {formatearDinero(
                                 Number(total_antiguedad) +
@@ -569,7 +569,7 @@ export const ComprobanteRecursosHumanos = ({ empleados }) => {
                                   fontSize: "8px",
                                 }}
                               >
-                                Sueldo del veinte:
+                                Quincena del veinte:
                               </Text>{" "}
                               {formatearDinero(
                                 Number(
