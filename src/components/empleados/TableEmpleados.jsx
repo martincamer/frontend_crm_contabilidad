@@ -546,6 +546,8 @@ export const TableEmpleados = () => {
               <thead>
                 <tr className="text-gray-800">
                   <th>Empleado</th>
+                  <th>Fabrica</th>
+                  <th>Sector/rol</th>
                   <th>Fecha ingreso</th>
                   <th>Antigüedad trabajando</th>
                   <th>Quincena 5</th>
@@ -628,6 +630,8 @@ export const TableEmpleados = () => {
                       <td className="font-semibold">
                         {g?.nombre} {g?.apellido}
                       </td>
+                      <td className="font-semibold">{g?.fabrica_sucursal}</td>
+                      <td className="font-semibold">{g?.sector_trabajo}</td>
                       <td>{updateFecha(g?.fecha_ingreso)}</td>
                       <td>{`${years} años, ${months} meses`}</td>
                       <td className="font-semibold">
