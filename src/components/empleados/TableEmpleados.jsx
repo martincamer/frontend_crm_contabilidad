@@ -546,7 +546,7 @@ export const TableEmpleados = () => {
 
               <p className="font-bold text-red-500">
                 <p className="text-gray-600">Total de empleados</p>
-                {empleados.length}
+                {filteredGastos.length}
               </p>
             </div>
           </div>
