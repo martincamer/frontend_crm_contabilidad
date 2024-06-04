@@ -264,7 +264,7 @@ export const TableEmpleados = () => {
       if (empleado.termino_pago === "quincenal") {
         // Obtener el sueldo básico, comida, banco y descuentos
 
-        const banco = Number(empleado.sueldo[0]?.quincena_cinco[0].banco || 0);
+        const banco = Number(empleado.sueldo[0]?.quincena_cinco[0]?.banco || 0);
 
         // Calcular ingreso neto
         const ingresoNeto = banco;
@@ -522,6 +522,11 @@ export const TableEmpleados = () => {
                   <th>Empleado</th>
                   <th>Fecha ingreso</th>
                   <th>Antigüedad trabajando</th>
+                  <th>Quincena 5</th>
+                  <th>Quincena 20</th>
+                  <th>Descuentos del 5</th>
+                  <th>Descuentos del 20</th>
+                  <th>Banco</th>
                   <th>Sueldo</th>
                   <th>Estado</th>
                   <th>Acciones</th>
@@ -600,7 +605,93 @@ export const TableEmpleados = () => {
                       <td>{updateFecha(g?.fecha_ingreso)}</td>
                       <td>{`${years} años, ${months} meses`}</td>
                       <td className="font-semibold">
-                        {formatearDinero(sueldo)}
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[0]?.quincena_cinco[0]
+                                  ?.quincena_cinco || 0
+                              ) +
+                                Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]?.otros || 0
+                                ) +
+                                Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]
+                                    ?.premio_produccion || 0
+                                ) +
+                                Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]
+                                    ?.premio_asistencia || 0
+                                ) +
+                                Number(total_antiguedad) -
+                                Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]?.banco || 0
+                                ) -
+                                Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]
+                                    ?.descuento_del_cinco || 0
+                                )
+                            : Number(g?.sueldo[0]?.sueldo_basico || 0) +
+                                Number(total_antiguedad || 0) +
+                                Number(g?.sueldo[0]?.comida || 0) +
+                                Number(g?.sueldo[0]?.premio_produccion || 0) +
+                                Number(g?.sueldo[0]?.premio_asistencia || 0) +
+                                Number(g?.sueldo[0]?.otros || 0) -
+                                Number(g?.sueldo[0]?.banco || 0) -
+                                Number(g?.sueldo[0]?.descuento_del_cinco || 0)
+                        )}
+                      </td>
+                      <td className="font-semibold">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[1]?.quincena_veinte[0]
+                                  ?.quincena_veinte || 0
+                              ) +
+                                Number(
+                                  g?.sueldo[1]?.quincena_veinte[0]?.comida || 0
+                                ) -
+                                Number(
+                                  g?.sueldo[1]?.quincena_veinte[0]
+                                    ?.descuento_del_veinte || 0
+                                )
+                            : Number(0)
+                        )}
+                      </td>
+                      <td className="font-semibold text-red-600">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[0]?.quincena_cinco[0]
+                                  ?.descuento_del_cinco || 0
+                              )
+                            : Number(g?.sueldo[0]?.descuento_del_cinco || 0)
+                        )}
+                      </td>
+                      <td className="font-semibold text-red-600">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[1]?.quincena_veinte[0]
+                                  ?.descuento_del_veinte || 0
+                              )
+                            : Number(0)
+                        )}
+                      </td>
+
+                      <td className="font-semibold text-red-600">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[0]?.quincena_cinco[0]?.banco || 0
+                              )
+                            : Number(g?.sueldo[0]?.banco || 0)
+                        )}
+                      </td>
+                      <td className="font-semibold">
+                        <span className="bg-blue-500 py-1 px-2 rounded text-white">
+                          {" "}
+                          {formatearDinero(sueldo)}
+                        </span>
                       </td>
                       <td>
                         <span
@@ -639,18 +730,13 @@ export const TableEmpleados = () => {
                             </button>
                           </li>
                           <li>
-                            <button
-                              onClick={() => {
-                                handleObtenerId(g._id);
-                                document
-                                  .getElementById("my-drawer-editar")
-                                  .showModal();
-                              }}
+                            <label
+                              onClick={() => handleObtenerId(g._id)}
+                              htmlFor="my-drawer-editar"
                               className="hover:text-blue-500 font-bold"
-                              type="button"
                             >
                               Editar empleado
-                            </button>
+                            </label>
                           </li>
                           <li>
                             <button
