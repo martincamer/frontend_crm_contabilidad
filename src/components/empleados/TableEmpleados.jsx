@@ -53,6 +53,7 @@ export const TableEmpleados = () => {
   const sortedVentas = empleados
     .slice()
     .sort((a, b) => new Date(b.date) - new Date(a.date));
+
   const currentVentas = sortedVentas.slice(indexOfFirstVenta, indexOfLastVenta); // Elementos a mostrar
 
   // Cambiar la página
@@ -319,25 +320,6 @@ export const TableEmpleados = () => {
   const ingresoTotalQuincenaVeinte =
     calcularIngresoQuincenaDelVeinte(empleados);
 
-  const totalSueldoMensual = empleados.reduce((acc, empleado) => {
-    if (empleado.termino_pago === "mensual") {
-      const sueldoMensual = empleado?.sueldo?.reduce(
-        (sueldoAcc, sueldoItem) => {
-          const sueldoTotal =
-            parseFloat(sueldoItem.sueldo_basico || 0) +
-            parseFloat(sueldoItem.comida || 0) +
-            parseFloat(sueldoItem.premio_produccion || 0) +
-            parseFloat(sueldoItem.premio_asistencia || 0) -
-            parseFloat(sueldoItem.descuento_del_cinco || 0);
-          return sueldoAcc + sueldoTotal;
-        },
-        0
-      );
-      return acc + sueldoMensual;
-    }
-    return acc;
-  }, 0);
-
   // Agrupar empleados por fabrica_sucursal
   const empleadosPorFabrica = filteredGastos.reduce((acc, empleado) => {
     const fabrica = empleado.fabrica_sucursal;
@@ -347,6 +329,21 @@ export const TableEmpleados = () => {
     acc[fabrica].push(empleado);
     return acc;
   }, {});
+
+  const ingresoTotalFiltrado = calcularIngresoNeto(filteredGastos);
+  const ingresoTotalFiltradoCinco =
+    calcularIngresoQuincenaDelCinco(filteredGastos);
+
+  const ingresoTotalFiltradoVeinte =
+    calcularIngresoQuincenaDelVeinte(filteredGastos);
+
+  const ingresoTotalFiltradoBanco =
+    calcularIngresoQuincenaDelCincoBanco(filteredGastos);
+
+  const ingresoTotalFiltradoBancoMensual =
+    calcularIngresoNetoBanco(filteredGastos);
+
+  console.log("total", ingresoTotalFiltrado);
 
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
@@ -446,7 +443,7 @@ export const TableEmpleados = () => {
                   </p>
                   <p className="text-blue-500 text-lg font-bold">
                     {formatearDinero(
-                      ingresoTotalQuincenaCincoBanco + ingresoTotalQuincenaBanco
+                      ingresoTotalFiltradoVeinte + ingresoTotalQuincenaBanco
                     )}
                   </p>
                 </div>
@@ -509,6 +506,35 @@ export const TableEmpleados = () => {
         >
           Imprimir documento recursos humanos/mensual datos
         </button>
+      </div>
+      <div className="w-1/2">
+        {selectedFabricaSucursal && (
+          <div className="bg-white mx-3 my-5 py-3.5 px-3 flex flex-col gap-1">
+            <p className="capitalize font-bold">{selectedFabricaSucursal}</p>
+            <div className="flex gap-10">
+              <p className="font-bold text-blue-500">
+                <p className="text-gray-600">
+                  Pagar efectivo quincena del cinco + mensual
+                </p>
+                {formatearDinero(
+                  ingresoTotalFiltrado + ingresoTotalFiltradoCinco
+                )}
+              </p>
+              <p className="font-bold text-blue-500">
+                <p className="text-gray-600">
+                  Pagar efectivo quincena del veinte
+                </p>
+                {formatearDinero(ingresoTotalFiltradoVeinte)}
+              </p>
+              <p className="font-bold text-red-500">
+                <p className="text-gray-600">Banco</p>
+                {formatearDinero(
+                  ingresoTotalFiltradoBanco + ingresoTotalFiltradoBancoMensual
+                )}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
       <div className="bg-white my-2 mx-3">
         {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
