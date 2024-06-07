@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import instance from "../api/axios";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { ModalGuardarDatos } from "../components/estadistica/ModalGuardarDatos";
-import { Link } from "react-router-dom";
-import { IoIosArrowRoundForward } from "react-icons/io";
+import { updateFecha } from "../helpers/FechaUpdate";
 
-export function HomeApp() {
-  const today = new Date();
+export const EstadisticasFiltrar = () => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  // Formatear la fecha como "dd/mm/yyyy"
-  const formattedDate = today.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
 
-  const [egresos, setEgresos] = useState(
-    JSON.parse(localStorage.getItem("egresos")) || []
-  );
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+  };
+
+  const [egresos, setEgresos] = useState([]);
 
   const [editandoIndice, setEditandoIndice] = useState(null);
   const [nuevoNumero, setNuevoNumero] = useState("");
@@ -31,19 +31,13 @@ export function HomeApp() {
   const [canjes, setCanjes] = useState(
     JSON.parse(localStorage.getItem("canjes")) || []
   );
-
   const [canjesNumero, setCanjesNumero] = useState("");
   const [canjesTipo, setCanjesTipo] = useState("");
   const [canjesObs, setCanjesObs] = useState("");
   const [canjesUtilizado, setCanjesUtilizado] = useState("");
   const [editandoIndiceCanjes, setEditandoIndiceCanjes] = useState(null);
 
-  // Guardar en localStorage cada vez que egresos cambie
-  useEffect(() => {
-    localStorage.setItem("egresos", JSON.stringify(egresos));
-    localStorage.setItem("canjes", JSON.stringify(canjes));
-  }, [egresos, canjes]);
-
+  console.log(egresos);
   // Arreglo para guardar el valor del presupuesto asignado
   const [presupuestoValor, setPresupuestoValor] = useState([]);
 
@@ -255,6 +249,28 @@ export function HomeApp() {
     return accumulator + parseInt(currentValue?.utilizado, 10);
   }, 0);
 
+  const [fecha, setFecha] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await instance.post("/estadisticas/range", {
+        startDate,
+        endDate,
+      });
+
+      setEgresos(response?.data[0]?.egresos);
+      setCanjes(response?.data[0]?.canjes);
+      setPresupuestoAsignado(response?.data[0]?.presupuesto);
+      setFecha(response?.data[0]?.date);
+
+      console.log(response);
+    } catch (error) {
+      console.error("Error sending date range:", error);
+    }
+  };
+
   return (
     <section className="mx-10 my-10">
       <div className="bg-white py-5 px-5 flex justify-between">
@@ -262,7 +278,8 @@ export function HomeApp() {
           Generar los datos de la estadistica del mes 🖐️
         </p>
         <p className="text-gray-600 font-semibold flex gap-2">
-          Fecha <p className="text-blue-500 font-extrabold">{formattedDate}</p>
+          Fecha{" "}
+          <p className="text-blue-500 font-extrabold">{updateFecha(fecha)}</p>
         </p>
       </div>
       <div className="mt-6 mb-10 grid grid-cols-4 gap-5 bg-white">
@@ -442,15 +459,45 @@ export function HomeApp() {
           </div>
         </article> */}
       </div>
-      <div className="transition-all ease-linear cursor-pointer bg-white py-5 px-5 flex">
-        <Link
-          to={"/filtrar-estadisticas"}
-          className="bg-blue-500 py-1 px-4 rounded-full text-white font-semibold flex gap-2 items-center"
-        >
-          Buscar o filtrar estadisticas{" "}
-          <IoIosArrowRoundForward className="text-4xl" />
-        </Link>
+
+      <div className="mt-6">
+        <div className="bg-white py-5 px-5 mx-3 max-w-3xl">
+          <h2 className="text-xl font-bold mb-4 text-blue-500">
+            Filtrar por Rango de Fechas
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Fecha de Inicio
+              </label>
+              <input
+                type="date"
+                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200  bg-white"
+                value={startDate}
+                onChange={handleStartDateChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Fecha de Fin
+              </label>
+              <input
+                type="date"
+                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200  bg-white"
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Filtrar datos
+            </button>
+          </form>
+        </div>
       </div>
+
       <div className="mt-5 transition-all ease-linear cursor-pointer bg-white py-5 px-5">
         <table className="min-w-full divide-y-1 divide-gray-200 bg-white text-sm table">
           <thead>
@@ -913,4 +960,4 @@ export function HomeApp() {
       />
     </section>
   );
-}
+};

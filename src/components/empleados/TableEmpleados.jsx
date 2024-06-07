@@ -572,7 +572,7 @@ export const TableEmpleados = () => {
                   <th>Descuentos del 20</th>
                   <th>Banco</th>
                   <th>Sueldo</th>
-                  <th>Estado</th>
+                  {/* <th>Estado</th> */}
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -739,7 +739,7 @@ export const TableEmpleados = () => {
                           {formatearDinero(sueldo)}
                         </span>
                       </td>
-                      <td>
+                      {/* <td>
                         <span
                           className={`${getEstadoClassNames(
                             g?.estado
@@ -747,7 +747,7 @@ export const TableEmpleados = () => {
                         >
                           {g?.estado}
                         </span>
-                      </td>
+                      </td> */}
                       <td>
                         <Dropdown>
                           <li>

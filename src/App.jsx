@@ -28,6 +28,8 @@ import { Empleado } from "./pages/Empleado";
 import { EmpleadosDatos } from "./pages/EmpleadosDatos";
 import { EmpleadosDato } from "./pages/EmpleadosDato";
 import InvoicePage from "./pages/PruebasComprobantes";
+import { EstadisticaProvider } from "./context/estadisticaContext";
+import { EstadisticasFiltrar } from "./pages/EstadisticasFiltrar";
 
 function App() {
   return (
@@ -39,49 +41,61 @@ function App() {
               <ProveedorProvider>
                 <CategoriaProvider>
                   <EmpleadoProvider>
-                    <Navbar />
-                    <Routes>
-                      <Route index path="/" element={<LoginPage />} />
-                      <Route path="/register" element={<RegisterPage />} />
-                      <Route element={<ProtectedRoute />}>
-                        <Route path="/presupuesto" element={<HomeApp />} />
-                        <Route
-                          index
-                          path="/empleados"
-                          element={<Empleados />}
-                        />
-                        <Route
-                          path="/datos-empleados"
-                          element={<EmpleadosDatos />}
-                        />
-                        <Route
-                          path="/empleados-datos/:id"
-                          element={<EmpleadosDato />}
-                        />
-                        <Route path="/empleado/:id" element={<Empleado />} />
-                        <Route
-                          path="/pruebas-comprobantes"
-                          element={<InvoicePage />}
-                        />
-                        <Route index path="/caja" element={<PageCaja />} />
-                        <Route index path="/banco" element={<PageBanco />} />
-                        <Route path="/gastos" element={<Gastos />} />
-                        <Route path="/ingresos" element={<Ingresos />} />
-                        <Route
-                          path="/crear-gasto"
-                          element={<PageCrearGasto />}
-                        />
-                        <Route path="/perfil" element={<Perfil />} />
-                        <Route path="/gasto/:id" element={<GastoPage />} />
-                        <Route path="/ingreso/:id" element={<IngresoPage />} />
-                        <Route path="/clientes" element={<ClientesPage />} />
-                        <Route
-                          path="/crear-cliente"
-                          element={<PageCrearCliente />}
-                        />
-                        <Route path="/cliente/:id" element={<ClientePage />} />
-                      </Route>
-                    </Routes>
+                    <EstadisticaProvider>
+                      <Navbar />
+                      <Routes>
+                        <Route index path="/" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                        <Route element={<ProtectedRoute />}>
+                          <Route path="/presupuesto" element={<HomeApp />} />
+                          <Route
+                            path="/filtrar-estadisticas"
+                            element={<EstadisticasFiltrar />}
+                          />
+                          <Route
+                            index
+                            path="/empleados"
+                            element={<Empleados />}
+                          />
+                          <Route
+                            path="/datos-empleados"
+                            element={<EmpleadosDatos />}
+                          />
+                          <Route
+                            path="/empleados-datos/:id"
+                            element={<EmpleadosDato />}
+                          />
+                          <Route path="/empleado/:id" element={<Empleado />} />
+                          <Route
+                            path="/pruebas-comprobantes"
+                            element={<InvoicePage />}
+                          />
+                          <Route index path="/caja" element={<PageCaja />} />
+                          <Route index path="/banco" element={<PageBanco />} />
+                          <Route path="/gastos" element={<Gastos />} />
+                          <Route path="/ingresos" element={<Ingresos />} />
+                          <Route
+                            path="/crear-gasto"
+                            element={<PageCrearGasto />}
+                          />
+                          <Route path="/perfil" element={<Perfil />} />
+                          <Route path="/gasto/:id" element={<GastoPage />} />
+                          <Route
+                            path="/ingreso/:id"
+                            element={<IngresoPage />}
+                          />
+                          <Route path="/clientes" element={<ClientesPage />} />
+                          <Route
+                            path="/crear-cliente"
+                            element={<PageCrearCliente />}
+                          />
+                          <Route
+                            path="/cliente/:id"
+                            element={<ClientePage />}
+                          />
+                        </Route>
+                      </Routes>
+                    </EstadisticaProvider>
                   </EmpleadoProvider>
                 </CategoriaProvider>
               </ProveedorProvider>
