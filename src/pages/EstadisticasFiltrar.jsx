@@ -960,11 +960,11 @@ export const EstadisticasFiltrar = () => {
         egresos={egresos}
       />
 
-      <ModalPdfEstadistica
+      {/* <ModalPdfEstadistica
         canjes={canjes}
         egresos={egresos}
         presupuestoAsignado={presupuestoAsignado}
-      />
+      /> */}
     </section>
   );
 };
