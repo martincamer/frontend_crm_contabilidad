@@ -1,11 +1,14 @@
-import { useEstadistica } from "../../context/estadisticaContext";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
+import instance from "../../api/axios";
 
-export const ModalGuardarDatos = ({ canjes, egresos, presupuestoAsignado }) => {
+export const ModalGuardarDatosUpdate = ({
+  canjes,
+  egresos,
+  presupuestoAsignado,
+  params,
+}) => {
   const { handleSubmit } = useForm();
-
-  const { createEstadistica } = useEstadistica();
 
   const onSubmit = async (formData) => {
     let reciboData = {
@@ -17,15 +20,16 @@ export const ModalGuardarDatos = ({ canjes, egresos, presupuestoAsignado }) => {
     };
 
     try {
-      await createEstadistica(reciboData);
-
-      document.getElementById("my_modal_guardar_datos").close();
+      const res = await instance.put(`/estadisticas/${params}`, reciboData);
+      console.log(res);
+      document.getElementById("my_modal_guardar_datos_update").close();
     } catch (error) {
       console.error("Error creating receipt:", error);
     }
   };
+
   return (
-    <dialog id="my_modal_datos" className="modal">
+    <dialog id="my_modal_guardar_datos_update" className="modal">
       <div className="modal-box rounded-none max-w-2xl py-10">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
@@ -48,7 +52,9 @@ export const ModalGuardarDatos = ({ canjes, egresos, presupuestoAsignado }) => {
             Guardar los datos
           </button>
           <button
-            onClick={() => document.getElementById("my_modal_datos").close()}
+            onClick={() =>
+              document.getElementById("my_modal_guardar_datos_update").close()
+            }
             type="button"
             className="bg-red-500 py-1 px-4 rounded-full text-white font-semibold"
           >

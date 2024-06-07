@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import instance from "../api/axios";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { ModalGuardarDatos } from "../components/estadistica/ModalGuardarDatos";
 import { Link } from "react-router-dom";
@@ -6,31 +8,11 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { PdfComprobantePresupuestos } from "../components/estadistica/PdfComprobantePresupuestos";
 import { PDFViewer } from "@react-pdf/renderer";
 import { ModalImprimirPresupuestos } from "../components/estadistica/ModalImprimirPresupuestos";
+import { ModalGuardarDatosUpdate } from "../components/estadistica/ModalGuardarDatosUpdate";
 
-export function HomeApp() {
-  const today = new Date();
-
-  // Formatear la fecha como "dd/mm/yyyy"
-  const formattedDate = today.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-
-  const obtenerFechaHoyFormato = () => {
-    const hoy = new Date();
-    const year = hoy.getFullYear();
-    const month = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses de 0 a 11
-    const day = String(hoy.getDate()); // Día sin padStart
-
-    return `${day}/${month}/${year}`;
-  };
-
-  const fechaHoy = obtenerFechaHoyFormato();
-
-  const [egresos, setEgresos] = useState(
-    JSON.parse(localStorage.getItem("egresos")) || []
-  );
+export const Estadistica = () => {
+  const params = useParams();
+  const [egresos, setEgresos] = useState([]);
 
   const [editandoIndice, setEditandoIndice] = useState(null);
   const [nuevoNumero, setNuevoNumero] = useState("");
@@ -42,9 +24,8 @@ export function HomeApp() {
   const [nuevaDiferencia, setNuevaDiferencia] = useState("");
   const [presupuestoAsignado, setPresupuestoAsignado] = useState("");
 
-  const [canjes, setCanjes] = useState(
-    JSON.parse(localStorage.getItem("canjes")) || []
-  );
+  const [canjes, setCanjes] = useState([]);
+  const [datos, setDatos] = useState([]);
 
   const [canjesNumero, setCanjesNumero] = useState("");
   const [canjesTipo, setCanjesTipo] = useState("");
@@ -52,18 +33,35 @@ export function HomeApp() {
   const [canjesUtilizado, setCanjesUtilizado] = useState("");
   const [editandoIndiceCanjes, setEditandoIndiceCanjes] = useState(null);
 
-  // Guardar en localStorage cada vez que egresos cambie
-  useEffect(() => {
-    localStorage.setItem("egresos", JSON.stringify(egresos));
-    localStorage.setItem("canjes", JSON.stringify(canjes));
-  }, [egresos, canjes]);
-
   // Arreglo para guardar el valor del presupuesto asignado
   const [presupuestoValor, setPresupuestoValor] = useState([]);
 
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await instance.get(`/estadisticas/${params?.id}`);
+      setCanjes(res?.data?.canjes);
+      setEgresos(res?.data?.egresos);
+      setPresupuestoAsignado(res?.data?.presupuesto);
+      setDatos(res);
+
+      console.log(res.data);
+    };
+    loadData();
+  }, [params?.id]);
+
+  const today = new Date();
+  console.log(datos);
+
+  // Formatear la fecha como "dd/mm/yyyy"
+  const formattedDate = today.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+
   // Efecto para cargar el presupuesto asignado del localStorage al cargar el componente
   useEffect(() => {
-    const presupuestoGuardado = localStorage.getItem("presupuestoAsignado");
+    const presupuestoGuardado = localStorage.getItem("presupuestoAsignadoDos");
     if (presupuestoGuardado) {
       setPresupuestoAsignado(JSON.parse(presupuestoGuardado));
       setPresupuestoValor((prevPresupuestoValor) => [
@@ -81,7 +79,7 @@ export function HomeApp() {
       ...prevPresupuestoValor,
       valor,
     ]);
-    localStorage.setItem("presupuestoAsignado", JSON.stringify(valor));
+    localStorage.setItem("presupuestoAsignadoDos", JSON.stringify(valor));
   };
 
   const agregarFila = () => {
@@ -268,8 +266,6 @@ export function HomeApp() {
   const totalUtilizado = canjes?.reduce((accumulator, currentValue) => {
     return accumulator + parseInt(currentValue?.utilizado, 10);
   }, 0);
-
-  console.log(fechaHoy);
 
   return (
     <section className="mx-10 my-10">
@@ -915,7 +911,9 @@ export function HomeApp() {
       </div>
       <div className="bg-white py-2 px-5 mt-5 flex gap-3">
         <button
-          onClick={() => document.getElementById("my_modal_datos").showModal()}
+          onClick={() =>
+            document.getElementById("my_modal_guardar_datos_update").showModal()
+          }
           className="bg-green-500 py-2 px-5 text-white font-bold rounded-md text-sm"
         >
           Guardar datos
@@ -930,18 +928,19 @@ export function HomeApp() {
         </button>
       </div>
 
-      <ModalGuardarDatos
+      <ModalGuardarDatosUpdate
+        params={params.id}
         presupuestoAsignado={presupuestoAsignado}
         canjes={canjes}
         egresos={egresos}
       />
 
       <ModalImprimirPresupuestos
-        month={fechaHoy}
         canjes={canjes}
         egresos={egresos}
         presupuestoAsignado={presupuestoAsignado}
+        datos={datos}
       />
     </section>
   );
-}
+};

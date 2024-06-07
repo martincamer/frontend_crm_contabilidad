@@ -30,6 +30,7 @@ import { EmpleadosDato } from "./pages/EmpleadosDato";
 import InvoicePage from "./pages/PruebasComprobantes";
 import { EstadisticaProvider } from "./context/estadisticaContext";
 import { EstadisticasFiltrar } from "./pages/EstadisticasFiltrar";
+import { Estadistica } from "./pages/Estadistica";
 
 function App() {
   return (
@@ -64,6 +65,10 @@ function App() {
                           <Route
                             path="/empleados-datos/:id"
                             element={<EmpleadosDato />}
+                          />
+                          <Route
+                            path="/estadistica/:id"
+                            element={<Estadistica />}
                           />
                           <Route path="/empleado/:id" element={<Empleado />} />
                           <Route
