@@ -682,7 +682,7 @@ export const ComprobantesTodos = ({
                             Number(total_antiguedad || 0) -
                             Number(
                               e?.sueldo[0]?.quincena_cinco[0]
-                                ?.descuento_del_cinco || 0
+                                ?.descuento_del_cinco
                             )
                         : selectedQuincena === "quincena_veinte"
                         ? Number(
@@ -749,11 +749,12 @@ export const ComprobantesTodos = ({
                             Number(
                               e?.sueldo[0]?.quincena_cinco[0]?.banco || 0
                             ) -
-                            Number(
-                              e?.sueldo[0]?.quincena_cinco[0]
-                                ?.descuento_del_cinco || 0
-                            )
-                        : selectedQuincena === "quincena_veinte"
+                            Number(quincenaVeinteDescuentos)
+                        : // Number(
+                        //   e?.sueldo[0]?.quincena_cinco[0]
+                        //     ?.descuento_del_cinco
+                        // )
+                        selectedQuincena === "quincena_veinte"
                         ? Number(
                             e?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte ||
                               0
@@ -772,7 +773,7 @@ export const ComprobantesTodos = ({
                           Number(e?.sueldo[0]?.otros || 0) +
                           Number(total_antiguedad) -
                           Number(e?.sueldo[0]?.banco || 0) -
-                          Number(e?.sueldo[0]?.descuentos_del_cinco || 0)
+                          Number(descuentosPorFaltasMensual)
                     )}
                   </Text>
                 </View>

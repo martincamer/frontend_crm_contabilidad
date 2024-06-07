@@ -41,10 +41,17 @@ export const ModalGuardarDatos = ({ canjes, egresos, presupuestoAsignado }) => {
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex gap-5 mt-5">
-          <button className="bg-green-500 py-1 px-4 rounded-full text-white font-semibold">
+          <button
+            type="submit"
+            className="bg-green-500 py-1 px-4 rounded-full text-white font-semibold"
+          >
             Guardar los datos
           </button>
-          <button className="bg-red-500 py-1 px-4 rounded-full text-white font-semibold">
+          <button
+            onClick={() => document.getElementById("my_modal_datos").close()}
+            type="button"
+            className="bg-red-500 py-1 px-4 rounded-full text-white font-semibold"
+          >
             Cerrar ventana
           </button>
         </form>
