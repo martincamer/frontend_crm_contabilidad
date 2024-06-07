@@ -314,6 +314,7 @@ export const TableEmpleados = () => {
   const ingresoTotalQuincenaCinco = calcularIngresoQuincenaDelCinco(empleados);
 
   const ingresoTotalQuincenaCincoBanco = calcularIngresoNetoBanco(empleados);
+
   const ingresoTotalQuincenaBanco =
     calcularIngresoQuincenaDelCincoBanco(empleados);
 
@@ -443,7 +444,7 @@ export const TableEmpleados = () => {
                   </p>
                   <p className="text-blue-500 text-lg font-bold">
                     {formatearDinero(
-                      ingresoTotalFiltradoVeinte + ingresoTotalQuincenaBanco
+                      ingresoTotalQuincenaCincoBanco + ingresoTotalQuincenaBanco
                     )}
                   </p>
                 </div>
@@ -894,7 +895,7 @@ export const TableEmpleados = () => {
       <ModalEmpleadoObservacion idObtenida={idObtenida} />
       <ModalAumentoSueldo />
       <ModalSeleccionarQuincena />
-      <ModalDocumentoRecursosHumanos empleados={empleados} />
+      <ModalDocumentoRecursosHumanos empleados={filteredGastos} />
     </div>
   );
 };
