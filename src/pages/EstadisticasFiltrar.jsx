@@ -3,7 +3,6 @@ import instance from "../api/axios";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { ModalGuardarDatos } from "../components/estadistica/ModalGuardarDatos";
 import { updateFecha } from "../helpers/FechaUpdate";
-import { ModalPdfEstadistica } from "../components/estadistica/ModalPdfEstadistica";
 
 export const EstadisticasFiltrar = () => {
   const [startDate, setStartDate] = useState("");
@@ -959,12 +958,6 @@ export const EstadisticasFiltrar = () => {
         canjes={canjes}
         egresos={egresos}
       />
-
-      {/* <ModalPdfEstadistica
-        canjes={canjes}
-        egresos={egresos}
-        presupuestoAsignado={presupuestoAsignado}
-      /> */}
     </section>
   );
 };
