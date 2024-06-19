@@ -649,7 +649,7 @@ export const TableEmpleados = () => {
                       </td>
                       <td className="font-semibold">{g?.fabrica_sucursal}</td>
                       <td className="font-semibold">{g?.sector_trabajo}</td>
-                      <td>{g?.fecha_ingreso}</td>
+                      <td>{g?.fecha_ingreso?.toISOString()?.split('T')[0]}</td>
                       <td>{`${years} años, ${months} meses`}</td>
                       <td className="font-semibold">
                         {formatearDinero(
