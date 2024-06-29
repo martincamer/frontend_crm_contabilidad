@@ -344,8 +344,6 @@ export const TableEmpleados = () => {
   const ingresoTotalFiltradoBancoMensual =
     calcularIngresoNetoBanco(filteredGastos);
 
-  console.log("total", ingresoTotalFiltrado);
-
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
       <div className="flex items-center">
@@ -649,7 +647,9 @@ export const TableEmpleados = () => {
                       </td>
                       <td className="font-semibold">{g?.fabrica_sucursal}</td>
                       <td className="font-semibold">{g?.sector_trabajo}</td>
-                      <td>{new Date(g.fecha_ingreso).toISOString().split('T')[0]}</td>
+                      <td>
+                        {new Date(g.fecha_ingreso).toISOString().split("T")[0]}
+                      </td>
                       <td>{`${years} años, ${months} meses`}</td>
                       <td className="font-semibold">
                         {formatearDinero(

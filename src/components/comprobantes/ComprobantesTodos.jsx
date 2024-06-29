@@ -121,7 +121,10 @@ export const ComprobantesTodos = ({
               e.sueldo[0]?.quincena_cinco.length > 0
             ) {
               total_antiguedad =
-                Number(e.sueldo[0].quincena_cinco[0]?.quincena_cinco || 0) *
+                Number(
+                  Number(e.sueldo[0].quincena_cinco[0]?.quincena_cinco || 0) +
+                    Number(e.sueldo[1].quincena_veinte[0]?.quincena_veinte || 0)
+                ) *
                 (0.01 * years);
             }
           } else if (selectedQuincena === "quincena_veinte") {
@@ -138,6 +141,12 @@ export const ComprobantesTodos = ({
               Number(e?.sueldo[0]?.sueldo_basico || 0) * (0.01 * years);
           }
         }
+
+        console.log(
+          "n",
+          Number(e.sueldo[1].quincena_veinte[0]?.quincena_veinte || 0)
+        );
+        console.log("empleados", empleados);
 
         return (
           <Page size="A4" style={styles.page}>
