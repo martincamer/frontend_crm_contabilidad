@@ -142,11 +142,13 @@ export const ComprobantesTodos = ({
           }
         }
 
-        console.log(
+        {
+          /* console.log(
           "n",
           Number(e.sueldo[1].quincena_veinte[0]?.quincena_veinte || 0)
         );
-        console.log("empleados", empleados);
+        console.log("empleados", empleados); */
+        }
 
         return (
           <Page size="A4" style={styles.page}>
