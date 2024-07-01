@@ -17,7 +17,6 @@ import { ClientesPage } from "./pages/ClientesPage";
 import { ClienteProvider } from "./context/ClientesContext";
 import { PageCrearCliente } from "./pages/PageCrearCliente";
 import { ClientePage } from "./pages/ClientePage";
-import { BancoProvider } from "./context/BancoContext";
 import { PageBanco } from "./pages/PageBanco";
 import { Ingresos } from "./pages/Ingresos";
 import { IngresoProvider } from "./context/IngresosContext";
@@ -31,11 +30,14 @@ import InvoicePage from "./pages/PruebasComprobantes";
 import { EstadisticaProvider } from "./context/estadisticaContext";
 import { EstadisticasFiltrar } from "./pages/EstadisticasFiltrar";
 import { Estadistica } from "./pages/Estadistica";
+import { PageBancoCheques } from "./pages/PageBancoCheques";
+import { BancoChequeProvider } from "./context/BancoChequesContext";
+import { PageBancoCheque } from "./pages/PageBancoCheque";
 
 function App() {
   return (
     <CajaProvider>
-      <BancoProvider>
+      <BancoChequeProvider>
         <ClienteProvider>
           <GastoProvider>
             <IngresoProvider>
@@ -49,6 +51,14 @@ function App() {
                         <Route path="/register" element={<RegisterPage />} />
                         <Route element={<ProtectedRoute />}>
                           <Route path="/presupuesto" element={<HomeApp />} />
+                          <Route
+                            path="/bancos"
+                            element={<PageBancoCheques />}
+                          />
+                          <Route
+                            path="/banco/:id"
+                            element={<PageBancoCheque />}
+                          />
                           <Route
                             path="/filtrar-estadisticas"
                             element={<EstadisticasFiltrar />}
@@ -107,7 +117,7 @@ function App() {
             </IngresoProvider>
           </GastoProvider>
         </ClienteProvider>
-      </BancoProvider>
+      </BancoChequeProvider>
     </CajaProvider>
   );
 }
