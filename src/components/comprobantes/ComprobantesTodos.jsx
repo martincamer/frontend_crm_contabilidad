@@ -630,6 +630,61 @@ export const ComprobantesTodos = ({ empleados, selectedQuincena }) => {
                       TOTAL EN ANTIGUEDAD: +{formatearDinero(total_antiguedad)}
                     </Text>
                   )}
+
+                  <View
+                    style={{
+                      fontFamily: "Roboto",
+                      fontWeight: "medium",
+                      fontSize: "10px",
+                      textTransform: "uppercase",
+                      marginTop: 10,
+                    }}
+                  >
+                    <View>
+                      {e?.sueldo &&
+                        (Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) >
+                          0 ||
+                        (e?.sueldo[0]?.quincena_cinco?.[0]
+                          ?.aguinaldo_proporcional || 0) > 0 ? (
+                          <Text
+                            style={{
+                              fontFamily: "Roboto",
+                              fontWeight: "medium",
+                              fontSize: "10px",
+                              textTransform: "uppercase",
+                              marginTop: 10,
+                              color: "#000",
+                            }}
+                          >
+                            Se sumo del aguinaldo por cobrar el proporcional en
+                            el banco de un total de{" "}
+                            <Text
+                              style={{
+                                fontFamily: "Roboto",
+                                fontWeight: "medium",
+                                fontSize: "10px",
+                                textTransform: "uppercase",
+                                marginTop: 10,
+                                backgroundColor: "#000",
+                                color: "#ffff",
+                              }}
+                            >
+                              {formatearDinero(
+                                Number(
+                                  e?.sueldo[0]?.aguinaldo_proporcional || 0
+                                ) ||
+                                  Number(
+                                    e?.sueldo[0]?.quincena_cinco?.[0]
+                                      ?.aguinaldo_proporcional || 0
+                                  )
+                              )}
+                            </Text>
+                          </Text>
+                        ) : (
+                          ""
+                        ))}
+                    </View>
+                  </View>
                 </View>
               </View>
               <View

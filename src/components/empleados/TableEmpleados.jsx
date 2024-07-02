@@ -365,6 +365,7 @@ export const TableEmpleados = () => {
           Number(g?.sueldo[0]?.premio_produccion || 0) +
           Number(g?.sueldo[0]?.premio_asistencia || 0) +
           Number(g?.sueldo[0]?.otros || 0) -
+          Number(g?.sueldo[0]?.aguinaldo_proporcional || 0) -
           Number(g?.sueldo[0]?.descuento_del_cinco || 0) || 0;
     } else if (g?.termino_pago === "quincenal") {
       total_antiguedad =
@@ -381,6 +382,7 @@ export const TableEmpleados = () => {
           Number(g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0) +
           Number(g?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
           Number(total_antiguedad || 0) -
+          Number(g?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0) -
           Number(g?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0) -
           Number(g?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0) ||
         0;
@@ -910,44 +912,6 @@ export const TableEmpleados = () => {
           </div>
         ))}
       </div>
-
-      {/* <SearchButton open={() => openSearch()} /> */}
-      {/* {click && (
-     
-      )} */}
-      {/* 
-      <div className="flex pb-12 justify-center items-center space-x-2">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-        >
-          <FaArrowLeft />
-        </button>
-        <ul className="flex space-x-2">
-          {getPageNumbers().map((number) => (
-            <li key={number} className="cursor-pointer">
-              <button
-                onClick={() => paginate(number)}
-                className={`${
-                  currentPage === number ? "bg-white" : "bg-gray-300"
-                } py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100`}
-              >
-                {number}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-          className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-        >
-          <FaArrowRight />
-        </button>
-      </div> */}
 
       {/* Modal editar estado */}
       <ModalGuardarDatos empleados={empleados} />

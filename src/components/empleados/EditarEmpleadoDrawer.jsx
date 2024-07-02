@@ -76,6 +76,10 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
         );
         setValue("banco", res?.sueldo[0]?.quincena_cinco[0]?.banco || 0);
         setValue(
+          "aguinaldo_proporcional",
+          res?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0
+        );
+        setValue(
           "premio_produccion",
           res?.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0
         );
@@ -109,6 +113,10 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
         setValue("premio_produccion", res?.sueldo[0]?.premio_produccion || 0);
         setValue("observacion", res?.sueldo[0]?.observacion || 0);
         setValue("banco", res?.sueldo[0]?.banco || 0);
+        setValue(
+          "aguinaldo_proporcional",
+          res?.sueldo[0]?.aguinaldo_proporcional || 0
+        );
       }
 
       setValue("nombre", res?.nombre);
@@ -146,6 +154,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
   const sector_trabajo = watch("sector_trabajo");
   const fabrica_sucursal = watch("fabrica_sucursal");
   const estado = watch("estado");
+  const aguinaldo_proporcional = watch("aguinaldo_proporcional");
 
   const calculateAntiquity = (startDate) => {
     const start = new Date(startDate);
@@ -179,7 +188,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
     Number(premio_asistencia) +
     Number(total_antiguedad) -
     Number(descuento_del_cinco) -
-    Number(banco);
+    Number(Number(banco) + Number(aguinaldo_proporcional));
   //totales
   const totalQuincenaVeinte =
     Number(quincena_veinte) + Number(comida) - Number(descuento_del_veinte);
@@ -201,7 +210,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
     Number(total_antiguedad) +
     Number(comida) -
     Number(descuento_del_cinco) -
-    Number(banco);
+    Number(Number(banco) + Number(aguinaldo_proporcional));
 
   const totalSueldo =
     Number(quincena_cinco) +
@@ -240,7 +249,10 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       otros: otros || 0,
                       premio_produccion: premio_produccion || 0,
                       premio_asistencia: premio_asistencia || 0,
-                      banco: banco || 0,
+                      banco:
+                        Number(banco) + Number(aguinaldo_proporcional) || 0,
+                      aguinaldo_proporcional:
+                        Number(aguinaldo_proporcional) || 0,
                       descuento_del_cinco: descuento_del_cinco || 0,
                       observacion_cinco: observacion_cinco || "",
                     },
@@ -264,9 +276,10 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                   premio_produccion: premio_produccion || 0,
                   premio_asistencia: premio_asistencia || 0,
                   comida: comida || 0,
-                  banco: banco || 0,
+                  banco: Number(banco) + Number(aguinaldo_proporcional) || 0,
                   descuento_del_cinco: descuento_del_cinco || 0,
                   observacion: observacion || "",
+                  aguinaldo_proporcional: Number(aguinaldo_proporcional) || 0,
                 },
               ],
         date: dayjs.utc(formData.date).format(),
@@ -277,6 +290,12 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
       console.error("Error creating product:", error);
     }
   };
+
+  const today = new Date();
+  const month = today.getMonth(); // 0 for January, 1 for February, ..., 11 for December
+
+  const showButton = month === 6 || month === 11; // Show button in July (6) and December (11)
+
   return (
     <div className="drawer drawer-end z-[1001]">
       <input id="my-drawer-editar" type="checkbox" className="drawer-toggle" />
@@ -549,7 +568,9 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                           Banco
                         </label>
                         <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
-                          {formatearDinero(Number(banco) || 0)}
+                          {formatearDinero(
+                            Number(banco) + Number(aguinaldo_proporcional) || 0
+                          )}
                         </p>
                       </div>
                     )}
@@ -588,6 +609,35 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       {formatearDinero(totalQuincenaCinco || 0)}
                     </p>
                   </div>
+
+                  {showButton && (
+                    <div onClick={handleInputClick}>
+                      {isEditable ? (
+                        <FormInput
+                          labelText={"Aguinaldo proporcional"}
+                          placeholder={"Escribe el valor"}
+                          type={"text"}
+                          props={{
+                            ...register("aguinaldo_proporcional", {
+                              required: true,
+                            }),
+                            onBlur: () => setIsEditable(false), // Save the value and set back to display mode
+                          }}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1 w-full">
+                          <label className="font-semibold text-xs text-gray-700">
+                            Aguinaldo proporcional
+                          </label>
+                          <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
+                            {formatearDinero(
+                              Number(aguinaldo_proporcional) || 0
+                            )}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <Texto
                     props={{
@@ -876,7 +926,9 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                           Banco
                         </label>
                         <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
-                          {formatearDinero(Number(banco) || 0)}
+                          {formatearDinero(
+                            Number(banco) + Number(aguinaldo_proporcional) || 0
+                          )}
                         </p>
                       </div>
                     )}
@@ -915,6 +967,35 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       {formatearDinero(totalSueldoNeto || 0)}
                     </p>
                   </div>
+
+                  {showButton && (
+                    <div onClick={handleInputClick}>
+                      {isEditable ? (
+                        <FormInput
+                          labelText={"Aguinaldo proporcional"}
+                          placeholder={"Escribe el valor"}
+                          type={"text"}
+                          props={{
+                            ...register("aguinaldo_proporcional", {
+                              required: true,
+                            }),
+                            onBlur: () => setIsEditable(false), // Save the value and set back to display mode
+                          }}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1 w-full">
+                          <label className="font-semibold text-xs text-gray-700">
+                            Aguinaldo proporcional
+                          </label>
+                          <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
+                            {formatearDinero(
+                              Number(aguinaldo_proporcional) || 0
+                            )}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <Texto
                     props={{

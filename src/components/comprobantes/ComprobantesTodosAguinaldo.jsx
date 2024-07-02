@@ -109,6 +109,9 @@ export const ComprobantesTodos = ({ empleados }) => {
               Number(e?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
               Number(total_antiguedad || 0) -
               Number(
+                e?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0
+              ) -
+              Number(
                 e?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0
               ) -
               Number(
@@ -123,8 +126,11 @@ export const ComprobantesTodos = ({ empleados }) => {
               Number(e?.sueldo[0]?.premio_produccion || 0) +
               Number(e?.sueldo[0]?.premio_asistencia || 0) +
               Number(e?.sueldo[0]?.otros || 0) -
+              Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) -
               Number(e?.sueldo[0]?.descuento_del_cinco || 0) || 0;
         }
+
+        console.log("rec", empleados);
         return (
           <Page size="A4" style={styles.page}>
             <View style={styles.section}>
@@ -268,6 +274,41 @@ export const ComprobantesTodos = ({ empleados }) => {
                   }}
                 >
                   Sector/Rol: {e?.sector_trabajo}
+                </Text>
+              </View>
+
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "Roboto",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Observación
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "Roboto",
+                    fontWeight: "medium",
+                    fontSize: "9px",
+                    textTransform: "uppercase",
+                    marginTop: 6,
+                  }}
+                >
+                  {e?.sueldo &&
+                    (Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) > 0 ||
+                    (e?.sueldo[0]?.quincena_cinco?.[0]
+                      ?.aguinaldo_proporcional || 0) > 0
+                      ? `Se descontó del aguinaldo por cobrar proporcional en el banco de ${formatearDinero(
+                          Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) ||
+                            Number(
+                              e?.sueldo[0]?.quincena_cinco?.[0]
+                                ?.aguinaldo_proporcional || 0
+                            )
+                        )}`
+                      : "")}
                 </Text>
               </View>
 
