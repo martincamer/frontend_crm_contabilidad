@@ -32,11 +32,7 @@ Font.register({
   ],
 });
 
-export const ComprobantesTodos = ({
-  empleados,
-  selectedQuincena,
-  selectedTerminoPago,
-}) => {
+export const ComprobantesTodos = ({ empleados, selectedQuincena }) => {
   // Estilos para el documento PDF
   const styles = StyleSheet.create({
     page: {

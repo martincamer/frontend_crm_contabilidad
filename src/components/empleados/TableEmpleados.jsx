@@ -28,6 +28,7 @@ import { ModalGuardarDatos } from "./ModalGuardarDatos";
 import { ModalAumentoSueldo } from "./ModalAumentoSueldo";
 import { ModalSeleccionarQuincena } from "./ModalSeleccionarQuincena";
 import { ModalDocumentoRecursosHumanos } from "./ModalDocumentoRecursosHumanos";
+import { ModalSeleccionarAguinaldo } from "./ModalSeleccionarAguinaldo";
 
 export const TableEmpleados = () => {
   const { click, openSearch } = useSearch();
@@ -344,6 +345,61 @@ export const TableEmpleados = () => {
   const ingresoTotalFiltradoBancoMensual =
     calcularIngresoNetoBanco(filteredGastos);
 
+  // Calcular el aguinaldo para cada empleado
+  const aguinaldosIndividuales = empleados.map((g) => {
+    let total_antiguedad = 0;
+    let sueldo = 0;
+
+    // Calcular la antigüedad
+    const { years } = calculateAntiquity(g?.fecha_ingreso);
+
+    if (g?.termino_pago === "mensual") {
+      total_antiguedad =
+        Number(g?.sueldo[0]?.sueldo_basico || 0) * (0.01 * years);
+
+      // Calcular sueldo mensual
+      sueldo =
+        Number(g?.sueldo[0]?.sueldo_basico || 0) +
+          Number(total_antiguedad || 0) +
+          Number(g?.sueldo[0]?.comida || 0) +
+          Number(g?.sueldo[0]?.premio_produccion || 0) +
+          Number(g?.sueldo[0]?.premio_asistencia || 0) +
+          Number(g?.sueldo[0]?.otros || 0) -
+          Number(g?.sueldo[0]?.descuento_del_cinco || 0) || 0;
+    } else if (g?.termino_pago === "quincenal") {
+      total_antiguedad =
+        (Number(g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
+          Number(g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0)) *
+        (0.01 * years);
+
+      // Calcular sueldo quincenal
+      sueldo =
+        Number(g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
+          Number(g?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
+          Number(g?.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0) +
+          Number(g?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0) +
+          Number(g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0) +
+          Number(g?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
+          Number(total_antiguedad || 0) -
+          Number(g?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0) -
+          Number(g?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0) ||
+        0;
+    }
+
+    // Calcular aguinaldo para el empleado actual
+    const aguinaldoIndividual = sueldo / 2;
+
+    return aguinaldoIndividual;
+  });
+
+  // Sumar todos los aguinaldos individuales para obtener el total
+  const aguinaldoTotal = aguinaldosIndividuales.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+
+  console.log("Aguinaldo total:", aguinaldoTotal);
+
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
       <div className="flex items-center">
@@ -448,6 +504,14 @@ export const TableEmpleados = () => {
                 </div>
                 <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                   <p className="text-sm font-semibold text-gray-700">
+                    Total a pagar en aguinaldo
+                  </p>
+                  <p className="text-blue-500 text-lg font-bold">
+                    {formatearDinero(aguinaldoTotal)}
+                  </p>
+                </div>
+                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+                  <p className="text-sm font-semibold text-gray-700">
                     Total de empleados cargados
                   </p>
                   <p className="text-blue-500 text-lg font-bold">
@@ -495,6 +559,15 @@ export const TableEmpleados = () => {
             }}
           >
             Imprimir sueldos en cantidad
+          </button>
+          <button
+            type="button"
+            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
+            onClick={() => {
+              document.getElementById("my_modal_aguinaldo").showModal();
+            }}
+          >
+            Imprimir aguinaldos
           </button>
         </div>
       </div>
@@ -896,6 +969,7 @@ export const TableEmpleados = () => {
       <ModalAumentoSueldo />
       <ModalSeleccionarQuincena />
       <ModalDocumentoRecursosHumanos empleados={filteredGastos} />
+      <ModalSeleccionarAguinaldo />
     </div>
   );
 };

@@ -1,70 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useEmpleado } from "../../context/EmpleadosContext";
 import { ModalViewerEmpleados } from "./ModalViewerEmpleados";
-import instance from "../../api/axios";
 
 export const ModalSeleccionarQuincena = () => {
   const { getEmpleados, getFabricas, fabricas, empleados } = useEmpleado();
   const [selectedFabrica, setSelectedFabrica] = useState("");
   const [selectedTerminoPago, setSelectedTerminoPago] = useState("");
   const [selectedQuincena, setSelectedQuincena] = useState("");
-  const [loading, setLoading] = useState(false);
 
   // Llamar a getFabricas y getEmpleados al montar el componente
   useEffect(() => {
     getFabricas();
     getEmpleados();
   }, []);
-
-  // const filtrarEmpleados = (
-  //   empleados,
-  //   selectedQuincena,
-  //   selectedFabrica,
-  //   selectedTerminoPago
-  // ) => {
-  //   // Filtrar por fábrica seleccionada
-  //   const empleadosFiltrados = empleados?.filter(
-  //     (empleado) => empleado?.fabrica_sucursal === selectedFabrica
-  //   );
-
-  //   // Filtrar por término de pago (quincenal o mensual)
-  //   if (selectedTerminoPago === "quincenal") {
-  //     // Filtrar por quincena seleccionada si está definida
-  //     if (selectedQuincena) {
-  //       return empleadosFiltrados
-  //         .filter((empleado) => {
-  //           // Verificar si el empleado tiene sueldo en la quincena seleccionada
-  //           return empleado?.sueldo.some((sueldo) => sueldo[selectedQuincena]);
-  //         })
-  //         .map((empleado) => {
-  //           // Crear una copia del empleado con solo el sueldo de la quincena seleccionada
-  //           const sueldoFiltrado = empleado.sueldo
-  //             .map((sueldo) => {
-  //               if (sueldo[selectedQuincena]) {
-  //                 return { [selectedQuincena]: sueldo[selectedQuincena] };
-  //               }
-  //               return null;
-  //             })
-  //             .filter(Boolean);
-
-  //           return { ...empleado, sueldo: sueldoFiltrado };
-  //         });
-  //     } else {
-  //       // Si no hay quincena seleccionada, devolver todos los quincenales
-  //       return empleadosFiltrados.filter(
-  //         (empleado) => empleado?.termino_pago === "quincenal"
-  //       );
-  //     }
-  //   } else if (selectedTerminoPago === "mensual") {
-  //     // Filtrar por empleados que tienen término de pago mensual
-  //     return empleadosFiltrados.filter(
-  //       (empleado) => empleado?.termino_pago === "mensual"
-  //     );
-  //   } else {
-  //     // Si no se seleccionó ningún término de pago específico, devolver todos los empleados de la fábrica seleccionada
-  //     return empleadosFiltrados;
-  //   }
-  // };
 
   const filtrarEmpleados = (
     empleados,
