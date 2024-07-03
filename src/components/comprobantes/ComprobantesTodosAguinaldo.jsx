@@ -182,9 +182,6 @@ export const ComprobantesTodos = ({ empleados, selectedMes }) => {
           sueldo /= 2;
         }
 
-        // Aquí puedes formatear el sueldo final si es necesario con la función formatearDinero
-        const sueldoFormateado = formatearDinero(sueldo);
-
         let aguinadlNew = 0;
         if (e?.termino_pago === "quincenal") {
           // Calcular sueldo quincenal
@@ -410,7 +407,13 @@ export const ComprobantesTodos = ({ empleados, selectedMes }) => {
                     BANCO
                   </Text>
 
-                  <Text>- {formatearDinero(Number(aguinadlNew))}</Text>
+                  <Text
+                    style={{
+                      color: "rgba(185 28 28)",
+                    }}
+                  >
+                    - {formatearDinero(Number(aguinadlNew))}
+                  </Text>
                 </View>
                 <View
                   style={{

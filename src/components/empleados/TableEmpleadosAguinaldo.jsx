@@ -86,14 +86,6 @@ export const TableEmpleadosAguinaldo = () => {
     return pageNumbers;
   };
 
-  //truncate ID
-  const truncateText = (text, maxLength) => {
-    if (text.length <= maxLength) {
-      return text;
-    }
-    return text.substring(0, maxLength);
-  };
-
   //obtener el id
   const { handleObtenerId, idObtenida } = useObtenerId();
 
@@ -112,72 +104,6 @@ export const TableEmpleadosAguinaldo = () => {
     return { years, months };
   };
 
-  //estado gastado
-  const getEstadoClassNames = (estado) => {
-    switch (estado) {
-      case "trabajando":
-        return "bg-green-100 text-green-700";
-      case "enfermo":
-        return "bg-orange-100 text-orange-700";
-      case "reposo":
-        return "bg-blue-100 text-blue-600";
-      case "accidentado":
-        return "bg-rose-100 text-rose-600";
-      case "despedido":
-        return "bg-red-100 text-red-700";
-      default:
-        return "";
-    }
-  };
-
-  // Función para calcular el ingreso neto
-  const calcularIngresoNeto = (empleados) => {
-    const ingresosNetos = empleados.reduce((total, empleado) => {
-      // Verificar si el empleado tiene termino_pago = 'sueldo'
-      if (empleado.termino_pago === "mensual") {
-        const antiquity = calculateAntiquity(empleado.fecha_ingreso);
-
-        let total_antiguedad = 0;
-
-        total_antiguedad =
-          Number(empleado.sueldo[0]?.sueldo_basico) * (0.01 * antiquity.years);
-        // Obtener el sueldo básico, comida, banco y descuentos
-        const sueldoBasico = Number(empleado.sueldo[0]?.sueldo_basico || 0);
-
-        const comida = Number(empleado.sueldo[0]?.comida || 0);
-
-        const premio_produccion = Number(
-          empleado.sueldo[0]?.premio_produccion || 0
-        );
-        const premio_asistencia = Number(
-          empleado.sueldo[0]?.premio_asistencia || 0
-        );
-
-        const otros = Number(empleado.sueldo[0]?.otros || 0);
-        const banco = Number(empleado.sueldo[0]?.banco || 0);
-
-        const descuento = Number(empleado.sueldo[0]?.descuento_del_cinco || 0);
-
-        // Calcular ingreso neto
-        const ingresoNeto =
-          sueldoBasico +
-          premio_produccion +
-          total_antiguedad +
-          premio_asistencia +
-          otros +
-          comida -
-          banco -
-          descuento;
-
-        // Sumar al total
-        total += ingresoNeto;
-      }
-      return total;
-    }, 0); // Iniciar el total en 0
-
-    return ingresosNetos;
-  };
-
   // Función para calcular el ingreso neto
   const calcularIngresoNetoBanco = (empleados) => {
     const ingresosNetos = empleados.reduce((total, empleado) => {
@@ -187,60 +113,6 @@ export const TableEmpleadosAguinaldo = () => {
 
         // Calcular ingreso neto
         const ingresoNeto = banco;
-
-        // Sumar al total
-        total += ingresoNeto;
-      }
-      return total;
-    }, 0); // Iniciar el total en 0
-
-    return ingresosNetos;
-  };
-
-  // Calcular ingreso quincena del 5
-  const calcularIngresoQuincenaDelCinco = (empleados) => {
-    const ingresosNetos = empleados.reduce((total, empleado) => {
-      // Verificar si el empleado tiene termino_pago = 'sueldo'
-      if (empleado.termino_pago === "quincenal") {
-        const antiquity = calculateAntiquity(empleado.fecha_ingreso);
-
-        let total_antiguedad = 0;
-
-        total_antiguedad =
-          (Number(empleado.sueldo[0]?.quincena_cinco[0]?.quincena_cinco) +
-            Number(empleado.sueldo[1]?.quincena_veinte[0]?.quincena_veinte)) *
-          (0.01 * antiquity.years);
-        // Obtener el sueldo básico, comida, banco y descuentos
-        const quincenaCinco = Number(
-          empleado.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
-        );
-
-        const banco = Number(empleado.sueldo[0]?.quincena_cinco[0].banco || 0);
-
-        const produccion = Number(
-          empleado.sueldo[0]?.quincena_cinco[0].premio_produccion || 0
-        );
-
-        const asistencia = Number(
-          empleado.sueldo[0]?.quincena_cinco[0].premio_asistencia || 0
-        );
-
-        const otros = Number(empleado.sueldo[0]?.quincena_cinco[0].otros || 0);
-        console.log("otross", otros);
-
-        const descuento = Number(
-          empleado.sueldo[0]?.quincena_cinco[0].descuento_del_cinco || 0
-        );
-
-        // Calcular ingreso neto
-        const ingresoNeto =
-          quincenaCinco +
-          produccion +
-          total_antiguedad +
-          asistencia +
-          otros -
-          banco -
-          descuento;
 
         // Sumar al total
         total += ingresoNeto;
@@ -272,48 +144,6 @@ export const TableEmpleadosAguinaldo = () => {
     return ingresosNetos;
   };
 
-  // Calcular ingreso quincena del veinte
-  const calcularIngresoQuincenaDelVeinte = (empleados) => {
-    const ingresosNetos = empleados.reduce((total, empleado) => {
-      // Verificar si el empleado tiene termino_pago = 'sueldo'
-      if (empleado.termino_pago === "quincenal") {
-        // Obtener el sueldo básico, comida, banco y descuentos
-        const quincenaCinco = Number(
-          empleado.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0
-        );
-
-        const comida = Number(
-          empleado.sueldo[1]?.quincena_veinte[0]?.comida || 0
-        );
-        const descuento = Number(
-          empleado.sueldo[1]?.quincena_veinte[0].descuento_del_veinte || 0
-        );
-
-        // Calcular ingreso neto
-        const ingresoNeto = quincenaCinco + comida - descuento;
-
-        // Sumar al total
-        total += ingresoNeto;
-      }
-      return total;
-    }, 0); // Iniciar el total en 0
-
-    return ingresosNetos;
-  };
-
-  // Ejemplo de uso
-  const ingresoTotal = calcularIngresoNeto(empleados);
-
-  const ingresoTotalQuincenaCinco = calcularIngresoQuincenaDelCinco(empleados);
-
-  const ingresoTotalQuincenaCincoBanco = calcularIngresoNetoBanco(empleados);
-
-  const ingresoTotalQuincenaBanco =
-    calcularIngresoQuincenaDelCincoBanco(empleados);
-
-  const ingresoTotalQuincenaVeinte =
-    calcularIngresoQuincenaDelVeinte(empleados);
-
   // Agrupar empleados por fabrica_sucursal
   const empleadosPorFabrica = filteredGastos.reduce((acc, empleado) => {
     const fabrica = empleado.fabrica_sucursal;
@@ -324,64 +154,98 @@ export const TableEmpleadosAguinaldo = () => {
     return acc;
   }, {});
 
-  const ingresoTotalFiltrado = calcularIngresoNeto(filteredGastos);
-  const ingresoTotalFiltradoCinco =
-    calcularIngresoQuincenaDelCinco(filteredGastos);
-
-  const ingresoTotalFiltradoVeinte =
-    calcularIngresoQuincenaDelVeinte(filteredGastos);
-
   const ingresoTotalFiltradoBanco =
     calcularIngresoQuincenaDelCincoBanco(filteredGastos);
 
   const ingresoTotalFiltradoBancoMensual =
     calcularIngresoNetoBanco(filteredGastos);
 
-  // Calcular el aguinaldo para cada empleado
-  const aguinaldosIndividuales = empleados.map((g) => {
+  // Función para calcular los meses de antigüedad desde la fecha de ingreso
+  const calcularMesesAntiguedad = (fechaIngreso) => {
+    const fechaIngresoDate = new Date(fechaIngreso);
+    const fechaActual = new Date();
+
+    // Calcular diferencia en meses
+    const diff =
+      (fechaActual.getFullYear() - fechaIngresoDate.getFullYear()) * 12 +
+      (fechaActual.getMonth() - fechaIngresoDate.getMonth());
+
+    return diff;
+  };
+
+  const calcularAntiguedad = (fechaIngreso) => {
+    const fechaIngresoDate = new Date(fechaIngreso);
+    const fechaActual = new Date();
+
+    // Calcular años y meses de diferencia
+    let yearsDiff = fechaActual.getFullYear() - fechaIngresoDate.getFullYear();
+    let monthsDiff = fechaActual.getMonth() - fechaIngresoDate.getMonth();
+
+    // Ajustar si la fecha actual es anterior al día de ingreso en el mismo mes
+    if (
+      monthsDiff < 0 ||
+      (monthsDiff === 0 && fechaActual.getDate() < fechaIngresoDate.getDate())
+    ) {
+      yearsDiff--;
+      monthsDiff += 12; // Sumar 12 meses para ajustar la diferencia negativa
+    }
+
+    return { years: yearsDiff, months: monthsDiff };
+  };
+
+  const aguinaldosIndividuales = empleados.map((e) => {
     let total_antiguedad = 0;
     let sueldo = 0;
 
     // Calcular la antigüedad
-    const { years } = calculateAntiquity(g?.fecha_ingreso);
+    const { years } = calculateAntiquity(e?.fecha_ingreso);
 
-    if (g?.termino_pago === "mensual") {
+    if (e?.termino_pago === "mensual") {
       total_antiguedad =
-        Number(g?.sueldo[0]?.sueldo_basico || 0) * (0.01 * years);
+        Number(e?.sueldo[0]?.sueldo_basico || 0) * (0.01 * years);
 
       // Calcular sueldo mensual
       sueldo =
-        Number(g?.sueldo[0]?.sueldo_basico || 0) +
+        Number(e?.sueldo[0]?.sueldo_basico || 0) +
           Number(total_antiguedad || 0) +
-          Number(g?.sueldo[0]?.comida || 0) +
-          Number(g?.sueldo[0]?.premio_produccion || 0) +
-          Number(g?.sueldo[0]?.premio_asistencia || 0) +
-          Number(g?.sueldo[0]?.otros || 0) -
-          Number(g?.sueldo[0]?.aguinaldo_proporcional || 0) -
-          Number(g?.sueldo[0]?.descuento_del_cinco || 0) || 0;
-    } else if (g?.termino_pago === "quincenal") {
+          Number(e?.sueldo[0]?.comida || 0) +
+          Number(e?.sueldo[0]?.premio_produccion || 0) +
+          Number(e?.sueldo[0]?.premio_asistencia || 0) +
+          Number(e?.sueldo[0]?.otros || 0) -
+          Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) -
+          Number(e?.sueldo[0]?.descuento_del_cinco || 0) || 0;
+    } else if (e?.termino_pago === "quincenal") {
       total_antiguedad =
-        (Number(g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
-          Number(g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0)) *
+        (Number(e?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
+          Number(e?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0)) *
         (0.01 * years);
 
       // Calcular sueldo quincenal
       sueldo =
-        Number(g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
-          Number(g?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
-          Number(g?.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0) +
-          Number(g?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0) +
-          Number(g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0) +
-          Number(g?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
+        Number(e?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
+          Number(e?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
+          Number(e?.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0) +
+          Number(e?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0) +
+          Number(e?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0) +
+          Number(e?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
           Number(total_antiguedad || 0) -
-          Number(g?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0) -
-          Number(g?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0) -
-          Number(g?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0) ||
+          Number(e?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0) -
+          Number(e?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0) -
+          Number(e?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0) ||
         0;
     }
 
     // Calcular aguinaldo para el empleado actual
-    const aguinaldoIndividual = sueldo / 2;
+    const antiguedadEnMeses = calcularMesesAntiguedad(e.fecha_ingreso);
+    let aguinaldoIndividual = 0;
+
+    if (antiguedadEnMeses < 6) {
+      // Si la antigüedad es menor a 6 meses, usar aguinaldo proporcional
+      aguinaldoIndividual = (sueldo / 12) * antiguedadEnMeses;
+    } else {
+      // Si no, usar la mitad del sueldo
+      aguinaldoIndividual = sueldo / 2;
+    }
 
     return aguinaldoIndividual;
   });
@@ -392,7 +256,36 @@ export const TableEmpleadosAguinaldo = () => {
     0
   );
 
-  console.log("Aguinaldo total:", aguinaldoTotal);
+  const bancoAguinaldoQuincenal = empleados.reduce(
+    (accumulator, currentValue) => {
+      // Verificar si el término de pago es quincenal
+      if (currentValue?.termino_pago === "quincenal") {
+        // Sumar el aguinaldo proporcional del sueldo quincenal
+        accumulator += Number(
+          currentValue?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional ||
+            0
+        );
+      }
+
+      return accumulator;
+    },
+    0
+  );
+
+  const bancoAguinaldoMensual = empleados.reduce(
+    (accumulator, currentValue) => {
+      // Verificar si el término de pago es quincenal
+      if (currentValue?.termino_pago === "quincenal") {
+        // Sumar el aguinaldo proporcional del sueldo quincenal
+        accumulator += Number(
+          currentValue?.sueldo[0]?.aguinaldo_proporcional || 0
+        );
+      }
+
+      return accumulator;
+    },
+    0
+  );
 
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
@@ -477,6 +370,17 @@ export const TableEmpleadosAguinaldo = () => {
                     {formatearDinero(aguinaldoTotal)}
                   </p>
                 </div>
+                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+                  <p className="text-sm font-semibold text-gray-700">
+                    Total a pagar aguinaldo banco
+                  </p>
+                  <p className="text-blue-500 text-lg font-bold">
+                    {formatearDinero(
+                      Number(bancoAguinaldoQuincenal) +
+                        Number(bancoAguinaldoMensual)
+                    )}
+                  </p>
+                </div>
 
                 <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                   <p className="text-sm font-semibold text-gray-700">
@@ -509,7 +413,7 @@ export const TableEmpleadosAguinaldo = () => {
           placeholder={"Buscar el empleado por el nombre y apellido.."}
         />
       </div>
-      {/* <div className="w-2/3">
+      <div className="w-2/3">
         {selectedFabricaSucursal && (
           <div className="bg-white mx-3 my-5 py-3.5 px-3 flex flex-col gap-1">
             <p className="font-bold text-blue-500 text-lg">
@@ -517,22 +421,8 @@ export const TableEmpleadosAguinaldo = () => {
               <span className="capitalize">{selectedFabricaSucursal}</span>.
             </p>
             <div className="flex justify-between px-5">
-              <p className="font-bold text-blue-500">
-                <p className="text-gray-600">
-                  Pagar efectivo quincena del cinco + mensual
-                </p>
-                {formatearDinero(
-                  ingresoTotalFiltrado + ingresoTotalFiltradoCinco
-                )}
-              </p>
-              <p className="font-bold text-blue-500">
-                <p className="text-gray-600">
-                  Pagar efectivo quincena del veinte
-                </p>
-                {formatearDinero(ingresoTotalFiltradoVeinte)}
-              </p>
               <p className="font-bold text-red-500">
-                <p className="text-gray-600">Banco</p>
+                <p className="text-gray-600">Aguinaldo</p>
                 {formatearDinero(
                   ingresoTotalFiltradoBanco + ingresoTotalFiltradoBancoMensual
                 )}
@@ -544,7 +434,7 @@ export const TableEmpleadosAguinaldo = () => {
             </div>
           </div>
         )}
-      </div> */}
+      </div>
       <div className="bg-white my-2 mx-3">
         {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
           <div className="" key={index}>
@@ -704,7 +594,7 @@ export const TableEmpleadosAguinaldo = () => {
                               htmlFor="my-drawer-editar-aguinaldo"
                               className="hover:text-blue-500 font-bold"
                             >
-                              Editar banco/proporcional
+                              Restar banco aguinaldo
                             </label>
                           </li>
                         </Dropdown>
