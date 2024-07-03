@@ -636,16 +636,16 @@ export const TableEmpleados = () => {
                 <tr className="text-gray-800">
                   <th>Empleado</th>
                   <th>Fabrica</th>
-                  {/* <th>Sector/rol</th>
-                  <th>Fecha ingreso</th>
+                  <th>Sector/rol</th>
+                  {/* <th>Fecha ingreso</th>
                   <th>Antigüedad trabajando</th> */}
                   <th>Quincena 5</th>
                   <th>Quincena 20</th>
                   <th>Premio prod.</th>
                   <th>Premio Asist.</th>
                   <th>Comida</th>
-                  <th>Descuentos del 5</th>
-                  <th>Descuentos del 20</th>
+                  <th>Desc del 5</th>
+                  <th>Desc del 20</th>
                   <th>Banco</th>
                   <th>Sueldo</th>
                   <th>Acciones</th>
@@ -722,8 +722,8 @@ export const TableEmpleados = () => {
                         {g?.nombre} {g?.apellido}
                       </td>
                       <td className="font-semibold">{g?.fabrica_sucursal}</td>
-                      {/* <td className="font-semibold">{g?.sector_trabajo}</td>
-                      <td>
+                      <td className="font-semibold">{g?.sector_trabajo}</td>
+                      {/* <td>
                         {new Date(g.fecha_ingreso).toISOString().split("T")[0]}
                       </td>
                       <td>{`${years} años, ${months} meses`}</td> */}

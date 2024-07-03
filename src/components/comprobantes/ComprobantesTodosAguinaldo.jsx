@@ -117,6 +117,13 @@ export const ComprobantesTodos = ({ empleados }) => {
               Number(
                 e?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0
               ) || 0;
+
+          // Verificar si la fecha de ingreso es menor a 6 meses
+          if (e?.sueldo[0]?.fecha_ingreso < 6) {
+            const mesesTrabajados = e?.sueldo[0]?.fecha_ingreso;
+            const aguinaldoProporcional = (sueldo / 12) * mesesTrabajados;
+            sueldo += aguinaldoProporcional;
+          }
         } else if (e?.termino_pago === "mensual") {
           // Calcular sueldo mensual
           sueldo =
@@ -128,6 +135,49 @@ export const ComprobantesTodos = ({ empleados }) => {
               Number(e?.sueldo[0]?.otros || 0) -
               Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) -
               Number(e?.sueldo[0]?.descuento_del_cinco || 0) || 0;
+
+          // Verificar si la fecha de ingreso es menor a 6 meses
+          if (e?.sueldo[0]?.fecha_ingreso < 6) {
+            const mesesTrabajados = e?.sueldo[0]?.fecha_ingreso;
+            const aguinaldoProporcional = (sueldo / 12) * mesesTrabajados;
+            sueldo += aguinaldoProporcional;
+          }
+        }
+
+        {
+          /* let sueldo = 0;
+
+        if (e?.termino_pago === "quincenal") {
+          // Calcular sueldo quincenal
+          sueldo =
+            Number(e?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
+              Number(e?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
+              Number(e?.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0) +
+              Number(e?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0) +
+              Number(e?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0) +
+              Number(e?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
+              Number(total_antiguedad || 0) -
+              Number(
+                e?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0
+              ) -
+              Number(
+                e?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0
+              ) -
+              Number(
+                e?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0
+              ) || 0;
+        } else if (e?.termino_pago === "mensual") {
+          // Calcular sueldo mensual
+          sueldo =
+            Number(e?.sueldo[0]?.sueldo_basico || 0) +
+              Number(total_antiguedad || 0) +
+              Number(e?.sueldo[0]?.comida || 0) +
+              Number(e?.sueldo[0]?.premio_produccion || 0) +
+              Number(e?.sueldo[0]?.premio_asistencia || 0) +
+              Number(e?.sueldo[0]?.otros || 0) -
+              Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) -
+              Number(e?.sueldo[0]?.descuento_del_cinco || 0) || 0;
+        } */
         }
 
         console.log("rec", empleados);
@@ -277,7 +327,7 @@ export const ComprobantesTodos = ({ empleados }) => {
                 </Text>
               </View>
 
-              <View>
+              {/* <View>
                 <Text
                   style={{
                     fontFamily: "Roboto",
@@ -310,7 +360,7 @@ export const ComprobantesTodos = ({ empleados }) => {
                         )}`
                       : "")}
                 </Text>
-              </View>
+              </View> */}
 
               <View
                 style={{
