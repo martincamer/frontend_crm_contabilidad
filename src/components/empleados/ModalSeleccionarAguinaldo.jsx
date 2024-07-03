@@ -6,8 +6,7 @@ import { ModalViewerEmpleadosAguinaldo } from "./ModalViewerEmpleadosAguinaldo";
 export const ModalSeleccionarAguinaldo = () => {
   const { getEmpleados, getFabricas, fabricas, empleados } = useEmpleado();
   const [selectedFabrica, setSelectedFabrica] = useState("");
-  const [selectedTerminoPago, setSelectedTerminoPago] = useState("");
-  const [selectedQuincena, setSelectedQuincena] = useState("");
+  const [selectedMes, setSelectedMes] = useState("");
 
   // Llamar a getFabricas y getEmpleados al montar el componente
   useEffect(() => {
@@ -33,7 +32,12 @@ export const ModalSeleccionarAguinaldo = () => {
     setSelectedFabrica(fabricaSeleccionada);
   };
 
-  console.log("e", empleadosFiltrados);
+  const handleMesChange = async (e) => {
+    const mesSelecionado = e.target.value;
+
+    setSelectedMes(mesSelecionado);
+  };
+
   return (
     <dialog id="my_modal_aguinaldo" className="modal">
       <div className="modal-box rounded-none max-w-md">
@@ -48,6 +52,26 @@ export const ModalSeleccionarAguinaldo = () => {
               Imprimir comprobantes/aguinaldo
             </p>
           </div>
+          <div className="flex flex-col gap-1 w-full mb-3">
+            <label className="font-semibold text-xs text-gray-700">
+              Seleccionar el mes del aguinaldo
+            </label>
+            <select
+              className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-bold"
+              value={selectedMes}
+              onChange={handleMesChange}
+            >
+              <option className="font-bold text-blue-500" disabled value="">
+                Seleccionar el mes
+              </option>
+              <option className="font-semibold" value="Junio">
+                Junio
+              </option>
+              <option className="font-semibold" value="Diciembre">
+                Diciembre
+              </option>
+            </select>
+          </div>
           <div className="flex flex-col gap-1 w-full">
             <label className="font-semibold text-xs text-gray-700">
               Seleccionar fábrica a pagar el aguinaldo
@@ -57,11 +81,11 @@ export const ModalSeleccionarAguinaldo = () => {
               value={selectedFabrica}
               onChange={handleFabricaChange}
             >
-              <option disabled value="">
+              <option className="font-bold text-blue-500" disabled value="">
                 Seleccionar fábrica
               </option>
               {fabricas.map((f) => (
-                <option key={f._id} value={f.nombre}>
+                <option className="font-semibold" key={f._id} value={f.nombre}>
                   {f.nombre}
                 </option>
               ))}
@@ -82,6 +106,7 @@ export const ModalSeleccionarAguinaldo = () => {
           </button>
         </div>
         <ModalViewerEmpleadosAguinaldo
+          selectedMes={selectedMes}
           selectedFabrica={selectedFabrica}
           empleados={empleadosFiltrados}
         />

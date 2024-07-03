@@ -138,6 +138,48 @@ export const ComprobantesTodos = ({ empleados, selectedQuincena }) => {
           }
         }
 
+        // Función para calcular los meses de antigüedad desde la fecha de ingreso
+        const calcularMesesAntiguedad = (fechaIngreso) => {
+          const fechaIngresoDate = new Date(fechaIngreso);
+          const fechaActual = new Date();
+
+          // Calcular diferencia en meses
+          const diff =
+            (fechaActual.getFullYear() - fechaIngresoDate.getFullYear()) * 12 +
+            (fechaActual.getMonth() - fechaIngresoDate.getMonth());
+
+          return diff;
+        };
+
+        const calcularAntiguedad = (fechaIngreso) => {
+          const fechaIngresoDate = new Date(fechaIngreso);
+          const fechaActual = new Date();
+
+          // Calcular años y meses de diferencia
+          let yearsDiff =
+            fechaActual.getFullYear() - fechaIngresoDate.getFullYear();
+          let monthsDiff = fechaActual.getMonth() - fechaIngresoDate.getMonth();
+
+          // Ajustar si la fecha actual es anterior al día de ingreso en el mismo mes
+          if (
+            monthsDiff < 0 ||
+            (monthsDiff === 0 &&
+              fechaActual.getDate() < fechaIngresoDate.getDate())
+          ) {
+            yearsDiff--;
+            monthsDiff += 12; // Sumar 12 meses para ajustar la diferencia negativa
+          }
+
+          return { years: yearsDiff, months: monthsDiff };
+        };
+
+        const calcularAntiguedadDelEmpleado = calcularAntiguedad(
+          e.fecha_ingreso
+        );
+
+        // Calcular la antigüedad en meses
+        const antiguedadEnMeses = calcularMesesAntiguedad(e.fecha_ingreso);
+
         return (
           <Page size="A4" style={styles.page}>
             <View style={styles.section}>
@@ -246,7 +288,9 @@ export const ComprobantesTodos = ({ empleados, selectedQuincena }) => {
                     color: "white",
                   }}
                 >
-                  Antigüedad: {`${years} años, ${months} meses`}
+                  {/* Antigüedad: {`${years} años, ${months} meses`} */}
+                  Antiguedad: {calcularAntiguedadDelEmpleado?.years} Años /{" "}
+                  {antiguedadEnMeses} Meses{" "}
                 </Text>
                 <Text
                   style={{

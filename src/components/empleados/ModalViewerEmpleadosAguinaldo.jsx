@@ -2,7 +2,7 @@ import React from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import { ComprobantesTodos } from "../comprobantes/ComprobantesTodosAguinaldo";
 
-export const ModalViewerEmpleadosAguinaldo = ({ empleados }) => {
+export const ModalViewerEmpleadosAguinaldo = ({ empleados, selectedMes }) => {
   return (
     <dialog id="my_modal_aguinaldo_comprobante" className="modal">
       <div className="modal-box rounded-none max-w-full h-full max-h-full">
@@ -18,7 +18,7 @@ export const ModalViewerEmpleadosAguinaldo = ({ empleados }) => {
             height: "100vh",
           }}
         >
-          <ComprobantesTodos empleados={empleados} />
+          <ComprobantesTodos selectedMes={selectedMes} empleados={empleados} />
         </PDFViewer>
       </div>
     </dialog>

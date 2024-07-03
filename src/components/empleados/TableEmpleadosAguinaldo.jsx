@@ -20,6 +20,7 @@ import { ModalSeleccionarAguinaldo } from "./ModalSeleccionarAguinaldo";
 import { EditarEmpleadoDrawerAguinaldo } from "./EditarEmpleadoDrawerAguinaldo";
 import Calendar from "../ui/Calendary";
 import ModalEliminar from "../ui/ModalEliminar";
+import { CgLaptop } from "react-icons/cg";
 
 export const TableEmpleadosAguinaldo = () => {
   const { click, openSearch } = useSearch();
@@ -555,9 +556,9 @@ export const TableEmpleadosAguinaldo = () => {
                 <tr className="text-gray-800">
                   <th>Empleado</th>
                   <th>Fabrica</th>
-                  <th>Sector/rol</th>
-                  <th>Proporcional banco</th>
+                  <th>Meses trabajando</th>
                   <th>Banco</th>
+                  <th>Aguinaldo</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -584,60 +585,95 @@ export const TableEmpleadosAguinaldo = () => {
                       (0.01 * years);
                   }
 
+                  console.log("meses", months);
+
+                  // Función para calcular los meses de antigüedad desde la fecha de ingreso
+                  const calcularMesesAntiguedad = (fechaIngreso) => {
+                    const fechaIngresoDate = new Date(fechaIngreso);
+                    const fechaActual = new Date();
+
+                    // Calcular diferencia en meses
+                    const diff =
+                      (fechaActual.getFullYear() -
+                        fechaIngresoDate.getFullYear()) *
+                        12 +
+                      (fechaActual.getMonth() - fechaIngresoDate.getMonth());
+
+                    return diff;
+                  };
+
+                  // Inicializar sueldo y aguinaldoProporcional
                   let sueldo = 0;
+                  let aguinaldoProporcional = 0;
+
+                  // Calcular la antigüedad en meses
+                  const antiguedadEnMeses = calcularMesesAntiguedad(
+                    g.fecha_ingreso
+                  );
 
                   if (g?.termino_pago === "quincenal") {
                     // Calcular sueldo quincenal
+
                     sueldo =
                       Number(
                         g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
                       ) +
-                        Number(g?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
-                        Number(
-                          g?.sueldo[0]?.quincena_cinco[0]?.premio_produccion ||
-                            0
-                        ) +
-                        Number(
-                          g?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia ||
-                            0
-                        ) +
-                        Number(
-                          g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0
-                        ) +
-                        Number(g?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
-                        Number(total_antiguedad || 0) -
-                        Number(
-                          g?.sueldo[1]?.quincena_veinte[0]
-                            ?.descuento_del_veinte || 0
-                        ) -
-                        Number(
-                          g?.sueldo[0]?.quincena_cinco[0]
-                            ?.descuento_del_cinco || 0
-                        ) || 0;
+                      Number(g?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
+                      Number(
+                        g?.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0
+                      ) +
+                      Number(
+                        g?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0
+                      ) +
+                      Number(
+                        g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0
+                      ) +
+                      Number(g?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
+                      Number(total_antiguedad || 0);
+
+                    // Verificar si la fecha de ingreso es menor a 6 meses
+                    if (antiguedadEnMeses < 6) {
+                      aguinaldoProporcional = (sueldo / 12) * antiguedadEnMeses;
+                    }
                   } else if (g?.termino_pago === "mensual") {
                     // Calcular sueldo mensual
                     sueldo =
                       Number(g?.sueldo[0]?.sueldo_basico || 0) +
-                        Number(total_antiguedad || 0) +
-                        Number(g?.sueldo[0]?.comida || 0) +
-                        Number(g?.sueldo[0]?.premio_produccion || 0) +
-                        Number(g?.sueldo[0]?.premio_asistencia || 0) +
-                        Number(g?.sueldo[0]?.otros || 0) -
-                        Number(g?.sueldo[0]?.descuento_del_cinco || 0) || 0;
+                      Number(total_antiguedad || 0) +
+                      Number(g?.sueldo[0]?.comida || 0) +
+                      Number(g?.sueldo[0]?.premio_produccion || 0) +
+                      Number(g?.sueldo[0]?.premio_asistencia || 0) +
+                      Number(g?.sueldo[0]?.otros || 0);
+
+                    // Verificar si la fecha de ingreso es menor a 6 meses
+                    if (antiguedadEnMeses < 6) {
+                      aguinaldoProporcional = (sueldo / 12) * antiguedadEnMeses;
+                    }
                   }
 
-                  let aguinaldoProporcional;
+                  // Determinar el sueldo final basado en la antigüedad del empleado
+                  if (antiguedadEnMeses < 6) {
+                    // Si la fecha de ingreso es menor a 6 meses, se utiliza aguinaldo proporcional
+                    sueldo = aguinaldoProporcional;
+                  } else {
+                    // Si no, se utiliza la mitad del sueldo
+                    sueldo /= 2;
+                  }
 
+                  // Aquí puedes formatear el sueldo final si es necesario con la función formatearDinero
+                  const sueldoFormateado = formatearDinero(sueldo);
+
+                  let aguinaldoBanco;
                   if (g?.termino_pago === "quincenal") {
                     // Calcular sueldo quincenal
-                    aguinaldoProporcional =
+                    aguinaldoBanco =
                       Number(
                         g?.sueldo[0]?.quincena_cinco[0]
                           ?.aguinaldo_proporcional || 0
                       ) || 0;
                   } else if (g?.termino_pago === "mensual") {
                     // Calcular sueldo mensual
-                    aguinaldoProporcional =
+                    aguinaldoBanco =
                       Number(g?.sueldo[0]?.aguinaldo_proporcional || 0) || 0;
                   }
 
@@ -647,23 +683,17 @@ export const TableEmpleadosAguinaldo = () => {
                         {g?.nombre} {g?.apellido}
                       </td>
                       <td className="font-semibold">{g?.fabrica_sucursal}</td>
-                      <td className="font-semibold">{g?.sector_trabajo}</td>
-                      {/* <td>
-                        {new Date(g.fecha_ingreso).toISOString().split("T")[0]}
-                      </td>
-                      <td>{`${years} años, ${months} meses`}</td> */}
                       <td className="font-semibold">
-                        <span className="bg-red-500 py-1 px-2 rounded text-white">
-                          {" "}
-                          {formatearDinero(Number(aguinaldoProporcional))}
+                        {antiguedadEnMeses} meses
+                      </td>
+                      <td className="font-semibold">
+                        <span className="bg-red-50 text-red-800 py-1 px-2 rounded ">
+                          {formatearDinero(aguinaldoBanco)}
                         </span>
                       </td>
                       <td className="font-semibold">
                         <span className="bg-blue-500 py-1 px-2 rounded text-white">
-                          {" "}
-                          {formatearDinero(
-                            Number(sueldo / 2) - Number(aguinaldoProporcional)
-                          )}
+                          {sueldoFormateado}
                         </span>
                       </td>
                       <td>

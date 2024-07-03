@@ -562,7 +562,7 @@ export const TableEmpleados = () => {
           >
             Imprimir sueldos en cantidad
           </button>
-          <button
+          {/* <button
             type="button"
             className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
             onClick={() => {
@@ -570,7 +570,7 @@ export const TableEmpleados = () => {
             }}
           >
             Imprimir aguinaldos
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="flex">

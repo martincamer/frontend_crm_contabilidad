@@ -32,8 +32,7 @@ Font.register({
   ],
 });
 
-export const ComprobantesTodos = ({ empleados }) => {
-  console.log(empleados);
+export const ComprobantesTodos = ({ empleados, selectedMes }) => {
   // Estilos para el documento PDF
   const styles = StyleSheet.create({
     page: {
@@ -96,10 +95,55 @@ export const ComprobantesTodos = ({ empleados }) => {
             (0.01 * years);
         }
 
+        // Función para calcular los meses de antigüedad desde la fecha de ingreso
+        const calcularMesesAntiguedad = (fechaIngreso) => {
+          const fechaIngresoDate = new Date(fechaIngreso);
+          const fechaActual = new Date();
+
+          // Calcular diferencia en meses
+          const diff =
+            (fechaActual.getFullYear() - fechaIngresoDate.getFullYear()) * 12 +
+            (fechaActual.getMonth() - fechaIngresoDate.getMonth());
+
+          return diff;
+        };
+
+        const calcularAntiguedad = (fechaIngreso) => {
+          const fechaIngresoDate = new Date(fechaIngreso);
+          const fechaActual = new Date();
+
+          // Calcular años y meses de diferencia
+          let yearsDiff =
+            fechaActual.getFullYear() - fechaIngresoDate.getFullYear();
+          let monthsDiff = fechaActual.getMonth() - fechaIngresoDate.getMonth();
+
+          // Ajustar si la fecha actual es anterior al día de ingreso en el mismo mes
+          if (
+            monthsDiff < 0 ||
+            (monthsDiff === 0 &&
+              fechaActual.getDate() < fechaIngresoDate.getDate())
+          ) {
+            yearsDiff--;
+            monthsDiff += 12; // Sumar 12 meses para ajustar la diferencia negativa
+          }
+
+          return { years: yearsDiff, months: monthsDiff };
+        };
+
+        const calcularAntiguedadDelEmpleado = calcularAntiguedad(
+          e.fecha_ingreso
+        );
+
+        // Inicializar sueldo y aguinaldoProporcional
         let sueldo = 0;
+        let aguinaldoProporcional = 0;
+
+        // Calcular la antigüedad en meses
+        const antiguedadEnMeses = calcularMesesAntiguedad(e.fecha_ingreso);
 
         if (e?.termino_pago === "quincenal") {
           // Calcular sueldo quincenal
+
           sueldo =
             Number(e?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
               Number(e?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
@@ -107,22 +151,11 @@ export const ComprobantesTodos = ({ empleados }) => {
               Number(e?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0) +
               Number(e?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0) +
               Number(e?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
-              Number(total_antiguedad || 0) -
-              Number(
-                e?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0
-              ) -
-              Number(
-                e?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0
-              ) -
-              Number(
-                e?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0
-              ) || 0;
+              Number(total_antiguedad || 0) || 0;
 
           // Verificar si la fecha de ingreso es menor a 6 meses
-          if (e?.sueldo[0]?.fecha_ingreso < 6) {
-            const mesesTrabajados = e?.sueldo[0]?.fecha_ingreso;
-            const aguinaldoProporcional = (sueldo / 12) * mesesTrabajados;
-            sueldo += aguinaldoProporcional;
+          if (antiguedadEnMeses < 6) {
+            aguinaldoProporcional = (sueldo / 12) * antiguedadEnMeses;
           }
         } else if (e?.termino_pago === "mensual") {
           // Calcular sueldo mensual
@@ -132,55 +165,38 @@ export const ComprobantesTodos = ({ empleados }) => {
               Number(e?.sueldo[0]?.comida || 0) +
               Number(e?.sueldo[0]?.premio_produccion || 0) +
               Number(e?.sueldo[0]?.premio_asistencia || 0) +
-              Number(e?.sueldo[0]?.otros || 0) -
-              Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) -
-              Number(e?.sueldo[0]?.descuento_del_cinco || 0) || 0;
+              Number(e?.sueldo[0]?.otros || 0) || 0;
 
           // Verificar si la fecha de ingreso es menor a 6 meses
-          if (e?.sueldo[0]?.fecha_ingreso < 6) {
-            const mesesTrabajados = e?.sueldo[0]?.fecha_ingreso;
-            const aguinaldoProporcional = (sueldo / 12) * mesesTrabajados;
-            sueldo += aguinaldoProporcional;
+          if (antiguedadEnMeses < 6) {
+            aguinaldoProporcional = (sueldo / 12) * antiguedadEnMeses;
           }
         }
 
-        {
-          /* let sueldo = 0;
-
-        if (e?.termino_pago === "quincenal") {
-          // Calcular sueldo quincenal
-          sueldo =
-            Number(e?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
-              Number(e?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
-              Number(e?.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0) +
-              Number(e?.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0) +
-              Number(e?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0) +
-              Number(e?.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
-              Number(total_antiguedad || 0) -
-              Number(
-                e?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0
-              ) -
-              Number(
-                e?.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0
-              ) -
-              Number(
-                e?.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0
-              ) || 0;
-        } else if (e?.termino_pago === "mensual") {
-          // Calcular sueldo mensual
-          sueldo =
-            Number(e?.sueldo[0]?.sueldo_basico || 0) +
-              Number(total_antiguedad || 0) +
-              Number(e?.sueldo[0]?.comida || 0) +
-              Number(e?.sueldo[0]?.premio_produccion || 0) +
-              Number(e?.sueldo[0]?.premio_asistencia || 0) +
-              Number(e?.sueldo[0]?.otros || 0) -
-              Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) -
-              Number(e?.sueldo[0]?.descuento_del_cinco || 0) || 0;
-        } */
+        // Determinar el sueldo final basado en la antigüedad del empleado
+        if (antiguedadEnMeses < 6) {
+          // Si la fecha de ingreso es menor a 6 meses, se utiliza aguinaldo proporcional
+          sueldo = aguinaldoProporcional;
+        } else {
+          // Si no, se utiliza la mitad del sueldo
+          sueldo /= 2;
         }
 
-        console.log("rec", empleados);
+        // Aquí puedes formatear el sueldo final si es necesario con la función formatearDinero
+        const sueldoFormateado = formatearDinero(sueldo);
+
+        let aguinadlNew = 0;
+        if (e?.termino_pago === "quincenal") {
+          // Calcular sueldo quincenal
+          aguinadlNew =
+            Number(
+              e?.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0
+            ) || 0;
+        } else if (e?.termino_pago === "mensual") {
+          // Calcular sueldo mensual
+          aguinadlNew = Number(e?.sueldo[0]?.aguinaldo_proporcional || 0) || 0;
+        }
+
         return (
           <Page size="A4" style={styles.page}>
             <View style={styles.section}>
@@ -236,7 +252,7 @@ export const ComprobantesTodos = ({ empleados }) => {
                     textTransform: "uppercase",
                   }}
                 >
-                  Recibo aguinaldo
+                  Recibo aguinaldo {selectedMes}
                 </Text>
               </View>
               <Text
@@ -271,7 +287,7 @@ export const ComprobantesTodos = ({ empleados }) => {
                     color: "white",
                   }}
                 >
-                  Fecha de ingreso: {updateFecha(e?.fecha_ingreso)}
+                  Fecha de ingreso: {updateFecha(e?.fecha_ingreso)}{" "}
                 </Text>
                 <Text
                   style={{
@@ -284,7 +300,9 @@ export const ComprobantesTodos = ({ empleados }) => {
                     color: "white",
                   }}
                 >
-                  Antigüedad: {`${years} años, ${months} meses`}
+                  {/* Antigüedad: {`${years} años, ${months} meses`}{" "} */}
+                  Antiguedad: {calcularAntiguedadDelEmpleado?.years} Años /{" "}
+                  {antiguedadEnMeses} Meses{" "}
                 </Text>
                 <Text
                   style={{
@@ -389,9 +407,10 @@ export const ComprobantesTodos = ({ empleados }) => {
                       textTransform: "uppercase",
                     }}
                   >
-                    SubTotal
+                    BANCO
                   </Text>
-                  <Text>{formatearDinero(sueldo / 2)}</Text>
+
+                  <Text>- {formatearDinero(Number(aguinadlNew))}</Text>
                 </View>
                 <View
                   style={{
@@ -415,7 +434,9 @@ export const ComprobantesTodos = ({ empleados }) => {
                   >
                     Total a cobrar
                   </Text>
-                  <Text>{formatearDinero(sueldo / 2)}</Text>
+                  <Text>
+                    {formatearDinero(Number(sueldo) - Number(aguinadlNew))}
+                  </Text>
                 </View>
               </View>
             </View>
