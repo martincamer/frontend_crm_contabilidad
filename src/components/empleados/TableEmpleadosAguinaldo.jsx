@@ -193,7 +193,7 @@ export const TableEmpleadosAguinaldo = () => {
     return { years: yearsDiff, months: monthsDiff };
   };
 
-  const aguinaldosIndividuales = empleados.map((e) => {
+  const aguinaldosIndividuales = filteredGastos.map((e) => {
     let total_antiguedad = 0;
     let sueldo = 0;
 
@@ -256,7 +256,7 @@ export const TableEmpleadosAguinaldo = () => {
     0
   );
 
-  const bancoAguinaldoQuincenal = empleados.reduce(
+  const bancoAguinaldoQuincenal = filteredGastos.reduce(
     (accumulator, currentValue) => {
       // Verificar si el término de pago es quincenal
       if (currentValue?.termino_pago === "quincenal") {
@@ -272,7 +272,7 @@ export const TableEmpleadosAguinaldo = () => {
     0
   );
 
-  const bancoAguinaldoMensual = empleados.reduce(
+  const bancoAguinaldoMensual = filteredGastos.reduce(
     (accumulator, currentValue) => {
       // Verificar si el término de pago es quincenal
       if (currentValue?.termino_pago === "quincenal") {
@@ -286,6 +286,66 @@ export const TableEmpleadosAguinaldo = () => {
     },
     0
   );
+
+  const calcularAguinaldoTotal = (empleados) => {
+    const aguinaldoTotal = empleados.reduce((total, empleado) => {
+      // Inicializar el aguinaldo individual del empleado en 0
+      let aguinaldoIndividual = 0;
+
+      // Verificar el tipo de pago del empleado
+      if (empleado.termino_pago === "quincenal") {
+        // Calcular sueldo quincenal incluyendo aguinaldo proporcional
+        const sueldoQuincenal =
+          Number(empleado.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0) +
+            Number(empleado.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
+            Number(
+              empleado.sueldo[0]?.quincena_cinco[0]?.premio_produccion || 0
+            ) +
+            Number(
+              empleado.sueldo[0]?.quincena_cinco[0]?.premio_asistencia || 0
+            ) +
+            Number(
+              empleado.sueldo[1]?.quincena_veinte[0]?.quincena_veinte || 0
+            ) +
+            Number(empleado.sueldo[1]?.quincena_veinte[0]?.comida || 0) +
+            Number(
+              empleado.sueldo[0]?.quincena_cinco[0]?.aguinaldo_proporcional || 0
+            ) -
+            Number(
+              empleado.sueldo[1]?.quincena_veinte[0]?.descuento_del_veinte || 0
+            ) -
+            Number(
+              empleado.sueldo[0]?.quincena_cinco[0]?.descuento_del_cinco || 0
+            ) || 0;
+
+        // Calcular aguinaldo individual (sueldo quincenal / 2)
+        aguinaldoIndividual = sueldoQuincenal / 2;
+      } else if (empleado.termino_pago === "mensual") {
+        // Calcular sueldo mensual incluyendo aguinaldo proporcional
+        const sueldoMensual =
+          Number(empleado.sueldo[0]?.sueldo_basico || 0) +
+            Number(empleado.sueldo[0]?.comida || 0) +
+            Number(empleado.sueldo[0]?.premio_produccion || 0) +
+            Number(empleado.sueldo[0]?.premio_asistencia || 0) +
+            Number(empleado.sueldo[0]?.otros || 0) +
+            Number(empleado.sueldo[0]?.aguinaldo_proporcional || 0) -
+            Number(empleado.sueldo[0]?.descuento_del_cinco || 0) || 0;
+
+        // Calcular aguinaldo individual (sueldo mensual / 2)
+        aguinaldoIndividual = sueldoMensual / 2;
+      }
+
+      // Sumar el aguinaldo individual al total
+      total += aguinaldoIndividual;
+
+      return total;
+    }, 0); // Iniciar el total en 0
+
+    return aguinaldoTotal;
+  };
+
+  // Calcular el aguinaldo total
+  const totalAguinaldo = calcularAguinaldoTotal(filteredGastos);
 
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
@@ -387,7 +447,7 @@ export const TableEmpleadosAguinaldo = () => {
                     Total de empleados cargados
                   </p>
                   <p className="text-blue-500 text-lg font-bold">
-                    {empleados.length}
+                    {filteredGastos.length}
                   </p>
                 </div>
               </ul>
@@ -413,7 +473,7 @@ export const TableEmpleadosAguinaldo = () => {
           placeholder={"Buscar el empleado por el nombre y apellido.."}
         />
       </div>
-      <div className="w-2/3">
+      {/* <div className="w-2/3">
         {selectedFabricaSucursal && (
           <div className="bg-white mx-3 my-5 py-3.5 px-3 flex flex-col gap-1">
             <p className="font-bold text-blue-500 text-lg">
@@ -423,9 +483,7 @@ export const TableEmpleadosAguinaldo = () => {
             <div className="flex justify-between px-5">
               <p className="font-bold text-red-500">
                 <p className="text-gray-600">Aguinaldo</p>
-                {formatearDinero(
-                  ingresoTotalFiltradoBanco + ingresoTotalFiltradoBancoMensual
-                )}
+                {formatearDinero(totalAguinaldo)}
               </p>
               <p className="font-bold text-red-500">
                 <p className="text-gray-600">Total de empleados</p>
@@ -434,7 +492,7 @@ export const TableEmpleadosAguinaldo = () => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
       <div className="bg-white my-2 mx-3">
         {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
           <div className="" key={index}>
