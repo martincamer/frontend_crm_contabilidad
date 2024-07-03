@@ -631,7 +631,7 @@ export const ComprobantesTodos = ({ empleados, selectedQuincena }) => {
                     </Text>
                   )}
 
-                  <View
+                  {/* <View
                     style={{
                       fontFamily: "Roboto",
                       fontWeight: "medium",
@@ -684,7 +684,7 @@ export const ComprobantesTodos = ({ empleados, selectedQuincena }) => {
                           ""
                         ))}
                     </View>
-                  </View>
+                  </View> */}
                 </View>
               </View>
               <View

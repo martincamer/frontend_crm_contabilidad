@@ -33,6 +33,7 @@ import { Estadistica } from "./pages/Estadistica";
 import { PageBancoCheques } from "./pages/PageBancoCheques";
 import { BancoChequeProvider } from "./context/BancoChequesContext";
 import { PageBancoCheque } from "./pages/PageBancoCheque";
+import { EmpleadosAguinaldo } from "./pages/EmpleadosAguinaldos";
 
 function App() {
   return (
@@ -67,6 +68,11 @@ function App() {
                             index
                             path="/empleados"
                             element={<Empleados />}
+                          />
+                          <Route
+                            index
+                            path="/empleados-aguinaldo"
+                            element={<EmpleadosAguinaldo />}
                           />
                           <Route
                             path="/datos-empleados"

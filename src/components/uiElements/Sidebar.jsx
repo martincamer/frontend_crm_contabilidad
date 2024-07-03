@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../../context/authContext";
 import { Link, useLocation } from "react-router-dom";
-import { MdEvStation, MdOutlinePersonPin } from "react-icons/md";
+import { MdEvStation, MdLocalOffer, MdOutlinePersonPin } from "react-icons/md";
 import { FaDatabase, FaMoneyBillWave } from "react-icons/fa";
 
 export const SideBar = () => {
@@ -44,6 +44,15 @@ export const SideBar = () => {
         >
           <MdOutlinePersonPin className="text-xl" />{" "}
           <Link to={"/empleados"}>Empleados</Link>
+        </button>
+        <button
+          type="button"
+          className={`flex gap-2 ${
+            location.pathname === "/" ? "text-blue-600" : "text-gray-700"
+          } font-bold items-center text-base hover:text-blue-600`}
+        >
+          <MdLocalOffer className="text-xl" />{" "}
+          <Link to={"/empleados-aguinaldo"}>Empleados aguinaldo</Link>
         </button>
       </div>
     </div>

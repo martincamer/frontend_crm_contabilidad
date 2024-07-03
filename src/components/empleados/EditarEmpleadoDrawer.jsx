@@ -249,8 +249,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       otros: otros || 0,
                       premio_produccion: premio_produccion || 0,
                       premio_asistencia: premio_asistencia || 0,
-                      banco:
-                        Number(banco) + Number(aguinaldo_proporcional) || 0,
+                      banco: Number(banco) || 0,
                       aguinaldo_proporcional:
                         Number(aguinaldo_proporcional) || 0,
                       descuento_del_cinco: descuento_del_cinco || 0,
@@ -276,7 +275,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                   premio_produccion: premio_produccion || 0,
                   premio_asistencia: premio_asistencia || 0,
                   comida: comida || 0,
-                  banco: Number(banco) + Number(aguinaldo_proporcional) || 0,
+                  banco: Number(banco) || 0,
                   descuento_del_cinco: descuento_del_cinco || 0,
                   observacion: observacion || "",
                   aguinaldo_proporcional: Number(aguinaldo_proporcional) || 0,
@@ -568,9 +567,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                           Banco
                         </label>
                         <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
-                          {formatearDinero(
-                            Number(banco) + Number(aguinaldo_proporcional) || 0
-                          )}
+                          {formatearDinero(Number(banco) || 0)}
                         </p>
                       </div>
                     )}
@@ -610,7 +607,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                     </p>
                   </div>
 
-                  {showButton && (
+                  {/* {showButton && (
                     <div onClick={handleInputClick}>
                       {isEditable ? (
                         <FormInput
@@ -637,7 +634,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                         </div>
                       )}
                     </div>
-                  )}
+                  )} */}
 
                   <Texto
                     props={{
@@ -926,9 +923,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                           Banco
                         </label>
                         <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
-                          {formatearDinero(
-                            Number(banco) + Number(aguinaldo_proporcional) || 0
-                          )}
+                          {formatearDinero(Number(banco) || 0)}
                         </p>
                       </div>
                     )}
@@ -968,7 +963,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                     </p>
                   </div>
 
-                  {showButton && (
+                  {/* {showButton && (
                     <div onClick={handleInputClick}>
                       {isEditable ? (
                         <FormInput
@@ -995,7 +990,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                         </div>
                       )}
                     </div>
-                  )}
+                  )} */}
 
                   <Texto
                     props={{
