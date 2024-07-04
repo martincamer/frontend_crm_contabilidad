@@ -7,12 +7,12 @@ import {
   FaRegCalendar,
   FaSignal,
 } from "react-icons/fa";
-import { updateFecha } from "../../helpers/FechaUpdate";
+// import { updateFecha } from "../../helpers/FechaUpdate";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 import { Dropdown } from "../ui/Dropdown";
-import { SearchButton } from "../ui/SearchButton";
+// import { SearchButton } from "../ui/SearchButton";
 import { Search } from "../ui/Search";
-import { useSearch } from "../../helpers/openSearch";
+// import { useSearch } from "../../helpers/openSearch";
 import { useObtenerId } from "../../helpers/obtenerId";
 import { useModal } from "../../helpers/modal";
 import { useEmpleado } from "../../context/EmpleadosContext";
@@ -31,7 +31,7 @@ import { ModalDocumentoRecursosHumanos } from "./ModalDocumentoRecursosHumanos";
 import { ModalSeleccionarAguinaldo } from "./ModalSeleccionarAguinaldo";
 
 export const TableEmpleados = () => {
-  const { click, openSearch } = useSearch();
+  // const { click, openSearch } = useSearch();
   const { deleteEmpleado, getEmpleados, empleados, getFabricas, fabricas } =
     useEmpleado();
 
@@ -118,24 +118,6 @@ export const TableEmpleados = () => {
     const months = Math.floor((diffDays % 365) / 30);
 
     return { years, months };
-  };
-
-  //estado gastado
-  const getEstadoClassNames = (estado) => {
-    switch (estado) {
-      case "trabajando":
-        return "bg-green-100 text-green-700";
-      case "enfermo":
-        return "bg-orange-100 text-orange-700";
-      case "reposo":
-        return "bg-blue-100 text-blue-600";
-      case "accidentado":
-        return "bg-rose-100 text-rose-600";
-      case "despedido":
-        return "bg-red-100 text-red-700";
-      default:
-        return "";
-    }
   };
 
   // Función para calcular el ingreso neto
@@ -400,8 +382,6 @@ export const TableEmpleados = () => {
     0
   );
 
-  console.log("Aguinaldo total:", aguinaldoTotal);
-
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
       <div className="flex items-center">
@@ -639,16 +619,24 @@ export const TableEmpleados = () => {
                   <th>Sector/rol</th>
                   {/* <th>Fecha ingreso</th>
                   <th>Antigüedad trabajando</th> */}
-                  <th>Quincena 5</th>
-                  <th>Quincena 20</th>
                   <th>Premio prod.</th>
                   <th>Premio Asist.</th>
                   <th>Comida</th>
+                  <th>Total Antig.</th>
                   <th>Desc del 5</th>
                   <th>Desc del 20</th>
                   <th>Banco</th>
-                  <th>Sueldo</th>
-                  <th>Acciones</th>
+                  {empleadosPorFabrica[fabrica].some(
+                    (g) => g?.termino_pago === "quincenal"
+                  ) && <th>Quin 5/pagar</th>}
+                  {empleadosPorFabrica[fabrica].some(
+                    (g) => g?.termino_pago === "mensual"
+                  ) && <th>Sueldo basico</th>}
+                  {/* <th>Quin 20/pagar</th> */}
+                  {empleadosPorFabrica[fabrica].some(
+                    (g) => g?.termino_pago === "quincenal"
+                  ) && <th>Quin 20/pagar</th>}
+                  <th>Sueldo final</th>
                 </tr>
               </thead>
               <tbody className="text-xs capitalize">
@@ -723,10 +711,68 @@ export const TableEmpleados = () => {
                       </td>
                       <td className="font-semibold">{g?.fabrica_sucursal}</td>
                       <td className="font-semibold">{g?.sector_trabajo}</td>
-                      {/* <td>
-                        {new Date(g.fecha_ingreso).toISOString().split("T")[0]}
+                      <td className="font-bold text-green-500">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[0]?.quincena_cinco[0]
+                                  ?.premio_produccion || 0
+                              )
+                            : Number(g?.sueldo[0]?.premio_produccion || 0)
+                        )}
                       </td>
-                      <td>{`${years} años, ${months} meses`}</td> */}
+                      <td className="font-semibold text-green-500">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[0]?.quincena_cinco[0]
+                                  ?.premio_asistencia || 0
+                              )
+                            : Number(g?.sueldo[0]?.premio_asistencia || 0)
+                        )}
+                      </td>
+                      <td className="font-semibold text-green-500">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[1]?.quincena_veinte[0]?.comida || 0
+                              )
+                            : Number(g?.sueldo[0]?.comida || 0)
+                        )}
+                      </td>
+                      <td className="font-semibold text-blue-500">
+                        {formatearDinero(total_antiguedad)}
+                      </td>
+                      <td className="font-semibold text-red-600">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[0]?.quincena_cinco[0]
+                                  ?.descuento_del_cinco || 0
+                              )
+                            : Number(g?.sueldo[0]?.descuento_del_cinco || 0)
+                        )}
+                      </td>
+                      <td className="font-semibold text-red-600">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[1]?.quincena_veinte[0]
+                                  ?.descuento_del_veinte || 0
+                              )
+                            : Number(0)
+                        )}
+                      </td>
+
+                      <td className="font-semibold text-red-600">
+                        {formatearDinero(
+                          g?.termino_pago === "quincenal"
+                            ? Number(
+                                g?.sueldo[0]?.quincena_cinco[0]?.banco || 0
+                              )
+                            : Number(g?.sueldo[0]?.banco || 0)
+                        )}
+                      </td>
                       <td className="font-semibold">
                         {formatearDinero(
                           g?.termino_pago === "quincenal"
@@ -763,97 +809,35 @@ export const TableEmpleados = () => {
                                 Number(g?.sueldo[0]?.descuento_del_cinco || 0)
                         )}
                       </td>
-                      <td className="font-semibold">
-                        {formatearDinero(
-                          g?.termino_pago === "quincenal"
-                            ? Number(
-                                g?.sueldo[1]?.quincena_veinte[0]
-                                  ?.quincena_veinte || 0
-                              ) +
-                                Number(
-                                  g?.sueldo[1]?.quincena_veinte[0]?.comida || 0
-                                ) -
-                                Number(
+                      {g.termino_pago === "mensual" ? (
+                        ""
+                      ) : (
+                        <td className="font-semibold">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
                                   g?.sueldo[1]?.quincena_veinte[0]
-                                    ?.descuento_del_veinte || 0
-                                )
-                            : Number(0)
-                        )}
-                      </td>
-                      <td className="font-semibold">
-                        {formatearDinero(
-                          g?.termino_pago === "quincenal"
-                            ? Number(
-                                g?.sueldo[0]?.quincena_cinco[0]
-                                  ?.premio_produccion || 0
-                              )
-                            : Number(g?.sueldo[0]?.premio_produccion || 0)
-                        )}
-                      </td>
-                      <td className="font-semibold">
-                        {formatearDinero(
-                          g?.termino_pago === "quincenal"
-                            ? Number(
-                                g?.sueldo[0]?.quincena_cinco[0]
-                                  ?.premio_asistencia || 0
-                              )
-                            : Number(g?.sueldo[0]?.premio_asistencia || 0)
-                        )}
-                      </td>
-                      <td className="font-semibold">
-                        {formatearDinero(
-                          g?.termino_pago === "quincenal"
-                            ? Number(
-                                g?.sueldo[1]?.quincena_veinte[0]?.comida || 0
-                              )
-                            : Number(g?.sueldo[0]?.comida || 0)
-                        )}
-                      </td>
-                      <td className="font-semibold text-red-600">
-                        {formatearDinero(
-                          g?.termino_pago === "quincenal"
-                            ? Number(
-                                g?.sueldo[0]?.quincena_cinco[0]
-                                  ?.descuento_del_cinco || 0
-                              )
-                            : Number(g?.sueldo[0]?.descuento_del_cinco || 0)
-                        )}
-                      </td>
-                      <td className="font-semibold text-red-600">
-                        {formatearDinero(
-                          g?.termino_pago === "quincenal"
-                            ? Number(
-                                g?.sueldo[1]?.quincena_veinte[0]
-                                  ?.descuento_del_veinte || 0
-                              )
-                            : Number(0)
-                        )}
-                      </td>
-
-                      <td className="font-semibold text-red-600">
-                        {formatearDinero(
-                          g?.termino_pago === "quincenal"
-                            ? Number(
-                                g?.sueldo[0]?.quincena_cinco[0]?.banco || 0
-                              )
-                            : Number(g?.sueldo[0]?.banco || 0)
-                        )}
-                      </td>
+                                    ?.quincena_veinte || 0
+                                ) +
+                                  Number(
+                                    g?.sueldo[1]?.quincena_veinte[0]?.comida ||
+                                      0
+                                  ) -
+                                  Number(
+                                    g?.sueldo[1]?.quincena_veinte[0]
+                                      ?.descuento_del_veinte || 0
+                                  )
+                              : Number(0)
+                          )}
+                        </td>
+                      )}
                       <td className="font-semibold">
                         <span className="bg-blue-500 py-1 px-2 rounded text-white">
                           {" "}
                           {formatearDinero(sueldo)}
                         </span>
                       </td>
-                      {/* <td>
-                        <span
-                          className={`${getEstadoClassNames(
-                            g?.estado
-                          )} font-bold py-1 px-2 rounded`}
-                        >
-                          {g?.estado}
-                        </span>
-                      </td> */}
+
                       <td>
                         <Dropdown>
                           <li>

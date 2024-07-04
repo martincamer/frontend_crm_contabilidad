@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, Message, Button, Input, Label } from "../components/ui";
 import { loginSchema } from "../schemas/auth";
-import img from "../assets/logistica.jpg";
 
 export function LoginPage() {
   const {
@@ -22,7 +21,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/empleados");
+      navigate("/presupuesto");
     }
   }, [isAuthenticated]);
 

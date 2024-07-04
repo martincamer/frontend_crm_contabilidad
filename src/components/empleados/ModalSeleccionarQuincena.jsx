@@ -47,7 +47,6 @@ export const ModalSeleccionarQuincena = () => {
 
   const empleadosFiltrados = filtrarEmpleados(
     empleados,
-    // selectedQuincena,
     selectedFabrica,
     selectedTerminoPago
   );
@@ -70,24 +69,6 @@ export const ModalSeleccionarQuincena = () => {
   const handleQuincenaChange = (e) => {
     setSelectedQuincena(e.target.value);
   };
-
-  // Función para generar comprobantes para todos los empleados
-  // const generarComprobantes = async () => {
-  //   try {
-  //     setLoading(true);
-  //     // Realizar la llamada al backend para generar los comprobantes
-  //     const response = await instance.post(`/empleados/comprobantes`, {
-  //       fabrica: selectedFabrica,
-  //       termino_pago: selectedTerminoPago,
-  //       quincena: selectedQuincena,
-  //     });
-  //     console.log(response.data); // Verificar la respuesta del backend
-  //   } catch (error) {
-  //     console.error("Error al generar comprobantes:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   console.log("fabrica", empleadosFiltrados);
 

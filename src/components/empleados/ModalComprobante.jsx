@@ -88,8 +88,6 @@ export const ModalComprobante = ({ idObtenida }) => {
     }
   };
 
-  console.log(empleado);
-
   return (
     <dialog id="my_modal_nuevo_comprobante" className="modal">
       <div className="modal-box rounded-none">

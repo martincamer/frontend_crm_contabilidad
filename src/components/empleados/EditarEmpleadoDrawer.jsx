@@ -188,7 +188,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
     Number(premio_asistencia) +
     Number(total_antiguedad) -
     Number(descuento_del_cinco) -
-    Number(Number(banco) + Number(aguinaldo_proporcional));
+    Number(Number(banco));
   //totales
   const totalQuincenaVeinte =
     Number(quincena_veinte) + Number(comida) - Number(descuento_del_veinte);
@@ -210,7 +210,7 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
     Number(total_antiguedad) +
     Number(comida) -
     Number(descuento_del_cinco) -
-    Number(Number(banco) + Number(aguinaldo_proporcional));
+    Number(Number(banco));
 
   const totalSueldo =
     Number(quincena_cinco) +
@@ -607,35 +607,6 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                     </p>
                   </div>
 
-                  {/* {showButton && (
-                    <div onClick={handleInputClick}>
-                      {isEditable ? (
-                        <FormInput
-                          labelText={"Aguinaldo proporcional"}
-                          placeholder={"Escribe el valor"}
-                          type={"text"}
-                          props={{
-                            ...register("aguinaldo_proporcional", {
-                              required: true,
-                            }),
-                            onBlur: () => setIsEditable(false), // Save the value and set back to display mode
-                          }}
-                        />
-                      ) : (
-                        <div className="flex flex-col gap-1 w-full">
-                          <label className="font-semibold text-xs text-gray-700">
-                            Aguinaldo proporcional
-                          </label>
-                          <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
-                            {formatearDinero(
-                              Number(aguinaldo_proporcional) || 0
-                            )}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  )} */}
-
                   <Texto
                     props={{
                       ...register("observacion_del_cinco", {
@@ -673,7 +644,6 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       </div>
                     )}
                   </div>
-
                   <div onClick={handleInputClick}>
                     {isEditable ? (
                       <FormInput
@@ -698,6 +668,32 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       </div>
                     )}
                   </div>
+                  {sector_trabajo === "gerente" && (
+                    <div onClick={handleInputClick}>
+                      {isEditable ? (
+                        <FormInput
+                          labelText={"Premio producción"}
+                          placeholder={"Escribe el valor"}
+                          type={"text"}
+                          props={{
+                            ...register("premio_produccion", {
+                              required: true,
+                            }),
+                            onBlur: () => setIsEditable(false), // Save the value and set back to display mode
+                          }}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1 w-full">
+                          <label className="font-semibold text-xs text-gray-700">
+                            Premio producción
+                          </label>
+                          <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
+                            {formatearDinero(Number(premio_produccion) || 0)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <div onClick={handleInputClick}>
                     {isEditable ? (
@@ -723,7 +719,6 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       </div>
                     )}
                   </div>
-
                   <div className="flex flex-col gap-1 w-full">
                     <label className="font-semibold text-xs text-gray-700">
                       Total de la quincena veinte cierre
@@ -732,7 +727,6 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       {formatearDinero(totalQuincenaVeinte || 0)}
                     </p>
                   </div>
-
                   <Texto
                     props={{
                       ...register("observacion_del_veinte", {
@@ -827,7 +821,33 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                       </div>
                     )}
                   </div>
-                  {sector_trabajo === "gerencia" && (
+
+                  <div onClick={handleInputClick}>
+                    {isEditable ? (
+                      <FormInput
+                        labelText={"Premio asistencia"}
+                        placeholder={"Escribe el valor"}
+                        type={"text"}
+                        props={{
+                          ...register("premio_asistencia", {
+                            required: true,
+                          }),
+                          onBlur: () => setIsEditable(false), // Save the value and set back to display mode
+                        }}
+                      />
+                    ) : (
+                      <div className="flex flex-col gap-1 w-full">
+                        <label className="font-semibold text-xs text-gray-700">
+                          Premio asistencia
+                        </label>
+                        <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
+                          {formatearDinero(Number(premio_asistencia) || 0)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {sector_trabajo === "gerente" && (
                     <div onClick={handleInputClick}>
                       {isEditable ? (
                         <FormInput
@@ -854,30 +874,32 @@ export const EditarEmpleadoDrawer = ({ idObtenida }) => {
                     </div>
                   )}
 
-                  <div onClick={handleInputClick}>
-                    {isEditable ? (
-                      <FormInput
-                        labelText={"Premio asistencia"}
-                        placeholder={"Escribe el valor"}
-                        type={"text"}
-                        props={{
-                          ...register("premio_asistencia", {
-                            required: true,
-                          }),
-                          onBlur: () => setIsEditable(false), // Save the value and set back to display mode
-                        }}
-                      />
-                    ) : (
-                      <div className="flex flex-col gap-1 w-full">
-                        <label className="font-semibold text-xs text-gray-700">
-                          Premio asistencia
-                        </label>
-                        <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
-                          {formatearDinero(Number(premio_asistencia) || 0)}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                  {sector_trabajo === "producción" && (
+                    <div onClick={handleInputClick}>
+                      {isEditable ? (
+                        <FormInput
+                          labelText={"Premio producción"}
+                          placeholder={"Escribe el valor"}
+                          type={"text"}
+                          props={{
+                            ...register("premio_produccion", {
+                              required: true,
+                            }),
+                            onBlur: () => setIsEditable(false), // Save the value and set back to display mode
+                          }}
+                        />
+                      ) : (
+                        <div className="flex flex-col gap-1 w-full">
+                          <label className="font-semibold text-xs text-gray-700">
+                            Premio producción
+                          </label>
+                          <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
+                            {formatearDinero(Number(premio_produccion) || 0)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <div onClick={handleInputClick}>
                     {isEditable ? (

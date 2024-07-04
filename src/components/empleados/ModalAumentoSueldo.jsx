@@ -58,8 +58,6 @@ export const ModalAumentoSueldo = () => {
               {...register("fabrica", { required: true })}
             >
               <option value="">Seleccionar fabrica</option>
-              {/* <option value="marcos ciani 255">Marcos ciani 255</option>
-              <option value="long">Long</option> */}
               {fabricas.map((f) => (
                 <option key={f._id}>{f.nombre}</option>
               ))}

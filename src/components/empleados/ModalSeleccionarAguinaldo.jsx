@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useEmpleado } from "../../context/EmpleadosContext";
-import { ModalViewerEmpleados } from "./ModalViewerEmpleados";
+// import { ModalViewerEmpleados } from "./ModalViewerEmpleados";
 import { ModalViewerEmpleadosAguinaldo } from "./ModalViewerEmpleadosAguinaldo";
 
 export const ModalSeleccionarAguinaldo = () => {

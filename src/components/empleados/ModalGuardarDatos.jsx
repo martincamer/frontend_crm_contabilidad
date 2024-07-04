@@ -13,7 +13,6 @@ export const ModalGuardarDatos = () => {
     getEmpleados();
   }, []);
 
-  console.log(empleados);
   const onSubmit = async (formData) => {
     let reciboData = {
       ...formData,

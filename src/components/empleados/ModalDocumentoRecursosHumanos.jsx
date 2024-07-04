@@ -44,7 +44,6 @@ export const ModalDocumentoRecursosHumanos = ({ empleados }) => {
   // Llamar a la función y obtener el resultado
   const resultado = agruparEmpleados(empleados);
 
-  console.log(resultado);
   return (
     <dialog id="my_modal_recursos_humanos" className="modal">
       <div className="modal-box rounded-none w-full max-w-6xl scroll-bar">

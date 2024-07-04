@@ -473,26 +473,7 @@ export const TableEmpleadosAguinaldo = () => {
           placeholder={"Buscar el empleado por el nombre y apellido.."}
         />
       </div>
-      {/* <div className="w-2/3">
-        {selectedFabricaSucursal && (
-          <div className="bg-white mx-3 my-5 py-3.5 px-3 flex flex-col gap-1">
-            <p className="font-bold text-blue-500 text-lg">
-              <span className="text-gray-700">Fabrica/Sucursal</span>{" "}
-              <span className="capitalize">{selectedFabricaSucursal}</span>.
-            </p>
-            <div className="flex justify-between px-5">
-              <p className="font-bold text-red-500">
-                <p className="text-gray-600">Aguinaldo</p>
-                {formatearDinero(totalAguinaldo)}
-              </p>
-              <p className="font-bold text-red-500">
-                <p className="text-gray-600">Total de empleados</p>
-                {filteredGastos.length}
-              </p>
-            </div>
-          </div>
-        )}
-      </div> */}
+
       <div className="bg-white my-2 mx-3">
         {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
           <div className="" key={index}>
