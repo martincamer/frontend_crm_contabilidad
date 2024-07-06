@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import { ComprobantesTodos } from "../comprobantes/ComprobantesTodos";
 

@@ -5,6 +5,8 @@ import { ModalCrearBancoCheque } from "../components/banco/ModalCrearBancoCheque
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { ModalCrearCheque } from "../components/banco/ModalCrearCheque";
 import { Link } from "react-router-dom";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { ChequesPdf } from "../components/comprobantes/ChequesPdf";
 
 export const PageBancoCheques = () => {
   const { getBancos, bancos, deleteChequeBanco } = useBancoCheque();
@@ -126,6 +128,22 @@ export const PageBancoCheques = () => {
               placeholder="Fecha fin"
             />
           </div>
+        </div>
+        <div>
+          <PDFDownloadLink
+            fileName="Resumen de los cheques/banco"
+            className="font-semibold text-sm bg-blue-500 py-1.5 px-6 text-white rounded-full hover:bg-rose-500 transition-all"
+            document={
+              <ChequesPdf
+                cheques={bancos}
+                calcularTotalMovimientos={calcularTotalMovimientos}
+                fechaInicioMovimientos={fechaInicioMovimientos}
+                fechaFinMovimientos={fechaFinMovimientos}
+              />
+            }
+          >
+            Descargar resumen bancos/cheques pdf.
+          </PDFDownloadLink>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-5 bg-white py-5 px-5">
@@ -259,6 +277,14 @@ export const PageBancoCheques = () => {
 
       <ModalCrearBancoCheque />
       <ModalCrearCheque bancos={bancos} />
+      {/* <PDFViewer className="h-screen">
+        <ChequesPdf
+          cheques={bancos}
+          calcularTotalMovimientos={calcularTotalMovimientos}
+          fechaInicioMovimientos={fechaInicioMovimientos}
+          fechaFinMovimientos={fechaFinMovimientos}
+        />
+      </PDFViewer> */}
     </section>
   );
 };

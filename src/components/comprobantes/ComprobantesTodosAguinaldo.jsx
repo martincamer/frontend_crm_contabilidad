@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Page,
   Text,
@@ -59,6 +59,24 @@ export const ComprobantesTodos = ({ empleados, selectedMes }) => {
       marginBottom: 5,
     },
   });
+
+  const [fechaHoy, setFechaHoy] = useState("");
+
+  useEffect(() => {
+    const obtenerFechaHoy = () => {
+      const hoy = new Date(); // Obtener la fecha de hoy
+      const dia = hoy.getDate(); // Obtener el día del mes (1 al 31)
+      const mes = hoy.getMonth() + 1; // Obtener el mes (0 a 11, por eso se suma 1)
+      const anio = hoy.getFullYear(); // Obtener el año (ej. 2024)
+
+      // Construir la fecha en el formato "D/MM/YYYY"
+      const fechaFormateada = `${dia}/${mes}/${anio}`;
+
+      setFechaHoy(fechaFormateada); // Actualizar el estado con la fecha formateada
+    };
+
+    obtenerFechaHoy(); // Llamar a la función al montar el componente
+  }, []);
 
   return (
     <Document
@@ -230,7 +248,7 @@ export const ComprobantesTodos = ({ empleados, selectedMes }) => {
                     textTransform: "uppercase",
                   }}
                 >
-                  Fecha: {updateFecha(e?.date)}
+                  Fecha: {fechaHoy}
                 </Text>
               </View>
 
