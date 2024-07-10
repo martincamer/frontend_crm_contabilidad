@@ -350,7 +350,7 @@ export const TableEmpleadosAguinaldo = () => {
   return (
     <div className="overflow-y-scroll h-[100vh] scroll-bar">
       <div className="flex items-center">
-        <div className="bg-white py-2 px-5 my-5 mx-3 max-w-3xl gap-10 flex items-center">
+        <div className="bg-white py-2 px-5 my-5 mx-3 max-w-3xl gap-10 flex items-center max-md:hidden">
           <p className="text-xs font-bold text-blue-500">
             Mas opciones empleados
           </p>
@@ -454,7 +454,7 @@ export const TableEmpleadosAguinaldo = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white py-2 px-6 flex gap-3">
+        <div className="bg-white py-2 px-6 flex gap-3 max-md:hidden">
           <button
             type="button"
             className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
@@ -466,7 +466,7 @@ export const TableEmpleadosAguinaldo = () => {
           </button>
         </div>
       </div>
-      <div className="flex">
+      <div className="max-md:my-2 md:flex">
         <Search
           value={searchTerm}
           onChange={handleSearch}
@@ -474,7 +474,7 @@ export const TableEmpleadosAguinaldo = () => {
         />
       </div>
 
-      <div className="bg-white my-2 mx-3">
+      <div className="bg-white my-2 mx-3 max-md:overflow-x-auto">
         {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
           <div className="" key={index}>
             <h2 className="px-5 py-4 uppercase text-sm font-bold text-blue-500">
