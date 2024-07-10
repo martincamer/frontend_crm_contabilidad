@@ -26,8 +26,8 @@ export function LoginPage() {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-screen flex gap-12 items-center">
-      <div className="h-screen w-1/2  shadow-2xl background-image">
+    <div className="h-screen flex gap-12 items-center max-md:px-5">
+      <div className="h-screen w-1/2  shadow-2xl background-image max-md:hidden">
         <div>
           <h3 className="text-white font-bold text-2xl py-20 px-20">
             <span className="border-b-4 border-blue-500">CRM CONTABLE </span>

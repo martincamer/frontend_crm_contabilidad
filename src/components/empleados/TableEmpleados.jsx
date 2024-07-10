@@ -383,18 +383,18 @@ export const TableEmpleados = () => {
   );
 
   return (
-    <div className="overflow-y-scroll h-[100vh] scroll-bar">
-      <div className="flex items-center">
-        <div className="bg-white py-2 px-5 my-5 mx-3 max-w-3xl gap-10 flex items-center">
+    <div className="md:overflow-y-scroll md:h-[100vh] scroll-bar">
+      <div className="flex items-center max-md:flex-col max-md:items-stretch">
+        <div className="bg-white py-2 px-5 my-5 mx-3 max-w-3xl gap-10 flex items-center max-md:flex-col max-md:gap-2">
           <p className="text-xs font-bold text-blue-500">
             Mas opciones empleados
           </p>
           <div className="flex gap-2">
-            <div className="dropdown">
+            <div className="dropdown max-md:hidden">
               <div
                 tabIndex={0}
                 role="button"
-                className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
+                className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer max-md:hidden"
               >
                 <FaRegCalendar className="text-lg" /> Fecha
               </div>
@@ -445,7 +445,17 @@ export const TableEmpleados = () => {
                 </div>
               </ul>
             </div>
-            <div className="dropdown">
+            <div
+              onClick={() => {
+                document.getElementById("my_modal_estadisticas").showModal();
+              }}
+              tabIndex={0}
+              role="button"
+              className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer md:hidden"
+            >
+              <FaSignal className="text-base" /> Estadisticas
+            </div>
+            <div className="dropdown max-md:hidden">
               <div
                 tabIndex={0}
                 role="button"
@@ -455,7 +465,7 @@ export const TableEmpleados = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 cursor-pointer grid grid-cols-2 gap-2 w-[700px] mt-2"
+                className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 cursor-pointer grid grid-cols-2 max-md:grid-cols-1 gap-2 w-[700px] mt-2 max-md:w-[300px]"
               >
                 <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                   <p className="text-sm font-semibold text-gray-700">
@@ -484,14 +494,6 @@ export const TableEmpleados = () => {
                     )}
                   </p>
                 </div>
-                {/* <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Total a pagar en aguinaldo
-                  </p>
-                  <p className="text-blue-500 text-lg font-bold">
-                    {formatearDinero(aguinaldoTotal)}
-                  </p>
-                </div> */}
                 <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
                   <p className="text-sm font-semibold text-gray-700">
                     Total de empleados cargados
@@ -504,56 +506,49 @@ export const TableEmpleados = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white py-2 px-6 flex gap-3">
-          <Link
-            className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
-            to={"/datos-empleados"}
-          >
-            Buscar sueldos mensuales
-          </Link>
-          <button
-            type="button"
-            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
-            onClick={() => {
-              document.getElementById("my_modal_guardar_datos").showModal();
-            }}
-          >
-            Guardar tabla mensual
-          </button>
+        <div className="bg-white py-2 px-6 max-md:overflow-y-scroll max-md:mb-3 mx-10 max-md:hidden">
+          <div className="flex gap-3 max-md:flex-col h-[5vh] ">
+            <Link
+              className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
+              to={"/datos-empleados"}
+            >
+              Buscar sueldos mensuales
+            </Link>
+            <button
+              type="button"
+              className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
+              onClick={() => {
+                document.getElementById("my_modal_guardar_datos").showModal();
+              }}
+            >
+              Guardar tabla mensual
+            </button>
 
-          <button
-            type="button"
-            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
-            onClick={() => {
-              document.getElementById("my_modal_aumento_sueldo").showModal();
-            }}
-          >
-            Aumentar sueldos
-          </button>
+            <button
+              type="button"
+              className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
+              onClick={() => {
+                document.getElementById("my_modal_aumento_sueldo").showModal();
+              }}
+            >
+              Aumentar sueldos
+            </button>
 
-          <button
-            type="button"
-            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
-            onClick={() => {
-              document
-                .getElementById("my_modal_seleccionar_quincena")
-                .showModal();
-            }}
-          >
-            Imprimir sueldos en cantidad
-          </button>
-          {/* <button
-            type="button"
-            className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
-            onClick={() => {
-              document.getElementById("my_modal_aguinaldo").showModal();
-            }}
-          >
-            Imprimir aguinaldos
-          </button> */}
+            <button
+              type="button"
+              className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
+              onClick={() => {
+                document
+                  .getElementById("my_modal_seleccionar_quincena")
+                  .showModal();
+              }}
+            >
+              Imprimir sueldos en cantidad
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex">
+      <div className="flex max-md:flex-col gap-2 max-w-auto max-w-full">
         <Search
           value={searchTerm}
           onChange={handleSearch}
@@ -561,7 +556,7 @@ export const TableEmpleados = () => {
         />
         <button
           type="button"
-          className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-blue-600 transition-all"
+          className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-blue-600 transition-all max-md:hidden"
           onClick={() => {
             document.getElementById("my_modal_recursos_humanos").showModal();
           }}
@@ -605,7 +600,7 @@ export const TableEmpleados = () => {
           </div>
         )}
       </div>
-      <div className="bg-white my-2 mx-3">
+      <div className="bg-white my-2 mx-3 max-md:overflow-x-auto ma">
         {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
           <div className="" key={index}>
             <h2 className="px-5 py-4 uppercase text-sm font-bold text-blue-500">
@@ -849,7 +844,7 @@ export const TableEmpleados = () => {
                               Ver empleado completo
                             </Link>
                           </li>
-                          <li>
+                          <li className="max-md:hidden">
                             <button
                               onClick={() => {
                                 handleObtenerId(g._id);
@@ -865,7 +860,7 @@ export const TableEmpleados = () => {
                               Observación empleado
                             </button>
                           </li>
-                          <li>
+                          <li className="max-md:hidden">
                             <label
                               onClick={() => handleObtenerId(g._id)}
                               htmlFor="my-drawer-editar"
@@ -874,7 +869,7 @@ export const TableEmpleados = () => {
                               Editar empleado
                             </label>
                           </li>
-                          <li>
+                          <li className="max-md:hidden">
                             <button
                               onClick={() => {
                                 handleObtenerId(g._id);
@@ -890,7 +885,7 @@ export const TableEmpleados = () => {
                               Cambiar el estado
                             </button>
                           </li>
-                          <li>
+                          <li className="max-md:hidden">
                             <button
                               onClick={() => {
                                 handleObtenerId(g._id);
@@ -904,7 +899,7 @@ export const TableEmpleados = () => {
                               Generar comprobante
                             </button>
                           </li>
-                          <li>
+                          <li className="max-md:hidden">
                             <button
                               onClick={() => {
                                 handleObtenerId(g._id);
@@ -948,6 +943,76 @@ export const TableEmpleados = () => {
       <ModalSeleccionarQuincena />
       <ModalDocumentoRecursosHumanos empleados={filteredGastos} />
       <ModalSeleccionarAguinaldo />
+
+      <ModalVerEstadisticas
+        empleados={empleados}
+        ingresoTotal={ingresoTotal}
+        ingresoTotalQuincenaBanco={ingresoTotalQuincenaBanco}
+        ingresoTotalQuincenaCinco={ingresoTotalQuincenaCinco}
+        ingresoTotalQuincenaCincoBanco={ingresoTotalQuincenaCincoBanco}
+        ingresoTotalQuincenaVeinte={ingresoTotalQuincenaVeinte}
+      />
     </div>
+  );
+};
+
+const ModalVerEstadisticas = ({
+  ingresoTotalQuincenaCinco,
+  ingresoTotal,
+  ingresoTotalQuincenaVeinte,
+  ingresoTotalQuincenaCincoBanco,
+  ingresoTotalQuincenaBanco,
+  empleados,
+}) => {
+  return (
+    <dialog id="my_modal_estadisticas" className="modal">
+      <div className="modal-box w-auto rounded-none py-16">
+        <form method="dialog">
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <div>
+          <p className="font-bold mb-3 text-blue-500">Estadisticas empleados</p>
+        </div>
+        <ul tabIndex={0} className="grid grid-cols-1 gap-3">
+          <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+            <p className="text-sm font-semibold text-gray-700">
+              Total a pagar quicena del 5 / efectivo
+            </p>
+            <p className="text-blue-500 text-lg font-bold">
+              {formatearDinero(ingresoTotalQuincenaCinco + ingresoTotal)}
+            </p>
+          </div>
+
+          <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+            <p className="text-sm font-semibold text-gray-700">
+              Total a pagar quincena del 20 / efectivo
+            </p>
+            <p className="text-blue-500 text-lg font-bold">
+              {formatearDinero(ingresoTotalQuincenaVeinte)}
+            </p>
+          </div>
+          <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+            <p className="text-sm font-semibold text-gray-700">
+              Total a pagar quicena del 5 / banco
+            </p>
+            <p className="text-blue-500 text-lg font-bold">
+              {formatearDinero(
+                ingresoTotalQuincenaCincoBanco + ingresoTotalQuincenaBanco
+              )}
+            </p>
+          </div>
+          <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+            <p className="text-sm font-semibold text-gray-700">
+              Total de empleados cargados
+            </p>
+            <p className="text-blue-500 text-lg font-bold">
+              {empleados.length}
+            </p>
+          </div>
+        </ul>
+      </div>
+    </dialog>
   );
 };
