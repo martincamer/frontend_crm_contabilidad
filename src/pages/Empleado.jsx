@@ -177,7 +177,7 @@ export const Empleado = () => {
         </BreadCrumbs>
       </Navegacion>
 
-      <div className="flex my-10 mx-10">
+      <div className="flex my-10 mx-10 max-md:mx-4">
         <div className="bg-white py-5 px-5">
           <p className="font-bold text-blue-500">
             Detalles del empleado obtenido / referencia{" "}
@@ -186,11 +186,11 @@ export const Empleado = () => {
         </div>
       </div>
 
-      <div className="mx-10 w-1/2 my-5">
+      <div className="mx-10 w-1/2 my-5 max-md:w-auto max-md:mx-4">
         <div className="bg-white py-5 px-5 flex flex-col gap-4">
           <p className="font-bold text-gray-600">Empleado datos</p>
 
-          <div className="flex gap-2 justify-between">
+          <div className="flex gap-2 justify-between max-md:flex-col">
             <div className="flex flex-col gap-2">
               <p className="font-medium text-orange-500 flex gap-2">
                 Nombre{" "}
@@ -488,25 +488,39 @@ export const Empleado = () => {
           )}
         </div>
       </div>
-      <div className="my-10 bg-white py-10 px-10 mx-10 mb-10 h-full">
+      <div className="my-10 bg-white py-10 px-10 mx-10 mb-10 h-full max-md:mx-4 max-md:px-3">
         <p className="text-blue-500 font-bold text-lg">Comprobantes de pago</p>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center max-md:flex-col max-md:mt-2 max-md:items-start">
           <p className="font-semibold">Buscar comprobantes por mes o día</p>
           <input
             type="date"
             name="startDate"
-            className="border border-gray-200 shadow font-bold text-sm px-2 py-1 my-2"
+            className="border border-gray-200 shadow font-bold text-sm px-2 py-1 my-2 max-md:hidden"
             onChange={handleDateFilter}
           />
           <input
             type="date"
             name="endDate"
-            className="border border-gray-200 shadow font-bold text-sm px-2 py-1 my-2"
+            className="border border-gray-200 shadow font-bold text-sm px-2 py-1 my-2 max-md:hidden"
             onChange={handleDateFilter}
           />
+          <div className="flex gap-2">
+            <input
+              type="date"
+              name="startDate"
+              className="border border-gray-200 shadow font-bold text-sm px-2 py-1 my-2 md:hidden"
+              onChange={handleDateFilter}
+            />
+            <input
+              type="date"
+              name="endDate"
+              className="border border-gray-200 shadow font-bold text-sm px-2 py-1 my-2 md:hidden"
+              onChange={handleDateFilter}
+            />
+          </div>
         </div>
 
-        <div className="bg-white my-2 mx-3">
+        <div className="bg-white my-2 mx-3 overflow-x-auto">
           <table className="table">
             <thead>
               <tr className="text-gray-800">

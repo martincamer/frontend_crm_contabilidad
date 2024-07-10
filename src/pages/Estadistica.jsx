@@ -268,7 +268,7 @@ export const Estadistica = () => {
   }, 0);
 
   return (
-    <section className="mx-10 my-10">
+    <section className="mx-10 my-10 max-md:mx-5">
       <div className="bg-white py-5 px-5 flex justify-between">
         <p className="font-bold text-lg text-blue-500">
           Generar los datos de la estadistica del mes 🖐️

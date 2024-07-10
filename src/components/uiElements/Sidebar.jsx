@@ -5,7 +5,7 @@ import { MdEvStation, MdLocalOffer, MdOutlinePersonPin } from "react-icons/md";
 import { FaDatabase, FaMoneyBillWave } from "react-icons/fa";
 
 export const SideBar = () => {
-  const { user, isOpen } = useAuth();
+  const { isOpen } = useAuth();
 
   const location = useLocation();
 
@@ -13,7 +13,7 @@ export const SideBar = () => {
     <div
       className={`${
         !isOpen ? "w-64 opacity-1 shadow-lg" : "w-0 opacity-0"
-      } transition-all ease-linear flex flex-col bg-white min-h-screen max-h-full h-full `}
+      } transition-all ease-linear flex flex-col bg-white min-h-screen max-h-full h-full max-md:fixed max-md:z-[999]`}
     >
       <div className="flex flex-col gap-5 py-5 px-6">
         <button

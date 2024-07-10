@@ -600,6 +600,14 @@ export const TableEmpleados = () => {
           </div>
         )}
       </div>
+      <div className="bg-white py-3 px-3 my-5 mx-3 md:hidden w-auto">
+        <Link
+          className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
+          to={"/datos-empleados"}
+        >
+          Buscar sueldos mensuales
+        </Link>
+      </div>
       <div className="bg-white my-2 mx-3 max-md:overflow-x-auto ma">
         {Object.keys(empleadosPorFabrica).map((fabrica, index) => (
           <div className="" key={index}>

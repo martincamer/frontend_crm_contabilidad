@@ -104,7 +104,7 @@ export const PageBancoCheques = () => {
 
   return (
     <section className="py-10 px-5 flex flex-col gap-6">
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-5 items-center max-md:flex-col max-md:items-center max-md:bg-white max-md:py-4 max-md:px-4">
         {" "}
         <div className="font-bold text-blue-500">
           Filtrar movimientos de cheques del banco
@@ -146,7 +146,7 @@ export const PageBancoCheques = () => {
           </PDFDownloadLink>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-5 bg-white py-5 px-5">
+      <div className="grid grid-cols-4 gap-5 bg-white py-5 px-5 max-md:grid-cols-1 max-md:h-[20vh] max-md:overflow-y-scroll">
         {bancos.map((b) => (
           <div
             key={b._id}
@@ -182,14 +182,14 @@ export const PageBancoCheques = () => {
         ))}
       </div>
 
-      <div className=" bg-white py-5 px-5 flex gap-2">
+      <div className=" bg-white py-5 px-5 flex gap-2 max-md:overflow-x-auto">
         <button
           className="text-sm font-bold text-blue-500 bg-blue-50 py-2 px-5 rounded-full border border-blue-500 hover:bg-blue-500 transition-all hover:text-white flex gap-2 items-center"
           onClick={() =>
             document.getElementById("my_modal_crear_banco_cheque").showModal()
           }
         >
-          Crear nuevo banco <FaPiggyBank className="text-2xl" />
+          Crear nuevo banco <FaPiggyBank className="text-2xl max-md:hidden" />
         </button>
         <button
           className="text-sm font-bold text-blue-500 bg-blue-50 py-2 px-5 rounded-full border border-blue-500 hover:bg-blue-500 transition-all hover:text-white flex gap-2 items-center"
@@ -197,7 +197,7 @@ export const PageBancoCheques = () => {
             document.getElementById("my_modal_crear_cheque").showModal()
           }
         >
-          Crear nuevo cheque <FaMarkdown className="text-2xl" />
+          Crear nuevo cheque <FaMarkdown className="text-2xl max-md:hidden" />
         </button>
       </div>
       <div className="flex mt-5">
@@ -205,7 +205,7 @@ export const PageBancoCheques = () => {
           Tabla de cheques cargados
         </p>
       </div>
-      <div className="flex gap-2 w-1/5">
+      <div className="flex gap-2 w-1/5 max-md:w-auto">
         <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
           <input
             value={fechaInicio}
@@ -225,7 +225,7 @@ export const PageBancoCheques = () => {
           />
         </div>
       </div>
-      <div className="bg-white">
+      <div className="bg-white max-md:overflow-x-auto">
         <table className="table bg-white text-sm">
           <thead className="">
             <tr>

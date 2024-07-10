@@ -67,7 +67,7 @@ export const TableEmpleadosDatos = () => {
   console.log(empleados);
 
   return (
-    <div>
+    <div className="">
       <div className="mt-6">
         <div className="bg-white py-5 px-5 mx-3 max-w-3xl">
           <h2 className="text-xl font-bold mb-4 text-blue-500">
@@ -150,6 +150,7 @@ export const TableEmpleadosDatos = () => {
           </tbody>
         </table>
       </div>
+
       <ModalEliminar
         isOpen={isOpen}
         closeModal={closeModal}

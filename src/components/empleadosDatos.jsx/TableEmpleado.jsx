@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { updateFecha } from "../../helpers/FechaUpdate";
 import { formatearDinero } from "../../helpers/FormatearDinero";
+import { useEmpleado } from "../../context/EmpleadosContext";
 import instance from "../../api/axios";
 
 export const TableEmpleado = () => {
   const params = useParams();
+  const { getFabricas, fabricas } = useEmpleado();
+
+  useEffect(() => {
+    getFabricas();
+  }, []);
 
   const [datos, setDatos] = useState([]);
 
@@ -19,44 +25,6 @@ export const TableEmpleado = () => {
 
     loadData();
   }, [params.id]);
-
-  // function agruparEmpleados(datos) {
-  //   // Objeto para almacenar los datos agrupados
-  //   let agrupados = {};
-
-  //   // Recorrer los grupos de empleados
-  //   datos?.empleados?.forEach((grupo) => {
-  //     grupo?.forEach((empleado) => {
-  //       // Obtener la fábrica y el tipo de pago del empleado
-  //       const fabrica = empleado?.fabrica_sucursal;
-  //       const tipoPago = empleado?.termino_pago;
-
-  //       // Verificar si la fábrica ya está en el objeto agrupados
-  //       if (!agrupados[fabrica]) {
-  //         agrupados[fabrica] = {
-  //           fabrica_sucursal: fabrica,
-  //           empleados: [],
-  //         };
-  //       }
-
-  //       // Agregar empleado al arreglo correspondiente
-  //       agrupados[fabrica]?.empleados?.push({
-  //         nombre: empleado?.nombre,
-  //         apellido: empleado?.apellido,
-  //         dni: empleado?.dni,
-  //         fecha_ingreso: empleado?.fecha_ingreso,
-  //         sector_trabajo: empleado?.sector_trabajo,
-  //         termino_pago: tipoPago,
-  //         fecha: empleado.date,
-  //         sueldo:
-  //           tipoPago === "mensual" ? empleado?.sueldo[0] : empleado?.sueldo,
-  //       });
-  //     });
-  //   });
-
-  //   // Convertir el objeto agrupados a un array
-  //   return Object.values(agrupados);
-  // }
 
   function agruparEmpleados(datos) {
     // Objeto para almacenar los datos agrupados
@@ -98,7 +66,6 @@ export const TableEmpleado = () => {
 
   // Llamar a la función y obtener el resultado
   const resultado = agruparEmpleados(datos);
-  console.log("resultado", resultado);
 
   const [filtroFabrica, setFiltroFabrica] = useState("");
   const [filtroNombreApellido, setFiltroNombreApellido] = useState("");
@@ -150,20 +117,98 @@ export const TableEmpleado = () => {
     filtrarResultados();
   }, [filtroFabrica, filtroNombreApellido, datos]);
 
+  const [searchTerm, setSearchTerm] = useState(""); // Para la búsqueda
+  const [selectedFabricaSucursal, setSelectedFabricaSucursal] = useState("");
+  // Manejar búsqueda
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value); // Actualizar el término de búsqueda
+  };
+
+  const filteredGastos = datos?.empleados?.filter(
+    (venta) =>
+      // venta.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      // venta.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      `${venta.nombre} ${venta.apellido}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) &&
+      (selectedFabricaSucursal === "" ||
+        venta.fabrica_sucursal === selectedFabricaSucursal)
+  );
+
+  // Agrupar empleados por fabrica_sucursal
+  const empleadosPorFabrica = filteredGastos?.reduce((acc, empleado) => {
+    const fabrica = empleado.fabrica_sucursal;
+    if (!acc[fabrica]) {
+      acc[fabrica] = [];
+    }
+    acc[fabrica].push(empleado);
+    return acc;
+  }, {});
+
+  const calculateAntiquity = (startDate) => {
+    const start = new Date(startDate);
+    const now = new Date();
+    const diffTime = Math.abs(now - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    const years = Math.floor(diffDays / 365);
+    const months = Math.floor((diffDays % 365) / 30);
+
+    return { years, months };
+  };
+
+  console.log("empleados", empleadosPorFabrica);
   return (
     <div>
-      <div className="flex gap-5 mx-5 my-5">
+      <div className="flex flex-col gap-2 md:hidden bg-white mx-3 my-2 px-2 py-2">
+        {" "}
+        <div className="flex flex-col gap-1 py-2 px-3">
+          <label htmlFor="" className="uppercase font-bold text-xs">
+            Filtrar por fabrica
+          </label>
+          <select
+            className="uppercase text-xs font-semibold outline-none border py-3 px-2 focus:border-blue-500"
+            value={selectedFabricaSucursal}
+            onChange={(e) => setSelectedFabricaSucursal(e.target.value)}
+          >
+            <option
+              className="uppercase text-xs font-extrabold text-blue-500"
+              value=""
+            >
+              Todas las fábricas/sucursales
+            </option>
+            {fabricas.map((fab, index) => (
+              <option
+                className="uppercase text-xs font-bold"
+                key={index}
+                value={fab.nombre}
+              >
+                {fab.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+        <input
+          type="text"
+          placeholder="Buscar por nombre de fábrica..."
+          className="px-5 w-1/5 py-2 rounded-xl font-semibold text-sm outline-none focus:border-blue-500 max-md:w-auto border"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </div>
+
+      <div className="max-md:hidden flex gap-5 mx-5 my-5 max-md:flex-col max-md:w-auto max-md:gap-2 max-md:bg-white max-md:px-2 max-md:py-4">
         <input
           type="text"
           placeholder="Buscar por nombre y apellido..."
-          className="px-5 w-1/5 py-2 rounded-xl font-semibold text-sm outline-none focus:border-blue-500 border"
+          className="px-5 w-1/5 py-2 rounded-xl font-semibold text-sm outline-none focus:border-blue-500 max-md:w-auto border"
           onChange={handleFiltroNombreApellidoChange}
           value={filtroNombreApellido}
         />
         <input
           type="text"
           placeholder="Buscar por nombre de fábrica..."
-          className="px-5 w-1/5 py-2 rounded-xl font-semibold text-sm outline-none focus:border-blue-500 border"
+          className="px-5 w-1/5 py-2 rounded-xl font-semibold text-sm outline-none focus:border-blue-500 max-md:w-auto border"
           onChange={handleFiltroFabricaChange}
           value={filtroFabrica}
         />
@@ -171,7 +216,7 @@ export const TableEmpleado = () => {
           value={filtroFabrica}
           onChange={handleFiltroFabricaChange}
           className="px-5 w-1/5 py-2 rounded-xl capitalize font-semibold text-sm
-          outline-none focus:border-blue-500 border"
+          outline-none focus:border-blue-500 max-md:w-auto border"
         >
           <option className="font-bold capitalize" value="">
             Seleccionar fábrica
@@ -189,14 +234,14 @@ export const TableEmpleado = () => {
       </div>
       {resultadosFiltrados.map((r) => {
         return (
-          <div className="bg-white my-5 mx-5 py-5 px-5">
+          <div className="bg-white my-5 mx-5 py-5 px-5 max-md:hidden">
             <p className="uppercase text-gray-500 font-semibold mb-2">
               Fabrica{" "}
               <span className="font-bold text-blue-500">
                 {r.fabrica_sucursal}
               </span>
             </p>
-            <div className="flex flex-col gap-1 overflow-x-auto scroll-bar">
+            <div className="flex flex-col gap-1 overflow-x-auto scroll-bar max-md:hidden">
               {r.empleados.map((empleado, index) => {
                 const calculateAntiquity = (startDate, endDate) => {
                   try {
@@ -241,7 +286,10 @@ export const TableEmpleado = () => {
                 }
 
                 return (
-                  <div className="flex flex-col gap-1 text-xs" key={index}>
+                  <div
+                    className="flex flex-col max-md:w-[1220px] gap-1 text-xs"
+                    key={index}
+                  >
                     {empleado.termino_pago === "mensual"
                       ? index === 0 && (
                           <div
@@ -346,7 +394,7 @@ export const TableEmpleado = () => {
                           </div>
                         )}
                     {empleado.termino_pago === "mensual" ? (
-                      <div className="flex gap-5 border py-1 px-2">
+                      <div className="flex gap-5  py-1 px-2">
                         <p className="capitalize font-bold text-gray-700 w-[15%]">
                           {empleado.nombre} {empleado.apellido}
                         </p>
@@ -568,6 +616,254 @@ export const TableEmpleado = () => {
           </div>
         );
       })}
+
+      <div className="bg-white my-2 mx-3 max-md:overflow-x-auto ma">
+        {empleadosPorFabrica &&
+          Object.keys(empleadosPorFabrica).map((fabrica, index) => (
+            <div className="" key={index}>
+              <h2 className="px-5 py-4 uppercase text-sm font-bold text-blue-500">
+                <span className="text-gray-600">Fabrica/sucursal</span>{" "}
+                {fabrica}
+              </h2>
+              <table className="table">
+                <thead>
+                  <tr className="text-gray-800">
+                    <th>Empleado</th>
+                    <th>Fabrica</th>
+                    <th>Sector/rol</th>
+                    {/* <th>Fecha ingreso</th>
+                  <th>Antigüedad trabajando</th> */}
+                    <th>Premio prod.</th>
+                    <th>Premio Asist.</th>
+                    <th>Comida</th>
+                    <th>Total Antig.</th>
+                    <th>Desc del 5</th>
+                    <th>Desc del 20</th>
+                    <th>Banco</th>
+                    {empleadosPorFabrica[fabrica].some(
+                      (g) => g?.termino_pago === "quincenal"
+                    ) && <th>Quin 5/pagar</th>}
+                    {empleadosPorFabrica[fabrica].some(
+                      (g) => g?.termino_pago === "mensual"
+                    ) && <th>Sueldo basico</th>}
+                    {/* <th>Quin 20/pagar</th> */}
+                    {empleadosPorFabrica[fabrica].some(
+                      (g) => g?.termino_pago === "quincenal"
+                    ) && <th>Quin 20/pagar</th>}
+                    <th>Sueldo final</th>
+                  </tr>
+                </thead>
+                <tbody className="text-xs capitalize">
+                  {empleadosPorFabrica[fabrica].map((g) => {
+                    // Calcular la antigüedad
+                    const { years, months } = calculateAntiquity(
+                      g?.fecha_ingreso
+                    );
+
+                    let total_antiguedad = 0;
+
+                    if (g?.termino_pago === "mensual") {
+                      total_antiguedad =
+                        Number(g?.sueldo[0]?.sueldo_basico || 0) *
+                        (0.01 * years);
+                    } else {
+                      total_antiguedad =
+                        (Number(
+                          g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
+                        ) +
+                          Number(
+                            g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte ||
+                              0
+                          )) *
+                        (0.01 * years);
+                    }
+
+                    let sueldo = 0;
+
+                    if (g?.termino_pago === "quincenal") {
+                      // Calcular sueldo quincenal
+                      sueldo =
+                        Number(
+                          g?.sueldo[0]?.quincena_cinco[0]?.quincena_cinco || 0
+                        ) +
+                          Number(g?.sueldo[0]?.quincena_cinco[0]?.otros || 0) +
+                          Number(
+                            g?.sueldo[0]?.quincena_cinco[0]
+                              ?.premio_produccion || 0
+                          ) +
+                          Number(
+                            g?.sueldo[0]?.quincena_cinco[0]
+                              ?.premio_asistencia || 0
+                          ) +
+                          Number(
+                            g?.sueldo[1]?.quincena_veinte[0]?.quincena_veinte ||
+                              0
+                          ) +
+                          Number(
+                            g?.sueldo[1]?.quincena_veinte[0]?.comida || 0
+                          ) +
+                          Number(total_antiguedad || 0) -
+                          Number(
+                            g?.sueldo[1]?.quincena_veinte[0]
+                              ?.descuento_del_veinte || 0
+                          ) -
+                          Number(
+                            g?.sueldo[0]?.quincena_cinco[0]
+                              ?.descuento_del_cinco || 0
+                          ) || 0;
+                    } else if (g?.termino_pago === "mensual") {
+                      // Calcular sueldo mensual
+                      sueldo =
+                        Number(g?.sueldo[0]?.sueldo_basico || 0) +
+                          Number(total_antiguedad || 0) +
+                          Number(g?.sueldo[0]?.comida || 0) +
+                          Number(g?.sueldo[0]?.premio_produccion || 0) +
+                          Number(g?.sueldo[0]?.premio_asistencia || 0) +
+                          Number(g?.sueldo[0]?.otros || 0) -
+                          Number(g?.sueldo[0]?.descuento_del_cinco || 0) || 0;
+                    }
+
+                    return (
+                      <tr key={g?._id}>
+                        <td className="font-semibold">
+                          {g?.nombre} {g?.apellido}
+                        </td>
+                        <td className="font-semibold">{g?.fabrica_sucursal}</td>
+                        <td className="font-semibold">{g?.sector_trabajo}</td>
+                        <td className="font-bold text-green-500">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]
+                                    ?.premio_produccion || 0
+                                )
+                              : Number(g?.sueldo[0]?.premio_produccion || 0)
+                          )}
+                        </td>
+                        <td className="font-semibold text-green-500">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]
+                                    ?.premio_asistencia || 0
+                                )
+                              : Number(g?.sueldo[0]?.premio_asistencia || 0)
+                          )}
+                        </td>
+                        <td className="font-semibold text-green-500">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
+                                  g?.sueldo[1]?.quincena_veinte[0]?.comida || 0
+                                )
+                              : Number(g?.sueldo[0]?.comida || 0)
+                          )}
+                        </td>
+                        <td className="font-semibold text-blue-500">
+                          {formatearDinero(total_antiguedad)}
+                        </td>
+                        <td className="font-semibold text-red-600">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]
+                                    ?.descuento_del_cinco || 0
+                                )
+                              : Number(g?.sueldo[0]?.descuento_del_cinco || 0)
+                          )}
+                        </td>
+                        <td className="font-semibold text-red-600">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
+                                  g?.sueldo[1]?.quincena_veinte[0]
+                                    ?.descuento_del_veinte || 0
+                                )
+                              : Number(0)
+                          )}
+                        </td>
+
+                        <td className="font-semibold text-red-600">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]?.banco || 0
+                                )
+                              : Number(g?.sueldo[0]?.banco || 0)
+                          )}
+                        </td>
+                        <td className="font-semibold">
+                          {formatearDinero(
+                            g?.termino_pago === "quincenal"
+                              ? Number(
+                                  g?.sueldo[0]?.quincena_cinco[0]
+                                    ?.quincena_cinco || 0
+                                ) +
+                                  Number(
+                                    g?.sueldo[0]?.quincena_cinco[0]?.otros || 0
+                                  ) +
+                                  Number(
+                                    g?.sueldo[0]?.quincena_cinco[0]
+                                      ?.premio_produccion || 0
+                                  ) +
+                                  Number(
+                                    g?.sueldo[0]?.quincena_cinco[0]
+                                      ?.premio_asistencia || 0
+                                  ) +
+                                  Number(total_antiguedad) -
+                                  Number(
+                                    g?.sueldo[0]?.quincena_cinco[0]?.banco || 0
+                                  ) -
+                                  Number(
+                                    g?.sueldo[0]?.quincena_cinco[0]
+                                      ?.descuento_del_cinco || 0
+                                  )
+                              : Number(g?.sueldo[0]?.sueldo_basico || 0) +
+                                  Number(total_antiguedad || 0) +
+                                  Number(g?.sueldo[0]?.comida || 0) +
+                                  Number(g?.sueldo[0]?.premio_produccion || 0) +
+                                  Number(g?.sueldo[0]?.premio_asistencia || 0) +
+                                  Number(g?.sueldo[0]?.otros || 0) -
+                                  Number(g?.sueldo[0]?.banco || 0) -
+                                  Number(g?.sueldo[0]?.descuento_del_cinco || 0)
+                          )}
+                        </td>
+                        {g.termino_pago === "mensual" ? (
+                          ""
+                        ) : (
+                          <td className="font-semibold">
+                            {formatearDinero(
+                              g?.termino_pago === "quincenal"
+                                ? Number(
+                                    g?.sueldo[1]?.quincena_veinte[0]
+                                      ?.quincena_veinte || 0
+                                  ) +
+                                    Number(
+                                      g?.sueldo[1]?.quincena_veinte[0]
+                                        ?.comida || 0
+                                    ) -
+                                    Number(
+                                      g?.sueldo[1]?.quincena_veinte[0]
+                                        ?.descuento_del_veinte || 0
+                                    )
+                                : Number(0)
+                            )}
+                          </td>
+                        )}
+                        <td className="font-semibold">
+                          <span className="bg-blue-500 py-1 px-2 rounded text-white">
+                            {" "}
+                            {formatearDinero(sueldo)}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

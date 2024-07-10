@@ -73,14 +73,14 @@ export const PageBancoCheque = () => {
   };
 
   return (
-    <section className="py-10 px-5 flex flex-col gap-6">
-      <div className="flex gap-5 items-center bg-white py-2 px-4">
+    <section className="py-10 px-5 flex flex-col gap-6 min-h-screen max-h-full h-full">
+      <div className="flex gap-5 items-center bg-white py-2 px-4 max-md:flex-col max-md:items-start">
         {" "}
         <div className="font-bold text-blue-500">
           Filtrar movimientos de cheques del banco{" "}
-          <p className="text-gray-800 capitalize">{banco.nombre}</p>
+          <p className="text-gray-800 capitalize">{banco.nombre}.</p>
         </div>
-        <div className="flex gap-2 w-1/5">
+        <div className="flex gap-2 w-1/5 max-md:w-auto">
           <div className="bg-white py-2 px-3 text-sm font-bold w-full border border-blue-500 cursor-pointer flex items-center">
             <input
               value={fechaInicio}
@@ -101,7 +101,7 @@ export const PageBancoCheque = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-5 bg-white py-5 px-5">
+      <div className="grid grid-cols-4 gap-5 bg-white py-5 px-5 max-md:grid-cols-1">
         <div className="bg-white border-blue-500 border py-5 px-5">
           <p className="font-semibold">
             Banco:{" "}
@@ -126,7 +126,7 @@ export const PageBancoCheque = () => {
         </p>
       </div>
 
-      <div className="bg-white">
+      <div className="bg-white max-md:overflow-x-auto">
         <table className="table bg-white text-sm">
           <thead className="">
             <tr>

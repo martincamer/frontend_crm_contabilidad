@@ -6,7 +6,7 @@ import { NavegacionLink } from "../components/ui/NavegacionLink";
 
 export const EmpleadosDatos = () => {
   return (
-    <section>
+    <section className="max-md:min-h-screen max-md:max-h-full max-md:h-full">
       <Navegacion>
         <div className="flex">
           <NavegacionLink
