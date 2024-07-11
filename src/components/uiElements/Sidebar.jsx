@@ -38,12 +38,23 @@ export const SideBar = () => {
         </button>
         <button
           type="button"
-          className={`flex gap-2 ${
+          className={`flex gap-2 max-md:hidden ${
             location.pathname === "/" ? "text-blue-600" : "text-gray-700"
           } font-bold items-center text-base hover:text-blue-600`}
         >
           <MdOutlinePersonPin className="text-xl" />{" "}
           <Link to={"/empleados"}>Empleados</Link>
+        </button>
+        <button
+          type="button"
+          className={`flex gap-2 md:hidden ${
+            location.pathname === "/empleados-mobile"
+              ? "text-blue-600"
+              : "text-gray-700"
+          } font-bold items-center text-base hover:text-blue-600`}
+        >
+          <MdOutlinePersonPin className="text-xl" />{" "}
+          <Link to={"/empleados-mobile"}>Empleados</Link>
         </button>
         <button
           type="button"

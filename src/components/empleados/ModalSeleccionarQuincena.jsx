@@ -72,7 +72,7 @@ export const ModalSeleccionarQuincena = () => {
 
   return (
     <dialog id="my_modal_seleccionar_quincena" className="modal">
-      <div className="modal-box rounded-none max-w-md md:block hidden">
+      <div className="modal-box rounded-none max-w-md">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕
