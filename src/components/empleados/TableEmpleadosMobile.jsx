@@ -758,31 +758,6 @@ export const TableEmpleadosMobile = () => {
                                 handleObtenerId(g._id);
                                 document
                                   .getElementById(
-                                    "my_modal_observacion_empleado"
-                                  )
-                                  .showModal();
-                              }}
-                              className="hover:text-blue-500 font-bold"
-                              type="button"
-                            >
-                              Observación empleado
-                            </button>
-                          </li>
-                          <li className="max-md:hidden">
-                            <label
-                              onClick={() => handleObtenerId(g._id)}
-                              htmlFor="my-drawer-editar"
-                              className="hover:text-blue-500 font-bold"
-                            >
-                              Editar empleado
-                            </label>
-                          </li>
-                          <li className="max-md:hidden">
-                            <button
-                              onClick={() => {
-                                handleObtenerId(g._id);
-                                document
-                                  .getElementById(
                                     "my_modal_editar_estado_empleado"
                                   )
                                   .showModal();
@@ -793,7 +768,7 @@ export const TableEmpleadosMobile = () => {
                               Cambiar el estado
                             </button>
                           </li>
-                          <li className="max-md:hidden">
+                          <li className="">
                             <button
                               onClick={() => {
                                 handleObtenerId(g._id);
@@ -837,6 +812,8 @@ export const TableEmpleadosMobile = () => {
         idObtenida={idObtenida}
         message={"¿Deseas eliminar el empleado?"}
       />
+
+      <ModalComprobante idObtenida={idObtenida} />
 
       <ModalVerEstadisticas
         empleados={empleados}

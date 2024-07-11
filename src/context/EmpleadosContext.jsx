@@ -13,8 +13,10 @@ import {
   getSectoresRequest,
   createSectorRequest,
   createFabricaRequest,
+  deleteReciboRequest,
 } from "../api/empleados"; // Asegúrate de importar las funciones API correctas
 import { showSuccessToast } from "../helpers/toast";
+import axios from "axios";
 
 const EmpleadoContext = createContext();
 
@@ -33,6 +35,7 @@ export function EmpleadoProvider({ children }) {
   const [fabricas, setFabricas] = useState([]);
   const [sectores, setSectores] = useState([]);
   const [error, setError] = useState("");
+  const [empleado, setEmpleado] = useState([]);
 
   const getEmpleados = async () => {
     try {
@@ -60,6 +63,17 @@ export function EmpleadoProvider({ children }) {
       }
     } catch (error) {
       setError("Error al eliminar empleado");
+    }
+  };
+
+  const deleteRecibo = async (empleadoId, reciboId) => {
+    try {
+      const res = await deleteReciboRequest(empleadoId, reciboId);
+      console.log("asdasd", res);
+      setEmpleado(res.data.empleado);
+    } catch (error) {
+      console.error("Error al eliminar recibo:", error);
+      setError("Error al eliminar recibo");
     }
   };
 
@@ -228,6 +242,9 @@ export function EmpleadoProvider({ children }) {
         sectores,
         createSectores,
         createFabricas,
+        deleteRecibo,
+        empleado,
+        setEmpleado,
       }}
     >
       {children}

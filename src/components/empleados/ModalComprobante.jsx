@@ -77,7 +77,7 @@ export const ModalComprobante = ({ idObtenida }) => {
 
       // Cerrar el modal y limpiar el formulario
       document.getElementById("my_modal_nuevo_comprobante").close();
-      document.getElementById("my_modal_comprobante").showModal();
+      // document.getElementById("my_modal_comprobante").showModal();
       document.getElementById("my_modal_cobrado").showModal();
 
       reset();

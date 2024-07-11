@@ -38,3 +38,6 @@ export const createFabricaRequest = async (fabrica) =>
 export const getSectoresRequest = async () => axios.get("/sectores");
 
 export const getFabricasRequest = async () => axios.get("/fabricas");
+
+export const deleteReciboRequest = async (idEmpleado, idRecibo) =>
+  axios.delete(`/empleados/${idEmpleado}/recibos/${idRecibo}`);

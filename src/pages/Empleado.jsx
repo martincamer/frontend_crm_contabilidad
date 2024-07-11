@@ -11,11 +11,17 @@ import { Dropdown } from "../components/ui/Dropdown";
 import { PDFViewer } from "@react-pdf/renderer";
 import { ComprobantePago } from "../components/comprobantes/ComprobantePago";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useModal } from "../helpers/modal";
+import { useObtenerId } from "../helpers/obtenerId";
+import ModalEliminar from "../components/ui/ModalEliminar";
 
 export const Empleado = () => {
   const params = useParams();
-  const { getEmpleado } = useEmpleado();
-  const [empleado, setEmpleado] = useState([]);
+  const { getEmpleado, deleteRecibo, empleado, setEmpleado } = useEmpleado();
+
+  const { isOpen, openModal, closeModal } = useModal();
+
+  const { handleObtenerId, idObtenida } = useObtenerId();
 
   useEffect(() => {
     async function loadData() {
@@ -520,7 +526,7 @@ export const Empleado = () => {
           </div>
         </div>
 
-        <div className="bg-white my-2 mx-3 overflow-x-auto">
+        <div className="bg-white my-2 mx-3 overflow-x-auto overflow-y-auto scroll-bar h-[50vh]">
           <table className="table">
             <thead>
               <tr className="text-gray-800">
@@ -542,13 +548,27 @@ export const Empleado = () => {
                   <th>{updateFecha(g?.created_at)}</th>
                   <td>
                     <Dropdown>
-                      <li className="text-center">
+                      <li className="">
                         <button
                           type="button"
-                          className="font-semibold bg-blue-500 py-2 px-3 text-center text-white rounded-full text-sm"
+                          className="font-bold text-xs bg-blue-500 py-2 px-3 text-center text-white rounded-md w-full"
                           onClick={() => handleOpenModal(g)}
                         >
                           Ver comprobante
+                        </button>
+                      </li>
+                      <li className="">
+                        <button
+                          type="button"
+                          className="font-bold text-xs bg-red-500 py-2 px-3 text-center text-white rounded-md w-full"
+                          // onClick={() => {
+                          //   {
+                          //     handleObtenerId(idObtenida), openModal();
+                          //   }
+                          // }}
+                          onClick={() => deleteRecibo(params.id, g._id)}
+                        >
+                          Eliminar
                         </button>
                       </li>
                     </Dropdown>
@@ -558,6 +578,14 @@ export const Empleado = () => {
             </tbody>
           </table>
         </div>
+
+        <ModalEliminar
+          closeModal={closeModal}
+          idObtenida={idObtenida}
+          isOpen={isOpen}
+          message={"¿Estas seguro de eliminar el comprobante?"}
+          deleteTodo={""}
+        />
       </div>
 
       {totalPages > 1 && (

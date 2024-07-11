@@ -939,7 +939,7 @@ export const TableEmpleados = () => {
       <ModalGuardarDatos empleados={empleados} />
       <ModalEstadoEmpleados idObtenida={idObtenida} />
       <ModalComprobante idObtenida={idObtenida} />
-      <ModalComprobantePago idObtenida={idObtenida} />
+      {/* <ModalComprobantePago idObtenida={idObtenida} /> */}
       <ModalPagado />
 
       <ModalEliminar

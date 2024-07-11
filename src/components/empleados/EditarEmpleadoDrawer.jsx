@@ -7,8 +7,8 @@ import { Submit } from "../../components/ui/Submit";
 import { useEmpleado } from "../../context/EmpleadosContext";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 import { Texto } from "../../components/ui/Texto";
-import dayjs from "dayjs";
 import { IoAdd } from "react-icons/io5";
+import dayjs from "dayjs";
 
 export const EditarEmpleadoDrawer = ({ idObtenida }) => {
   const { register, handleSubmit, watch, setValue } = useForm();

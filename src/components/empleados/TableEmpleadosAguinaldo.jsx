@@ -467,7 +467,7 @@ export const TableEmpleadosAguinaldo = () => {
           </button>
         </div>
       </div>
-      <div className="mx-3 my-3 bg-white py-5 px-5  flex gap-2 w-auto justify-center">
+      <div className="mx-3 my-3 bg-white py-5 px-5  flex gap-2 w-auto justify-center hidden">
         <div className="dropdown">
           <div
             tabIndex={0}
