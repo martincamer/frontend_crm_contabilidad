@@ -376,26 +376,11 @@ export const TableEmpleadosMobile = () => {
   return (
     <div className="md:overflow-y-scroll md:h-[100vh] scroll-bar">
       <div className="flex items-center max-md:flex-col max-md:items-stretch">
-        <div className="bg-white py-2 px-5 my-5 mx-3 max-w-3xl gap-10 flex items-center max-md:flex-col max-md:gap-2">
+        <div className="bg-white py-4 px-5 my-10 mx-3 max-w-3xl gap-10 flex items-center max-md:flex-col max-md:gap-2">
           <p className="text-xs font-bold text-blue-500">
             Mas opciones empleados
           </p>
           <div className="flex gap-2">
-            <div className="dropdown max-md:hidden">
-              <div
-                tabIndex={0}
-                role="button"
-                className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer max-md:hidden"
-              >
-                <FaRegCalendar className="text-lg" /> Fecha
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-[600px] cursor-pointer mt-2"
-              >
-                <Calendar />
-              </ul>
-            </div>
             <div className="dropdown">
               <div
                 tabIndex={0}
@@ -446,96 +431,6 @@ export const TableEmpleadosMobile = () => {
             >
               <FaSignal className="text-base" /> Estadisticas
             </div>
-            <div className="dropdown max-md:hidden">
-              <div
-                tabIndex={0}
-                role="button"
-                className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
-              >
-                <FaSignal className="text-base" /> Estadisticas
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 cursor-pointer grid grid-cols-2 max-md:grid-cols-1 gap-2 w-[700px] mt-2 max-md:w-[300px]"
-              >
-                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Total a pagar quicena del 5 / efectivo
-                  </p>
-                  <p className="text-blue-500 text-lg font-bold">
-                    {formatearDinero(ingresoTotalQuincenaCinco + ingresoTotal)}
-                  </p>
-                </div>
-
-                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Total a pagar quincena del 20 / efectivo
-                  </p>
-                  <p className="text-blue-500 text-lg font-bold">
-                    {formatearDinero(ingresoTotalQuincenaVeinte)}
-                  </p>
-                </div>
-                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Total a pagar quicena del 5 / banco
-                  </p>
-                  <p className="text-blue-500 text-lg font-bold">
-                    {formatearDinero(
-                      ingresoTotalQuincenaCincoBanco + ingresoTotalQuincenaBanco
-                    )}
-                  </p>
-                </div>
-                <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Total de empleados cargados
-                  </p>
-                  <p className="text-blue-500 text-lg font-bold">
-                    {empleados.length}
-                  </p>
-                </div>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white py-2 px-6 max-md:overflow-y-scroll max-md:mb-3 mx-10 max-md:hidden">
-          <div className="flex gap-3 max-md:flex-col h-[5vh] ">
-            <Link
-              className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
-              to={"/datos-empleados"}
-            >
-              Buscar sueldos mensuales
-            </Link>
-            <button
-              type="button"
-              className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
-              onClick={() => {
-                document.getElementById("my_modal_guardar_datos").showModal();
-              }}
-            >
-              Guardar tabla mensual
-            </button>
-
-            <button
-              type="button"
-              className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
-              onClick={() => {
-                document.getElementById("my_modal_aumento_sueldo").showModal();
-              }}
-            >
-              Aumentar sueldos
-            </button>
-
-            <button
-              type="button"
-              className="text-sm bg-green-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-green-600 transition-all"
-              onClick={() => {
-                document
-                  .getElementById("my_modal_seleccionar_quincena")
-                  .showModal();
-              }}
-            >
-              Imprimir sueldos en cantidad
-            </button>
           </div>
         </div>
       </div>
@@ -545,24 +440,15 @@ export const TableEmpleadosMobile = () => {
           onChange={handleSearch}
           placeholder={"Buscar el empleado por el nombre y apellido.."}
         />
-        <button
-          type="button"
-          className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-blue-600 transition-all max-md:hidden"
-          onClick={() => {
-            document.getElementById("my_modal_recursos_humanos").showModal();
-          }}
-        >
-          Imprimir documento recursos humanos/mensual datos
-        </button>
       </div>
-      <div className="w-2/3">
+      <div className="w-auto">
         {selectedFabricaSucursal && (
-          <div className="bg-white mx-3 my-5 py-3.5 px-3 flex flex-col gap-1">
+          <div className="bg-white mx-3 my-5 py-3.5 px-3 flex flex-col gap-1  h-[10vh] overflow-y-scroll">
             <p className="font-bold text-blue-500 text-lg">
               <span className="text-gray-700">Fabrica/Sucursal</span>{" "}
               <span className="capitalize">{selectedFabricaSucursal}</span>.
             </p>
-            <div className="flex justify-between px-5">
+            <div className="flex flex-col gap-2">
               <p className="font-bold text-blue-500">
                 <p className="text-gray-600">
                   Pagar efectivo quincena del cinco + mensual
@@ -596,7 +482,7 @@ export const TableEmpleadosMobile = () => {
           className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
           to={"/datos-empleados"}
         >
-          Buscar sueldo
+          Filtrar sueldos
         </Link>
         <button
           onClick={() =>
@@ -921,7 +807,7 @@ export const TableEmpleadosMobile = () => {
                               Generar comprobante
                             </button>
                           </li>
-                          <li className="max-md:hidden">
+                          <li>
                             <button
                               onClick={() => {
                                 handleObtenerId(g._id);
@@ -944,12 +830,6 @@ export const TableEmpleadosMobile = () => {
         ))}
       </div>
 
-      {/* <ModalGuardarDatos empleados={empleados} />
-      <ModalEstadoEmpleados idObtenida={idObtenida} />
-      <ModalComprobante idObtenida={idObtenida} />
-      <ModalComprobantePago idObtenida={idObtenida} />
-      <ModalPagado /> */}
-
       <ModalEliminar
         isOpen={isOpen}
         closeModal={closeModal}
@@ -957,15 +837,6 @@ export const TableEmpleadosMobile = () => {
         idObtenida={idObtenida}
         message={"¿Deseas eliminar el empleado?"}
       />
-
-      {/* <EditarEmpleadoDrawer idObtenida={idObtenida} /> */}
-      {/* <ModalEmpleadoObservacion idObtenida={idObtenida} /> */}
-
-      {/* <ModalAumentoSueldo /> */}
-
-      {/* <ModalSeleccionarQuincena />
-      <ModalDocumentoRecursosHumanos empleados={filteredGastos} />
-      <ModalSeleccionarAguinaldo /> */}
 
       <ModalVerEstadisticas
         empleados={empleados}

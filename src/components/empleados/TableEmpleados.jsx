@@ -22,15 +22,13 @@ import { ModalEstadoEmpleados } from "./ModalEstadoEmpleados";
 import { ModalPagado } from "./ModalPagado";
 import { EditarEmpleadoDrawer } from "./EditarEmpleadoDrawer";
 import { ModalEmpleadoObservacion } from "./ModalEmpleadoObservacion";
-import Calendar from "../ui/Calendary";
-import ModalEliminar from "../ui/ModalEliminar";
 import { ModalGuardarDatos } from "./ModalGuardarDatos";
 import { ModalAumentoSueldo } from "./ModalAumentoSueldo";
 import { ModalSeleccionarQuincena } from "./ModalSeleccionarQuincena";
 import { ModalDocumentoRecursosHumanos } from "./ModalDocumentoRecursosHumanos";
 import { ModalSeleccionarAguinaldo } from "./ModalSeleccionarAguinaldo";
-import { ModalEditarEmpleadoMoible } from "./ModalEditarEmpleadoMoible";
-import { ModalCrearEmpleadoMobile } from "./ModalCrearEmpleadoMobile";
+import Calendar from "../ui/Calendary";
+import ModalEliminar from "../ui/ModalEliminar";
 
 export const TableEmpleados = () => {
   const { deleteEmpleado, getEmpleados, empleados, getFabricas, fabricas } =
@@ -507,7 +505,7 @@ export const TableEmpleados = () => {
           </div>
         </div>
         <div className="bg-white py-2 px-6 max-md:overflow-y-scroll max-md:mb-3 mx-10 max-md:hidden">
-          <div className="flex gap-3 max-md:flex-col h-[5vh] ">
+          <div className="flex gap-2">
             <Link
               className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
               to={"/datos-empleados"}
@@ -605,7 +603,7 @@ export const TableEmpleados = () => {
           className="text-sm bg-blue-500 rounded-full py-2 px-6 text-white font-semibold hover:bg-orange-500 transition-all"
           to={"/datos-empleados"}
         >
-          Buscar sueldo
+          Buscar sueldos
         </Link>
         <button
           onClick={() =>
@@ -860,21 +858,6 @@ export const TableEmpleados = () => {
                               Ver empleado completo
                             </Link>
                           </li>
-                          <li>
-                            <button
-                              className="hover:text-blue-500 font-bold"
-                              onClick={() => {
-                                handleObtenerId(g?._id),
-                                  document
-                                    .getElementById(
-                                      "my_modal_editar_empleado_mobile"
-                                    )
-                                    .showModal();
-                              }}
-                            >
-                              Editar empleado
-                            </button>
-                          </li>
                           <li className="max-md:hidden">
                             <button
                               onClick={() => {
@@ -891,7 +874,7 @@ export const TableEmpleados = () => {
                               Observación empleado
                             </button>
                           </li>
-                          <li className="max-md:hidden">
+                          <li>
                             <label
                               onClick={() => handleObtenerId(g._id)}
                               htmlFor="my-drawer-editar"
@@ -983,9 +966,6 @@ export const TableEmpleados = () => {
         ingresoTotalQuincenaCincoBanco={ingresoTotalQuincenaCincoBanco}
         ingresoTotalQuincenaVeinte={ingresoTotalQuincenaVeinte}
       />
-
-      <ModalEditarEmpleadoMoible idObtenida={idObtenida} />
-      <ModalCrearEmpleadoMobile />
     </div>
   );
 };

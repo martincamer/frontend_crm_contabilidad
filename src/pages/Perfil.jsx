@@ -13,7 +13,7 @@ export const Perfil = () => {
 
   return (
     <section className="container mx-auto my-10">
-      <div className="bg-white py-6 px-6 rounded-xl shadow-xl w-1/2 mx-auto flex justify-between">
+      <div className="bg-white py-6 px-6 rounded-xl shadow-xl w-1/2 max-md:mx-5 max-md:w-auto mx-auto flex justify-between">
         <div className="flex gap-3 items-center">
           <img
             src={
@@ -49,11 +49,11 @@ export const Perfil = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white rounded-xl shadow-xl w-1/2 mx-auto mt-5">
+      <div className="bg-white rounded-xl shadow-xl w-1/2 mx-auto mt-5 max-md:mx-5 max-md:w-auto">
         <div className="bg-gray-100 py-8 px-5 rounded-t-xl">
           <p className="text-blue-500 font-semibold text-sm">Mi Perfil</p>
         </div>
-        <div className="bg-white py-8 px-8 gap-2 grid grid-cols-3 rounded-xl">
+        <div className="bg-white py-8 px-8 gap-2 grid grid-cols-3 rounded-xl max-md:grid-cols-2 max-md:gap-8">
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
             Usuario{" "}
             <span className="font-semibold text-slate-400">
@@ -97,7 +97,7 @@ export const Perfil = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-xl w-1/2 mx-auto mt-5">
+      <div className="bg-white rounded-xl shadow-xl w-1/2 mx-auto mt-5 max-md:mx-5 max-md:w-auto">
         <div className="bg-gray-100 py-8 px-5 rounded-t-xl">
           <p className="text-blue-500 font-semibold text-sm">Seguridad</p>
         </div>

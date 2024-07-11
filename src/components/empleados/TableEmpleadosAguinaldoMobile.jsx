@@ -3,29 +3,14 @@ import { FaFilter, FaRegCalendar, FaSignal } from "react-icons/fa";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 import { Dropdown } from "../ui/Dropdown";
 import { Search } from "../ui/Search";
-import { useSearch } from "../../helpers/openSearch";
 import { useObtenerId } from "../../helpers/obtenerId";
 import { useModal } from "../../helpers/modal";
 import { useEmpleado } from "../../context/EmpleadosContext";
-import { ModalComprobante } from "./ModalComprobante";
-import { ModalComprobantePago } from "./ModalComprobantePago";
-import { ModalEstadoEmpleados } from "./ModalEstadoEmpleados";
-import { ModalPagado } from "./ModalPagado";
-import { ModalEmpleadoObservacion } from "./ModalEmpleadoObservacion";
-import { ModalGuardarDatos } from "./ModalGuardarDatos";
-import { ModalAumentoSueldo } from "./ModalAumentoSueldo";
-import { ModalSeleccionarQuincena } from "./ModalSeleccionarQuincena";
-import { ModalDocumentoRecursosHumanos } from "./ModalDocumentoRecursosHumanos";
-import { ModalSeleccionarAguinaldo } from "./ModalSeleccionarAguinaldo";
-import { EditarEmpleadoDrawerAguinaldo } from "./EditarEmpleadoDrawerAguinaldo";
 import Calendar from "../ui/Calendary";
-import ModalEliminar from "../ui/ModalEliminar";
-import { CgLaptop } from "react-icons/cg";
+import { ModalEditarEmpleadoAguinaldo } from "./ModalEditarEmpleadoAguinaldo";
 
-export const TableEmpleadosAguinaldo = () => {
-  const { click, openSearch } = useSearch();
-  const { deleteEmpleado, getEmpleados, empleados, getFabricas, fabricas } =
-    useEmpleado();
+export const TableEmpleadosAguinaldoMobile = () => {
+  const { getEmpleados, empleados, getFabricas, fabricas } = useEmpleado();
 
   useEffect(() => {
     getEmpleados();
@@ -682,8 +667,14 @@ export const TableEmpleadosAguinaldo = () => {
                         <Dropdown>
                           <li>
                             <label
-                              onClick={() => handleObtenerId(g._id)}
-                              htmlFor="my-drawer-editar-aguinaldo"
+                              onClick={() => {
+                                handleObtenerId(g._id);
+                                document
+                                  .getElementById(
+                                    "my_modal_editar_empleado_mobile_aguinaldo"
+                                  )
+                                  .showModal();
+                              }}
                               className="hover:text-blue-500 font-bold"
                             >
                               Restar banco aguinaldo
@@ -700,34 +691,13 @@ export const TableEmpleadosAguinaldo = () => {
         ))}
       </div>
 
-      {/* Modal editar estado */}
-      {/* <ModalGuardarDatos empleados={empleados} />
-      <ModalEstadoEmpleados idObtenida={idObtenida} />
-      <ModalComprobante idObtenida={idObtenida} />
-      <ModalComprobantePago idObtenida={idObtenida} />
-      <ModalPagado />
-
-      <ModalEliminar
-        isOpen={isOpen}
-        closeModal={closeModal}
-        deleteTodo={deleteEmpleado}
-        idObtenida={idObtenida}
-        message={"¿Deseas eliminar el empleado?"}
-      /> */}
-
-      <EditarEmpleadoDrawerAguinaldo idObtenida={idObtenida} />
-      {/* <ModalEmpleadoObservacion idObtenida={idObtenida} />
-      <ModalAumentoSueldo />
-      <ModalSeleccionarQuincena />
-      <ModalDocumentoRecursosHumanos empleados={filteredGastos} /> */}
-      <ModalSeleccionarAguinaldo />
-
       <ModalVerEstadisticas
         aguinaldoTotal={aguinaldoTotal}
         bancoAguinaldoMensual={bancoAguinaldoMensual}
         bancoAguinaldoQuincenal={bancoAguinaldoQuincenal}
         filteredGastos={filteredGastos}
       />
+      <ModalEditarEmpleadoAguinaldo idObtenida={idObtenida} />
     </div>
   );
 };

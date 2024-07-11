@@ -35,6 +35,7 @@ import { BancoChequeProvider } from "./context/BancoChequesContext";
 import { PageBancoCheque } from "./pages/PageBancoCheque";
 import { EmpleadosAguinaldo } from "./pages/EmpleadosAguinaldos";
 import { EmpleadosMobile } from "./pages/EmpleadosMobile";
+import { EmpleadosAguinaldosMobile } from "./pages/EmpleadosAguinaldosMobile";
 
 function App() {
   return (
@@ -79,6 +80,11 @@ function App() {
                             index
                             path="/empleados-aguinaldo"
                             element={<EmpleadosAguinaldo />}
+                          />
+                          <Route
+                            index
+                            path="/empleados-aguinaldo-mobile"
+                            element={<EmpleadosAguinaldosMobile />}
                           />
                           <Route
                             path="/datos-empleados"
