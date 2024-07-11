@@ -267,6 +267,28 @@ export const Estadistica = () => {
     return accumulator + parseInt(currentValue?.utilizado, 10);
   }, 0);
 
+  const hoy = new Date();
+  console.log(hoy);
+
+  function obtenerMes(fecha) {
+    const meses = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
+    const date = new Date(fecha);
+    return meses[date.getMonth()];
+  }
+
   return (
     <section className="mx-10 my-10 max-md:mx-5">
       <div className="bg-white py-5 px-5 flex justify-between max-md:flex-col">
@@ -887,6 +909,8 @@ export const Estadistica = () => {
         <PDFDownloadLink
           document={
             <PdfComprobantePresupuestos
+              obtenerMes={obtenerMes}
+              // month={hoy}
               // fechaObtenida={fechaObtenida}
               canjes={canjes}
               datos={egresos}
@@ -909,6 +933,8 @@ export const Estadistica = () => {
       />
 
       <ModalImprimirPresupuestos
+        // month={hoy}
+        obtenerMes={obtenerMes}
         canjes={canjes}
         egresos={egresos}
         presupuestoAsignado={presupuestoAsignado}
