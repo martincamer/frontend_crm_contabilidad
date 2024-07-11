@@ -410,6 +410,7 @@ export const TableEmpleadosAguinaldo = () => {
                 </div>
               </ul>
             </div>
+
             <div className="dropdown">
               <div
                 tabIndex={0}
@@ -464,6 +465,58 @@ export const TableEmpleadosAguinaldo = () => {
           >
             Imprimir aguinaldos
           </button>
+        </div>
+      </div>
+      <div className="mx-3 my-3 bg-white py-5 px-5  flex gap-2 w-auto justify-center">
+        <div className="dropdown">
+          <div
+            tabIndex={0}
+            role="button"
+            className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer"
+          >
+            <FaFilter className="text-base" /> Mas filtrós
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content z-[105] shadow-xl border border-gray-200 py-5 px-5 rounded-none bg-base-100 w-82 cursor-pointer mt-2"
+          >
+            <div className="">
+              <label htmlFor="" className="uppercase font-bold text-xs">
+                Filtrar por fabrica
+              </label>
+              <select
+                className="uppercase text-xs font-semibold outline-none border py-3 px-2 focus:border-blue-500"
+                value={selectedFabricaSucursal}
+                onChange={(e) => setSelectedFabricaSucursal(e.target.value)}
+              >
+                <option
+                  className="uppercase text-xs font-extrabold text-blue-500"
+                  value=""
+                >
+                  Todas las fábricas/sucursales
+                </option>
+                {fabricas.map((fab, index) => (
+                  <option
+                    className="uppercase text-xs font-bold"
+                    key={index}
+                    value={fab.nombre}
+                  >
+                    {fab.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </ul>
+        </div>
+        <div
+          onClick={() => {
+            document.getElementById("my_modal_estadisticas").showModal();
+          }}
+          tabIndex={0}
+          role="button"
+          className="text-xs font-bold text-gray-500 bg-gray-50 border py-2 px-3 flex gap-1 items-center cursor-pointer md:hidden"
+        >
+          <FaSignal className="text-base" /> Estadisticas
         </div>
       </div>
       <div className="max-md:my-2 md:flex">
@@ -668,6 +721,64 @@ export const TableEmpleadosAguinaldo = () => {
       <ModalSeleccionarQuincena />
       <ModalDocumentoRecursosHumanos empleados={filteredGastos} />
       <ModalSeleccionarAguinaldo />
+
+      <ModalVerEstadisticas
+        aguinaldoTotal={aguinaldoTotal}
+        bancoAguinaldoMensual={bancoAguinaldoMensual}
+        bancoAguinaldoQuincenal={bancoAguinaldoQuincenal}
+        filteredGastos={filteredGastos}
+      />
     </div>
+  );
+};
+
+const ModalVerEstadisticas = ({
+  aguinaldoTotal,
+  bancoAguinaldoQuincenal,
+  bancoAguinaldoMensual,
+  filteredGastos,
+}) => {
+  return (
+    <dialog id="my_modal_estadisticas" className="modal">
+      <div className="modal-box w-auto rounded-none py-16">
+        <form method="dialog">
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <div>
+          <p className="font-bold mb-3 text-blue-500">Estadisticas aguinaldo</p>
+        </div>
+        <ul tabIndex={0} className="grid grid-cols-1 gap-3">
+          <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+            <p className="text-sm font-semibold text-gray-700">
+              Total a pagar aguinaldos
+            </p>
+            <p className="text-blue-500 text-lg font-bold">
+              {formatearDinero(aguinaldoTotal)}
+            </p>
+          </div>
+          <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+            <p className="text-sm font-semibold text-gray-700">
+              Total a pagar aguinaldo banco
+            </p>
+            <p className="text-blue-500 text-lg font-bold">
+              {formatearDinero(
+                Number(bancoAguinaldoQuincenal) + Number(bancoAguinaldoMensual)
+              )}
+            </p>
+          </div>
+
+          <div className="border border-gray-200 bg-blue-50/50 py-4 px-4 flex flex-col gap-1 flex-1">
+            <p className="text-sm font-semibold text-gray-700">
+              Total de empleados cargados
+            </p>
+            <p className="text-blue-500 text-lg font-bold">
+              {filteredGastos.length}
+            </p>
+          </div>
+        </ul>
+      </div>
+    </dialog>
   );
 };

@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  Image,
-  Font,
-} from "@react-pdf/renderer";
-import logo from "../../../public/logo.png";
+import { Page, Text, View, Document, Font } from "@react-pdf/renderer";
 import normal from "../../fonts/Roboto-Light.ttf";
 import medium from "../../fonts/Roboto-Medium.ttf";
 import bold from "../../fonts/Roboto-Bold.ttf";
@@ -33,8 +24,6 @@ Font.register({
 });
 
 export const ComprobanteRecursosHumanos = ({ empleados }) => {
-  // Estilos para el documento PDF
-
   return (
     <Document
       style={{
@@ -95,9 +84,9 @@ export const ComprobanteRecursosHumanos = ({ empleados }) => {
                     )) *
                   (0.01 * antiquity.years);
 
-                console.log("total", total_antiguedad);
                 return (
                   <View
+                    key={empleado.nombre}
                     style={{
                       padding: 5,
                       border: "1px solid #000",

@@ -14,7 +14,6 @@ import medium from "../../fonts/Roboto-Medium.ttf";
 import bold from "../../fonts/Roboto-Bold.ttf";
 import { formatearDinero } from "../../helpers/FormatearDinero";
 import { updateFecha } from "../../helpers/FechaUpdate";
-import { format } from "date-fns";
 
 Font.register({
   family: "Roboto",

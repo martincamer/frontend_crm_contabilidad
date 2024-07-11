@@ -16,10 +16,10 @@ import { IoAdd } from "react-icons/io5";
 import dayjs from "dayjs";
 
 export const Empleados = () => {
-  const { register, handleSubmit, watch } = useForm();
-
   const { createEmpleado, sectores, getSectores, fabricas, getFabricas } =
     useEmpleado();
+
+  const { register, handleSubmit, watch } = useForm();
 
   useEffect(() => {
     getSectores();
@@ -183,9 +183,7 @@ export const Empleados = () => {
       };
 
       await createEmpleado(clienteData);
-    } catch (error) {
-      console.error("Error creating product:", error);
-    }
+    } catch (error) {}
   };
 
   return (

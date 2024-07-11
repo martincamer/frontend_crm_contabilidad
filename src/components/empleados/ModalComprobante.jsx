@@ -15,9 +15,7 @@ export const ModalComprobante = ({ idObtenida }) => {
       try {
         const res = await getEmpleado(idObtenida);
         setEmpleado(res);
-      } catch (error) {
-        console.error("Error fetching employee:", error);
-      }
+      } catch (error) {}
     }
     loadData();
   }, [idObtenida, empleados]);

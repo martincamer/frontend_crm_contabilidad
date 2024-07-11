@@ -183,7 +183,7 @@ export const EmpleadosAguinaldo = () => {
   return (
     <section>
       <Navegacion>
-        <div>
+        <div className="">
           <NavegacionLink
             link={"/empleados-aguinaldo"}
             estilos={

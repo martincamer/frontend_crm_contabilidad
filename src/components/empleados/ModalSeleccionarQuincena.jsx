@@ -70,11 +70,9 @@ export const ModalSeleccionarQuincena = () => {
     setSelectedQuincena(e.target.value);
   };
 
-  console.log("fabrica", empleadosFiltrados);
-
   return (
     <dialog id="my_modal_seleccionar_quincena" className="modal">
-      <div className="modal-box rounded-none max-w-md">
+      <div className="modal-box rounded-none max-w-md md:block hidden">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕

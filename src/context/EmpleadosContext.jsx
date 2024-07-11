@@ -48,9 +48,7 @@ export function EmpleadoProvider({ children }) {
     try {
       const res = await getEmpleadoRequest(id);
       return res.data;
-    } catch (error) {
-      console.error("Error al obtener empleado:", error);
-    }
+    } catch (error) {}
   };
 
   const deleteEmpleado = async (id) => {
@@ -61,7 +59,6 @@ export function EmpleadoProvider({ children }) {
         showSuccessToast("Empleado eliminado correctamente");
       }
     } catch (error) {
-      console.error("Error al eliminar empleado:", error);
       setError("Error al eliminar empleado");
     }
   };

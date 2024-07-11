@@ -31,9 +31,7 @@ export const ModalEstadoEmpleados = ({ idObtenida }) => {
       await updateEmpleadoEstado(idObtenida, estadoData);
 
       document.getElementById("my_modal_editar_estado_empleado").close();
-    } catch (error) {
-      console.error("Error creating product:", error);
-    }
+    } catch (error) {}
   };
 
   return (
