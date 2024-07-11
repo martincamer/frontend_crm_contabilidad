@@ -27,6 +27,27 @@ export function HomeApp() {
   };
 
   const fechaHoy = obtenerFechaHoyFormato();
+  const hoy = new Date();
+  console.log(hoy);
+
+  const obtenerMes = (fecha) => {
+    const meses = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
+    const date = new Date(fecha);
+    return meses[date.getMonth()];
+  };
 
   const [egresos, setEgresos] = useState(
     JSON.parse(localStorage.getItem("egresos")) || []
@@ -575,7 +596,7 @@ export function HomeApp() {
                     </span>
                   )}
                 </td>
-                <td className="space-x-2 gap-2">
+                <td className="space-x-2 gap-2 max-md:flex max-md:items-center max-md:justify-center">
                   {editandoIndice === index ? (
                     <>
                       <button
@@ -681,7 +702,7 @@ export function HomeApp() {
           </div>
           {/* Agregar más campos según sea necesario */}
           <button
-            className="bg-blue-500 py-1 px-2 text-white uppercase rounded-xl text-xs font-bold"
+            className="bg-blue-500 py-1 max-md:py-2 px-2 text-white uppercase rounded-xl text-xs font-bold"
             type="submit"
           >
             Agregar Fila
@@ -780,7 +801,7 @@ export function HomeApp() {
                   )}
                 </td>
 
-                <td className="space-x-2 gap-2">
+                <td className="space-x-2 gap-2 max-md:flex max-md:items-center max-md:justify-center">
                   {editandoIndiceCanjes === index ? (
                     <>
                       <button
@@ -861,7 +882,7 @@ export function HomeApp() {
             />
           </div>
           <button
-            className="bg-blue-500 py-1 px-2 text-white uppercase rounded-xl text-xs font-bold"
+            className="bg-blue-500 py-1 max-md:py-2 px-2 text-white uppercase rounded-xl text-xs font-bold"
             type="submit"
           >
             Agregar Fila canje
@@ -892,7 +913,8 @@ export function HomeApp() {
       />
 
       <ModalImprimirPresupuestos
-        month={fechaHoy}
+        month={hoy}
+        obtenerMes={obtenerMes}
         canjes={canjes}
         egresos={egresos}
         presupuestoAsignado={presupuestoAsignado}

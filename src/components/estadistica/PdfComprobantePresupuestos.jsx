@@ -28,6 +28,7 @@ export const PdfComprobantePresupuestos = ({
   canjes,
   data,
   month,
+  obtenerMes,
 }) => {
   const totalUtilizadoCanjes = canjes?.reduce((accumulator, currentValue) => {
     return accumulator + parseInt(currentValue?.utilizado, 10);
@@ -36,25 +37,6 @@ export const PdfComprobantePresupuestos = ({
   const totalUtilizadoNormal = datos?.reduce((accumulator, currentValue) => {
     return accumulator + parseInt(currentValue?.utilizado, 10);
   }, 0);
-
-  const obtenerMes = (fecha) => {
-    const meses = [
-      "enero",
-      "febrero",
-      "marzo",
-      "abril",
-      "mayo",
-      "junio",
-      "julio",
-      "agosto",
-      "septiembre",
-      "octubre",
-      "noviembre",
-      "diciembre",
-    ];
-    const date = new Date(fecha);
-    return meses[date.getMonth()];
-  };
 
   return (
     <Document>

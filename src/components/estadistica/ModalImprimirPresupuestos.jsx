@@ -8,6 +8,7 @@ export const ModalImprimirPresupuestos = ({
   fechaObtenida,
   datos,
   month,
+  obtenerMes,
 }) => {
   return (
     <dialog id="my_modal_pdf_estadistica" className="modal ">
@@ -33,6 +34,7 @@ export const ModalImprimirPresupuestos = ({
               presupuestoAsignado={presupuestoAsignado}
               data={datos}
               month={month}
+              obtenerMes={obtenerMes}
             />
           </PDFViewer>
         </div>

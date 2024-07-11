@@ -13,6 +13,9 @@ export const EstadisticasFiltrar = () => {
   const [endDate, setEndDate] = useState("");
   const [datos, setDatos] = useState([]);
 
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+
   const { closeModal, isOpen, openModal } = useModal();
   const { handleObtenerId, idObtenida } = useObtenerId();
 
@@ -24,13 +27,23 @@ export const EstadisticasFiltrar = () => {
     setEndDate(event.target.value);
   };
 
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       const response = await instance.post("/estadisticas/range", {
-        startDate,
-        endDate,
+        selectedYear,
+        selectedMonth,
+        // startDate,
+        // endDate,
       });
 
       setDatos(response.data);
@@ -49,8 +62,6 @@ export const EstadisticasFiltrar = () => {
     return text.substring(0, maxLength);
   };
 
-  console.log(datos);
-
   const deleteDatos = async (id) => {
     try {
       const res = await instance.delete(`/estadisticas/${id}`);
@@ -64,7 +75,7 @@ export const EstadisticasFiltrar = () => {
   };
 
   return (
-    <section className="mx-10 my-10">
+    <section className="mx-10 my-10 max-md:mx-4 max-md:my-0 max-md:py-10 max-md:min-h-screen max-md:max-h-full max-md:h-full">
       <div className="bg-white py-5 px-10">
         <p className="text-blue-500 text-2xl font-bold">
           Filtrar estadisticas mensuales
@@ -76,6 +87,46 @@ export const EstadisticasFiltrar = () => {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Mes
+            </label>
+            <select
+              value={selectedMonth}
+              onChange={handleMonthChange}
+              className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 bg-white"
+            >
+              <option value="">Selecciona un mes</option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Año
+            </label>
+            <input
+              type="number"
+              min="1900"
+              max="2100"
+              step="1"
+              value={selectedYear}
+              onChange={handleYearChange}
+              className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 bg-white"
+              placeholder="Ingrese el año"
+            />
+          </div>
+
+          {/* <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Fecha de Inicio
             </label>
@@ -96,7 +147,7 @@ export const EstadisticasFiltrar = () => {
               value={endDate}
               onChange={handleEndDateChange}
             />
-          </div>
+          </div> */}
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -105,7 +156,7 @@ export const EstadisticasFiltrar = () => {
           </button>
         </form>
       </div>
-      <div className="bg-white my-6">
+      <div className="bg-white my-6 max-md:overflow-x-auto max-md:h-[30vh]">
         <table className="table">
           <thead>
             <tr className="text-gray-800">
