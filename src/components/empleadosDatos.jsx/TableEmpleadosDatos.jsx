@@ -106,7 +106,7 @@ export const TableEmpleadosDatos = () => {
         </div>
       </div>
 
-      <div className="bg-white my-6 mx-3">
+      <div className="bg-white my-6 mx-3 max-md:overflow-x-auto">
         <table className="table">
           <thead>
             <tr className="text-gray-800">

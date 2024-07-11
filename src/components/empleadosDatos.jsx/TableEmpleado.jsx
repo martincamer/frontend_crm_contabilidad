@@ -70,6 +70,11 @@ export const TableEmpleado = () => {
   const [filtroFabrica, setFiltroFabrica] = useState("");
   const [filtroNombreApellido, setFiltroNombreApellido] = useState("");
   const [resultadosFiltrados, setResultadosFiltrados] = useState(resultado);
+  const [selectedTipoPago, setSelectedTipoPago] = useState(""); // Estado para el tipo de pago seleccionado
+
+  const handleTipoPagoChange = (e) => {
+    setSelectedTipoPago(e.target.value); // Actualizar el tipo de pago seleccionado
+  };
 
   // Función para manejar cambios en el filtro select de fábrica
   const handleFiltroFabricaChange = (e) => {
@@ -125,14 +130,13 @@ export const TableEmpleado = () => {
   };
 
   const filteredGastos = datos?.empleados?.filter(
-    (venta) =>
-      // venta.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      // venta.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      `${venta.nombre} ${venta.apellido}`
+    (empleado) =>
+      `${empleado.nombre} ${empleado.apellido}`
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) &&
       (selectedFabricaSucursal === "" ||
-        venta.fabrica_sucursal === selectedFabricaSucursal)
+        empleado.fabrica_sucursal === selectedFabricaSucursal) &&
+      (selectedTipoPago === "" || empleado.termino_pago === selectedTipoPago)
   );
 
   // Agrupar empleados por fabrica_sucursal
@@ -157,12 +161,11 @@ export const TableEmpleado = () => {
     return { years, months };
   };
 
-  console.log("empleados", empleadosPorFabrica);
   return (
-    <div>
-      <div className="flex flex-col gap-2 md:hidden bg-white mx-3 my-2 px-2 py-2">
+    <div className="max-md:py-12">
+      <div className="flex flex-col md:flex-col md:items-start md:px-5 md:py-6 py-4 gap-2 bg-white mx-3 px-2 py-2 mb-10">
         {" "}
-        <div className="flex flex-col gap-1 py-2 px-3">
+        <div className="flex flex-col gap-1 py-2 px-3 md:px-0">
           <label htmlFor="" className="uppercase font-bold text-xs">
             Filtrar por fabrica
           </label>
@@ -188,16 +191,36 @@ export const TableEmpleado = () => {
             ))}
           </select>
         </div>
+        <div className="flex flex-col gap-1 max-md:px-3">
+          <label htmlFor="" className="uppercase font-bold text-xs">
+            Filtrar por termino de pago
+          </label>
+          <select
+            value={selectedTipoPago}
+            onChange={handleTipoPagoChange}
+            className="uppercase text-xs font-semibold outline-none border py-3 px-2 focus:border-blue-500"
+          >
+            <option className="font-bold text-blue-500" value="">
+              Todos los tipos de pago
+            </option>
+            <option className="font-semibold" value="quincenal">
+              Quincenal
+            </option>
+            <option className="font-semibold" value="mensual">
+              Mensual
+            </option>
+          </select>
+        </div>
         <input
           type="text"
           placeholder="Buscar por nombre de fábrica..."
-          className="px-5 w-1/5 py-2 rounded-xl font-semibold text-sm outline-none focus:border-blue-500 max-md:w-auto border"
+          className="px-5 w-1/5 py-2 rounded-xl md:rounded-none md:border-blue-500 font-semibold text-sm outline-none focus:border-blue-700 max-md:w-auto border mt-3 max-md:mx-2"
           value={searchTerm}
           onChange={handleSearch}
         />
       </div>
 
-      <div className="max-md:hidden flex gap-5 mx-5 my-5 max-md:flex-col max-md:w-auto max-md:gap-2 max-md:bg-white max-md:px-2 max-md:py-4">
+      <div className="md:hidden max-md:hidden flex gap-5 mx-5 my-5 max-md:flex-col max-md:w-auto max-md:gap-2 max-md:bg-white max-md:px-2 max-md:py-4">
         <input
           type="text"
           placeholder="Buscar por nombre y apellido..."
@@ -234,7 +257,7 @@ export const TableEmpleado = () => {
       </div>
       {resultadosFiltrados.map((r) => {
         return (
-          <div className="bg-white my-5 mx-5 py-5 px-5 max-md:hidden">
+          <div className="bg-white my-5 mx-5 py-5 px-5 md:hidden  max-md:hidden">
             <p className="uppercase text-gray-500 font-semibold mb-2">
               Fabrica{" "}
               <span className="font-bold text-blue-500">
@@ -617,7 +640,7 @@ export const TableEmpleado = () => {
         );
       })}
 
-      <div className="bg-white my-2 mx-3 max-md:overflow-x-auto ma">
+      <div className="bg-white my-2 mx-3 overflow-x-auto">
         {empleadosPorFabrica &&
           Object.keys(empleadosPorFabrica).map((fabrica, index) => (
             <div className="" key={index}>
@@ -631,8 +654,20 @@ export const TableEmpleado = () => {
                     <th>Empleado</th>
                     <th>Fabrica</th>
                     <th>Sector/rol</th>
-                    {/* <th>Fecha ingreso</th>
-                  <th>Antigüedad trabajando</th> */}
+                    <th>Fecha ingreso</th>
+                    {empleadosPorFabrica[fabrica].some(
+                      (g) => g?.termino_pago === "mensual"
+                    ) && (
+                      <th>
+                        <th>SueldoBasico</th>
+                      </th>
+                    )}
+                    {empleadosPorFabrica[fabrica].some(
+                      (g) => g?.termino_pago === "quincenal"
+                    ) && <th>Quin 5 real</th>}{" "}
+                    {empleadosPorFabrica[fabrica].some(
+                      (g) => g?.termino_pago === "quincenal"
+                    ) && <th>Quin 20 real</th>}
                     <th>Premio prod.</th>
                     <th>Premio Asist.</th>
                     <th>Comida</th>
@@ -645,12 +680,12 @@ export const TableEmpleado = () => {
                     ) && <th>Quin 5/pagar</th>}
                     {empleadosPorFabrica[fabrica].some(
                       (g) => g?.termino_pago === "mensual"
-                    ) && <th>Sueldo basico</th>}
+                    ) && <th>Sueldo con desc.</th>}
                     {/* <th>Quin 20/pagar</th> */}
                     {empleadosPorFabrica[fabrica].some(
                       (g) => g?.termino_pago === "quincenal"
                     ) && <th>Quin 20/pagar</th>}
-                    <th>Sueldo final</th>
+                    <th>Sueldo cobrado/neto</th>
                   </tr>
                 </thead>
                 <tbody className="text-xs capitalize">
@@ -730,6 +765,48 @@ export const TableEmpleado = () => {
                         </td>
                         <td className="font-semibold">{g?.fabrica_sucursal}</td>
                         <td className="font-semibold">{g?.sector_trabajo}</td>
+                        <td className="font-semibold">
+                          {updateFecha(g?.fecha_ingreso)}
+                        </td>
+                        {g.termino_pago === "quincenal" && (
+                          <td className="font-semibold">
+                            <p className="bg-green-500 text-white p-1 rounded text-center">
+                              {formatearDinero(
+                                g?.termino_pago === "quincenal"
+                                  ? Number(
+                                      g?.sueldo[0]?.quincena_cinco[0]
+                                        ?.quincena_cinco || 0
+                                    )
+                                  : ""
+                              )}
+                            </p>
+                          </td>
+                        )}
+                        {g.termino_pago === "quincenal" && (
+                          <td className="font-semibold">
+                            <p className="bg-green-500 text-white p-1 rounded text-center">
+                              {formatearDinero(
+                                g?.termino_pago === "quincenal"
+                                  ? Number(
+                                      g?.sueldo[1]?.quincena_veinte[0]
+                                        ?.quincena_veinte || 0
+                                    )
+                                  : ""
+                              )}
+                            </p>
+                          </td>
+                        )}
+                        {g.termino_pago === "mensual" && (
+                          <td className="font-semibold">
+                            <p className="bg-green-500 text-white p-1 rounded text-center">
+                              {formatearDinero(
+                                g?.termino_pago === "mensual"
+                                  ? Number(g?.sueldo[0]?.sueldo_basico || 0)
+                                  : ""
+                              )}
+                            </p>
+                          </td>
+                        )}
                         <td className="font-bold text-green-500">
                           {formatearDinero(
                             g?.termino_pago === "quincenal"
@@ -782,7 +859,6 @@ export const TableEmpleado = () => {
                               : Number(0)
                           )}
                         </td>
-
                         <td className="font-semibold text-red-600">
                           {formatearDinero(
                             g?.termino_pago === "quincenal"

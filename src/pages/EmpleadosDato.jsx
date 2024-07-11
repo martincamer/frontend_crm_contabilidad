@@ -7,7 +7,7 @@ import { TableEmpleado } from "../components/empleadosDatos.jsx/TableEmpleado";
 
 export const EmpleadosDato = () => {
   return (
-    <section>
+    <section className="max-md:min-h-screen max-md:h-full max-md:max-h-full">
       <Navegacion>
         <div className="flex">
           <NavegacionLink
