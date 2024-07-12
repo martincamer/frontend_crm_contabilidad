@@ -13,6 +13,9 @@ export const TableEmpleadosDatos = () => {
   const [endDate, setEndDate] = useState("");
   const [empleados, setEmpleados] = useState([]);
 
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+
   const { closeModal, isOpen, openModal } = useModal();
   const { handleObtenerId, idObtenida } = useObtenerId();
 
@@ -24,13 +27,21 @@ export const TableEmpleadosDatos = () => {
     setEndDate(event.target.value);
   };
 
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       const response = await instance.post("/empleados-datos/range", {
-        startDate,
-        endDate,
+        selectedYear,
+        selectedMonth,
       });
 
       setEmpleados(response.data);
@@ -74,7 +85,7 @@ export const TableEmpleadosDatos = () => {
             Filtrar por Rango de Fechas
           </h2>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Fecha de Inicio
               </label>
@@ -94,6 +105,45 @@ export const TableEmpleadosDatos = () => {
                 className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200  bg-white"
                 value={endDate}
                 onChange={handleEndDateChange}
+              />
+            </div> */}
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Mes
+              </label>
+              <select
+                value={selectedMonth}
+                onChange={handleMonthChange}
+                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 bg-white"
+              >
+                <option value="">Selecciona un mes</option>
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5">Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Año
+              </label>
+              <input
+                type="number"
+                min="1900"
+                max="2100"
+                step="1"
+                value={selectedYear}
+                onChange={handleYearChange}
+                className="text-sm w-full bg-gray-200/90 placeholder:text-gray-500 font-semibold text-gray-800 px-4 py-3 focus:border-blue-500 transition-all outline-none border border-gray-200 bg-white"
+                placeholder="Ingrese el año"
               />
             </div>
             <button

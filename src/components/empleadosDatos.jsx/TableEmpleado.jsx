@@ -19,8 +19,6 @@ export const TableEmpleado = () => {
     async function loadData() {
       const res = await instance.get(`/empleados-datos/${params.id}`);
       setDatos(res.data);
-
-      console.log("datos", datos);
     }
 
     loadData();
@@ -162,8 +160,8 @@ export const TableEmpleado = () => {
   };
 
   return (
-    <div className="max-md:py-12">
-      <div className="flex flex-col md:flex-col md:items-start md:px-5 md:py-6 py-4 gap-2 bg-white mx-3 px-2 py-2 mb-10">
+    <div className="max-md:py-12 mt-5">
+      <div className="flex flex-col md:flex-row md:items-center md:px-5 md:py-6 py-4 gap-2 bg-white mx-3 px-2 mb-10">
         {" "}
         <div className="flex flex-col gap-1 py-2 px-3 md:px-0">
           <label htmlFor="" className="uppercase font-bold text-xs">
@@ -214,7 +212,7 @@ export const TableEmpleado = () => {
         <input
           type="text"
           placeholder="Buscar por nombre de fábrica..."
-          className="px-5 w-1/5 py-2 rounded-xl md:rounded-none md:border-blue-500 font-semibold text-sm outline-none focus:border-blue-700 max-md:w-auto border mt-3 max-md:mx-2"
+          className="px-5 w-1/5 py-2 rounded-xl md:rounded-none md:border-blue-500 font-semibold text-sm outline-none focus:border-blue-700 max-md:w-auto border max-md:mx-2"
           value={searchTerm}
           onChange={handleSearch}
         />
