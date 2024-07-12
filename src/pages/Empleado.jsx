@@ -8,7 +8,7 @@ import { useEmpleado } from "../context/EmpleadosContext";
 import { updateFecha } from "../helpers/FechaUpdate";
 import { formatearDinero } from "../helpers/FormatearDinero";
 import { Dropdown } from "../components/ui/Dropdown";
-import { PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { ComprobantePago } from "../components/comprobantes/ComprobantePago";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useModal } from "../helpers/modal";
@@ -103,6 +103,10 @@ export const Empleado = () => {
   const handleOpenModal = (recibo) => {
     setSelectedRecibo(recibo);
     document.getElementById("my_modal_pdf").showModal();
+  };
+
+  const handleRecibo = (recibo) => {
+    setSelectedRecibo(recibo);
   };
 
   //filter
@@ -548,7 +552,7 @@ export const Empleado = () => {
                   <th>{updateFecha(g?.created_at)}</th>
                   <td>
                     <Dropdown>
-                      <li className="">
+                      <li className="max-md:hidden">
                         <button
                           type="button"
                           className="font-bold text-xs bg-blue-500 py-2 px-3 text-center text-white rounded-md w-full"
@@ -556,6 +560,15 @@ export const Empleado = () => {
                         >
                           Ver comprobante
                         </button>
+                      </li>
+                      <li key={g._id} className="md:hidden">
+                        <PDFDownloadLink
+                          document={<ComprobantePago recibo={g} />}
+                          fileName={`ComprobantePago-${g._id}.pdf`}
+                          className="font-bold text-xs bg-blue-500 py-2 px-3 text-center text-white rounded-md w-auto"
+                        >
+                          Descargar comprob.
+                        </PDFDownloadLink>
                       </li>
                       <li className="">
                         <button
