@@ -62,6 +62,7 @@ export function ProveedorProvider({ children }) {
     try {
       const res = await createProveedorRequest(proveedor);
       const nuevoProveedor = res.data;
+
       setProveedores([...proveedores, nuevoProveedor]);
       toast.success("Proveedor creado correctamente");
       // navigate("/proveedores");

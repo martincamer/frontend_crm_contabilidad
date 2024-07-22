@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Submit } from "../ui/Submit";
 import { FormInput } from "../ui/FormInput";
 import { useForm } from "react-hook-form";
 import { useBancoCheque } from "../../context/BancoChequesContext";
 import { SelectInput } from "../ui/SelectInput";
-import dayjs from "dayjs";
 import { formatearDinero } from "../../helpers/FormatearDinero";
+import { useProveedor } from "../../context/ProveedoresContext";
+import { ModalCrearProveedor } from "../ui/ModalCrearProveedor";
+import { IoMdAdd } from "react-icons/io";
+import dayjs from "dayjs";
 
 export const ModalCrearCheque = ({ bancos }) => {
   const { crearCheque } = useBancoCheque();
+
+  const { proveedores, getProveedores } = useProveedor();
+
+  useEffect(() => {
+    getProveedores();
+  }, []);
 
   const { register, handleSubmit, reset, watch } = useForm();
 
@@ -68,6 +77,7 @@ export const ModalCrearCheque = ({ bancos }) => {
                 </option>
               ))}
             </SelectInput>
+
             <SelectInput
               labelText={"Seleccionar el tipo"}
               props={{ ...register("tipo", { required: true }) }}
@@ -83,12 +93,27 @@ export const ModalCrearCheque = ({ bancos }) => {
               </option>
             </SelectInput>
 
-            <FormInput
-              labelText={"Para quien"}
-              placeholder={"Escribe el cliente/etc del cheque"}
-              props={{ ...register("datos", { required: true }) }}
-              type={"text"}
-            />
+            <div className="flex gap-2 items-center">
+              <SelectInput
+                labelText={"Seleccionar el proveedor"}
+                props={{ ...register("datos", { required: true }) }}
+              >
+                <option className="font-bold text-blue-500">
+                  Seleccionar el proveedor
+                </option>
+                {proveedores.map((p) => (
+                  <option key={p._id}>{p.nombre}</option>
+                ))}
+              </SelectInput>
+              <div
+                onClick={() => {
+                  document.getElementById("my_modal_proveedor").showModal();
+                }}
+                className="border py-1 px-1 bg-blue-500 border-blue-500 text-white cursor-pointer"
+              >
+                <IoMdAdd className="text-xl" />
+              </div>
+            </div>
 
             <FormInput
               labelText={"Numero del cheque"}
@@ -96,17 +121,17 @@ export const ModalCrearCheque = ({ bancos }) => {
               props={{ ...register("numero_cheque", { required: true }) }}
               type={"text"}
             />
+
             <FormInput
-              labelText={"Numero de la ruta"}
-              placeholder={"Numero de la ruta"}
-              props={{ ...register("numero_ruta", { required: true }) }}
-              type={"text"}
+              labelText={"Fecha de cobro"}
+              props={{ ...register("fecha_cobro", { required: true }) }}
+              type={"date"}
             />
 
             <div onClick={handleInputClick}>
               {isEditable ? (
                 <FormInput
-                  labelText={"Total del cheque"}
+                  labelText={"Monto del cheque"}
                   placeholder={"Escribe el total"}
                   props={{
                     ...register("total", {
@@ -119,7 +144,7 @@ export const ModalCrearCheque = ({ bancos }) => {
               ) : (
                 <div className="flex flex-col gap-1 w-full">
                   <label className="font-semibold text-xs text-gray-700">
-                    Total del cheque
+                    Monto del cheque
                   </label>
                   <p className="border capitalize border-[#E2E8F0] bg-[#F7FAFC] py-[0.90rem] px-[0.75rem] focus:border-blue-500 rounded-none outline-none outline-[1px] text-xs font-semibold">
                     {formatearDinero(Number(total) || 0)}
@@ -131,6 +156,7 @@ export const ModalCrearCheque = ({ bancos }) => {
           <Submit type={"submit"}>Guardar el cheque</Submit>
         </form>
       </div>
+      <ModalCrearProveedor />
     </dialog>
   );
 };

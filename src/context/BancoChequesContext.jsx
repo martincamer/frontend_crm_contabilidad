@@ -123,6 +123,7 @@ export function BancoChequeProvider({ children }) {
         updateBanco,
         crearCheque,
         deleteChequeBanco,
+        setBancos,
       }}
     >
       {children}

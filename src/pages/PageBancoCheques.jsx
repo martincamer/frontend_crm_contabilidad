@@ -7,9 +7,21 @@ import { ModalCrearCheque } from "../components/banco/ModalCrearCheque";
 import { Link } from "react-router-dom";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { ChequesPdf } from "../components/comprobantes/ChequesPdf";
+import { updateFecha } from "../helpers/FechaUpdate";
+import instance from "../api/axios";
+import { showSuccessToast } from "../helpers/toast";
+import { useProveedor } from "../context/ProveedoresContext";
 
 export const PageBancoCheques = () => {
-  const { getBancos, bancos, deleteChequeBanco } = useBancoCheque();
+  const { getBancos, bancos, setBancos, deleteChequeBanco } = useBancoCheque();
+
+  const { getProveedores, proveedores } = useProveedor();
+
+  useEffect(() => {
+    getProveedores();
+  }, []);
+
+  const [proveedorSeleccionado, setProveedorSeleccionado] = useState("");
 
   useEffect(() => {
     getBancos();
@@ -40,19 +52,25 @@ export const PageBancoCheques = () => {
   const fechaInicioObj = new Date(fechaInicio);
   const fechaFinObj = new Date(fechaFin);
 
-  // Función para aplicar el filtro por fecha y ordenar por fecha de mayor a menor
-  const filterAndSortCheques = () => {
+  const filterAndSortCheques = (proveedorSeleccionado) => {
     // Filtrar por fechas y obtener solo los cheques
     const filteredCheques = [];
 
     bancos.forEach((banco) => {
       banco.cheques.forEach((cheque) => {
         const fechaCheque = new Date(cheque.date);
+        // Filtrar por fechas
         if (
           (!fechaInicioObj || fechaCheque >= fechaInicioObj) &&
           (!fechaFinObj || fechaCheque <= fechaFinObj)
         ) {
-          filteredCheques.push(cheque);
+          // Filtrar por proveedor (si está seleccionado)
+          if (
+            !proveedorSeleccionado ||
+            cheque.datos === proveedorSeleccionado
+          ) {
+            filteredCheques.push(cheque);
+          }
         }
       });
     });
@@ -66,6 +84,12 @@ export const PageBancoCheques = () => {
   };
 
   const filterDataCheques = filterAndSortCheques();
+
+  const handleChangeProveedor = (event) => {
+    setProveedorSeleccionado(event.target.value);
+  };
+
+  const chequesFiltrados = filterAndSortCheques(proveedorSeleccionado);
 
   // Estados para las fechas filtradas
   const [fechaInicioMovimientos, setFechaInicioMovimientos] = useState(
@@ -101,6 +125,33 @@ export const PageBancoCheques = () => {
   const handleFechaFinChangeMovimientos = (e) => {
     setFechaFinMovimientos(e.target.value);
   };
+
+  const actualizarEstadoCheque = async (id, estadoActual) => {
+    try {
+      // Determinar el nuevo estado a enviar al servidor
+      const nuevoEstado =
+        estadoActual === "pendiente el cobro"
+          ? "cobrado"
+          : "pendiente el cobro";
+
+      // Realizar la solicitud PUT al servidor para actualizar el estado del cheque
+      const response = await instance.put(`/actualizar-cheque/${id}`, {
+        estado: nuevoEstado,
+      });
+
+      // Actualizar el estado local de bancos con los datos devueltos por el servidor
+      setBancos(response.data);
+
+      showSuccessToast("Estado actualizado correctamente");
+    } catch (error) {
+      console.error("Error al actualizar el estado del cheque:", error);
+    }
+  };
+
+  const totalCheques = chequesFiltrados.reduce(
+    (total, banco) => total + banco.total,
+    0
+  );
 
   return (
     <section className="py-10 px-5 flex flex-col gap-6">
@@ -146,7 +197,7 @@ export const PageBancoCheques = () => {
           </PDFDownloadLink>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-5 bg-white py-5 px-5 max-md:grid-cols-1 max-md:h-[20vh] max-md:overflow-y-scroll">
+      <div className="grid grid-cols-4 gap-5 bg-white py-5 px-5 max-md:grid-cols-1 max-md:h-[20vh] h-[20vh] scroll-bar overflow-y-scroll max-md:overflow-y-scroll">
         {bancos.map((b) => (
           <div
             key={b._id}
@@ -200,6 +251,7 @@ export const PageBancoCheques = () => {
           Crear nuevo cheque <FaMarkdown className="text-2xl max-md:hidden" />
         </button>
       </div>
+
       <div className="flex mt-5">
         <p className="text-blue-500 font-bold border-b-2 border-blue-500">
           Tabla de cheques cargados
@@ -224,6 +276,31 @@ export const PageBancoCheques = () => {
             placeholder="Fecha fin"
           />
         </div>
+
+        <select
+          className="border border-blue-500 mx-2 py-1 px-2 font-semibold capitalize text-sm cursor-pointer outline-none"
+          id="proveedorSelect"
+          value={proveedorSeleccionado}
+          onChange={handleChangeProveedor}
+        >
+          <option className="font-bold text-xs text-blue-600" value="">
+            Todos los proveedores
+          </option>
+          {proveedores.map((p) => (
+            <option className="font-semibold capitalize text-xs">
+              {p.nombre}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-6 gap-5 bg-white py-5 px-5 max-md:grid-cols-1 max-md:h-[20vh] max-md:overflow-y-scroll">
+        <div className="bg-white border-blue-500 border py-5 px-5">
+          <p className="font-semibold">Total en cheques</p>
+          <span className="text-blue-500 capitalize font-bold">
+            {formatearDinero(totalCheques)}
+          </span>
+        </div>
       </div>
       <div className="bg-white max-md:overflow-x-auto">
         <table className="table bg-white text-sm">
@@ -233,13 +310,14 @@ export const PageBancoCheques = () => {
               <th>Total</th>
               <th>Tipo</th>
               <th>Número de Cheque</th>
-              <th>Datos</th>
-              <th>Número de Ruta</th>
-              <th>Fecha</th>
+              <th>Proveedor/empresa</th>
+              <th>Fecha de cobro</th>
+              <th>Fecha de carga</th>
+              <th>Estado del cheque</th>
             </tr>
           </thead>
           <tbody className="capitalize text-xs">
-            {filterDataCheques.map((banco) => (
+            {chequesFiltrados.map((banco) => (
               <tr key={banco._id}>
                 <th>{banco.banco}</th>
                 <th className="text-blue-500">
@@ -248,8 +326,26 @@ export const PageBancoCheques = () => {
                 <th>{banco.tipo}</th>
                 <th>{banco.numero_cheque}</th>
                 <th>{banco.datos}</th>
-                <th>{banco.numero_ruta}</th>
+                <th>{updateFecha(banco.fecha_cobro)}</th>
                 <th>{new Date(banco.date).toLocaleString()}</th>{" "}
+                <th>
+                  <button
+                    onClick={() =>
+                      actualizarEstadoCheque(banco._id, banco.estado)
+                    }
+                    className="flex"
+                  >
+                    <p
+                      className={`py-1 px-2 rounded text-white ${
+                        banco.estado === "pendiente el cobro"
+                          ? "bg-orange-500"
+                          : "bg-green-500"
+                      }`}
+                    >
+                      {banco.estado}
+                    </p>
+                  </button>
+                </th>
                 {/* Mostrar fecha y hora */}
                 <th>
                   <div className="flex">
