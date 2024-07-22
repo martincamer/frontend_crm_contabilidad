@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Submit } from "../ui/Submit";
 import { useForm } from "react-hook-form";
 import { useEmpleado } from "../../context/EmpleadosContext";

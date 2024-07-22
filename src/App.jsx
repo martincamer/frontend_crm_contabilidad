@@ -36,6 +36,8 @@ import { PageBancoCheque } from "./pages/PageBancoCheque";
 import { EmpleadosAguinaldo } from "./pages/EmpleadosAguinaldos";
 import { EmpleadosMobile } from "./pages/EmpleadosMobile";
 import { EmpleadosAguinaldosMobile } from "./pages/EmpleadosAguinaldosMobile";
+import { EmpleadosDatosAguinaldo } from "./pages/EmpleadosDatosAguinaldo";
+import { EmpleadoDatoAguinaldo } from "./pages/EmpleadoDatoAguinaldo";
 
 function App() {
   return (
@@ -89,10 +91,18 @@ function App() {
                           <Route
                             path="/datos-empleados"
                             element={<EmpleadosDatos />}
+                          />{" "}
+                          <Route
+                            path="/datos-empleados-aguinaldo"
+                            element={<EmpleadosDatosAguinaldo />}
                           />
                           <Route
                             path="/empleados-datos/:id"
                             element={<EmpleadosDato />}
+                          />
+                          <Route
+                            path="/empleados-datos-aguinaldo/:id"
+                            element={<EmpleadoDatoAguinaldo />}
                           />
                           <Route
                             path="/estadistica/:id"

@@ -373,14 +373,6 @@ export const PageBancoCheques = () => {
 
       <ModalCrearBancoCheque />
       <ModalCrearCheque bancos={bancos} />
-      {/* <PDFViewer className="h-screen">
-        <ChequesPdf
-          cheques={bancos}
-          calcularTotalMovimientos={calcularTotalMovimientos}
-          fechaInicioMovimientos={fechaInicioMovimientos}
-          fechaFinMovimientos={fechaFinMovimientos}
-        />
-      </PDFViewer> */}
     </section>
   );
 };
