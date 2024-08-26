@@ -91,7 +91,9 @@ export const TableEmpleadosDatosAguinaldo = () => {
               >
                 <option value="">Selecciona un mes</option>
                 <option value="6">Junio</option>
+                <option value="9">Septiembre</option>
                 <option value="12">Diciembre</option>
+                <option value="3">Marzo</option>
               </select>
             </div>
             <div className="mb-4">

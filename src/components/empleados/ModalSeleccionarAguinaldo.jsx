@@ -66,9 +66,15 @@ export const ModalSeleccionarAguinaldo = () => {
               </option>
               <option className="font-semibold" value="Junio">
                 Junio
+              </option>{" "}
+              <option className="font-semibold" value="Septiembre">
+                Septiembre
               </option>
               <option className="font-semibold" value="Diciembre">
                 Diciembre
+              </option>{" "}
+              <option className="font-semibold" value="Marzo">
+                Marzo
               </option>
             </select>
           </div>

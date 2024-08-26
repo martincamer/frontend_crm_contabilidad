@@ -62,6 +62,12 @@ export const ModalGuardarAguinaldo = () => {
             </option>
             <option className="font-semibold capitalize" value={"diciembre"}>
               Diciembre
+            </option>{" "}
+            <option className="font-semibold capitalize" value={"septiembre"}>
+              Septiembre
+            </option>
+            <option className="font-semibold capitalize" value={"marzo"}>
+              Marzo
             </option>
           </SelectInput>
           <FormInput

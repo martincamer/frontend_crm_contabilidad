@@ -203,17 +203,18 @@ export const TableEmpleadosAguinaldo = () => {
 
     // Calcular aguinaldo para el empleado actual
     const antiguedadEnMeses = calcularMesesAntiguedad(e.fecha_ingreso);
-    let aguinaldoIndividual = 0;
+    let aguinaldoProporcional = 0;
 
+    // Determinar el sueldo final basado en la antigüedad del empleado
     if (antiguedadEnMeses < 6) {
-      // Si la antigüedad es menor a 6 meses, usar aguinaldo proporcional
-      aguinaldoIndividual = (sueldo / 12) * antiguedadEnMeses;
+      // Si la fecha de ingreso es menor a 6 meses, se utiliza aguinaldo proporcional
+      sueldo = aguinaldoProporcional /= 4;
     } else {
-      // Si no, usar la mitad del sueldo
-      aguinaldoIndividual = sueldo / 2;
+      // Si no, se utiliza la mitad del sueldo
+      sueldo /= 4;
     }
 
-    return aguinaldoIndividual;
+    return sueldo;
   });
 
   // Sumar todos los aguinaldos individuales para obtener el total
@@ -285,7 +286,7 @@ export const TableEmpleadosAguinaldo = () => {
             ) || 0;
 
         // Calcular aguinaldo individual (sueldo quincenal / 2)
-        aguinaldoIndividual = sueldoQuincenal / 2;
+        aguinaldoIndividual = sueldoQuincenal / 4;
       } else if (empleado.termino_pago === "mensual") {
         // Calcular sueldo mensual incluyendo aguinaldo proporcional
         const sueldoMensual =
@@ -298,7 +299,7 @@ export const TableEmpleadosAguinaldo = () => {
             Number(empleado.sueldo[0]?.descuento_del_cinco || 0) || 0;
 
         // Calcular aguinaldo individual (sueldo mensual / 2)
-        aguinaldoIndividual = sueldoMensual / 2;
+        aguinaldoIndividual = sueldoMensual / 4;
       }
 
       // Sumar el aguinaldo individual al total
@@ -618,10 +619,10 @@ export const TableEmpleadosAguinaldo = () => {
                   // Determinar el sueldo final basado en la antigüedad del empleado
                   if (antiguedadEnMeses < 6) {
                     // Si la fecha de ingreso es menor a 6 meses, se utiliza aguinaldo proporcional
-                    sueldo = aguinaldoProporcional;
+                    sueldo = aguinaldoProporcional /= 4;
                   } else {
                     // Si no, se utiliza la mitad del sueldo
-                    sueldo /= 2;
+                    sueldo /= 4;
                   }
 
                   // Aquí puedes formatear el sueldo final si es necesario con la función formatearDinero

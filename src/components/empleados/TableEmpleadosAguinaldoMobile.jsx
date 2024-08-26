@@ -621,10 +621,10 @@ export const TableEmpleadosAguinaldoMobile = () => {
                   // Determinar el sueldo final basado en la antigüedad del empleado
                   if (antiguedadEnMeses < 6) {
                     // Si la fecha de ingreso es menor a 6 meses, se utiliza aguinaldo proporcional
-                    sueldo = aguinaldoProporcional;
+                    sueldo = aguinaldoProporcional /= 4;
                   } else {
                     // Si no, se utiliza la mitad del sueldo
-                    sueldo /= 2;
+                    sueldo /= 4;
                   }
 
                   // Aquí puedes formatear el sueldo final si es necesario con la función formatearDinero
