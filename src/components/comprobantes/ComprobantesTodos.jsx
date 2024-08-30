@@ -307,8 +307,7 @@ export const ComprobantesTodos = ({ empleados, selectedQuincena }) => {
                   }}
                 >
                   {/* Antigüedad: {`${years} años, ${months} meses`} */}
-                  Antiguedad: {calcularAntiguedadDelEmpleado?.years} Años /{" "}
-                  {antiguedadEnMeses} Meses{" "}
+                  Antiguedad: {calcularAntiguedadDelEmpleado?.years} Años
                 </Text>
                 <Text
                   style={{
