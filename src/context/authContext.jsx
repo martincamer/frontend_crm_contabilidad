@@ -175,6 +175,7 @@ export const AuthProvider = ({ children }) => {
         updateUserImagen,
         handleToggle,
         isOpen,
+        setIsOpen,
       }}
     >
       {children}

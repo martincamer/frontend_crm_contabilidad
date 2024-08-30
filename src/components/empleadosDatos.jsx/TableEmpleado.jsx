@@ -209,13 +209,19 @@ export const TableEmpleado = () => {
             </option>
           </select>
         </div>
-        <input
-          type="text"
-          placeholder="Buscar por nombre de fábrica..."
-          className="px-5 w-1/5 py-2 rounded-xl md:rounded-none md:border-blue-500 font-semibold text-sm outline-none focus:border-blue-700 max-md:w-auto border max-md:mx-2"
-          value={searchTerm}
-          onChange={handleSearch}
-        />
+        <div className="flex flex-col gap-1 max-md:px-3 w-full">
+          {" "}
+          <label htmlFor="" className="uppercase font-bold text-xs">
+            Filtrar por termino de pago
+          </label>
+          <input
+            type="text"
+            placeholder="Buscar por nombre de fábrica..."
+            className="px-5 w-1/5 py-2.5 rounded-xl md:rounded-none md:border-gray-300 font-semibold text-sm outline-none focus:border-blue-700 max-md:w-auto border max-md:mx-2"
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+        </div>
       </div>
 
       <div className="md:hidden max-md:hidden flex gap-5 mx-5 my-5 max-md:flex-col max-md:w-auto max-md:gap-2 max-md:bg-white max-md:px-2 max-md:py-4">

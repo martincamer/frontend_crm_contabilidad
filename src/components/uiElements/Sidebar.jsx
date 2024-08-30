@@ -5,7 +5,7 @@ import { MdLocalOffer, MdOutlinePersonPin } from "react-icons/md";
 import { FaDatabase, FaMoneyBillWave } from "react-icons/fa";
 
 export const SideBar = () => {
-  const { isOpen, user } = useAuth();
+  const { isOpen, user, setIsOpen } = useAuth();
 
   const location = useLocation();
 
@@ -17,6 +17,7 @@ export const SideBar = () => {
     >
       <div className="flex flex-col gap-5 py-5 px-6">
         <button
+          onClick={() => setIsOpen(!isOpen)}
           type="button"
           className={`flex gap-2 ${
             location.pathname === "/presupuesto"
@@ -28,6 +29,7 @@ export const SideBar = () => {
           <Link to={"/presupuesto"}>Presupuesto</Link>
         </button>
         <button
+          onClick={() => setIsOpen(!isOpen)}
           type="button"
           className={`flex gap-2 ${
             location.pathname === "/bancos" ? "text-blue-600" : "text-gray-700"
@@ -42,6 +44,7 @@ export const SideBar = () => {
         ) : (
           <>
             <button
+              onClick={() => setIsOpen(!isOpen)}
               type="button"
               className={`flex gap-2 max-md:hidden ${
                 location.pathname === "/" ? "text-blue-600" : "text-gray-700"
@@ -51,6 +54,7 @@ export const SideBar = () => {
               <Link to={"/empleados"}>Empleados</Link>
             </button>
             <button
+              onClick={() => setIsOpen(!isOpen)}
               type="button"
               className={`flex gap-2 md:hidden ${
                 location.pathname === "/empleados-mobile"
@@ -62,6 +66,7 @@ export const SideBar = () => {
               <Link to={"/empleados-mobile"}>Empleados</Link>
             </button>
             <button
+              onClick={() => setIsOpen(!isOpen)}
               type="button"
               className={`flex gap-2 max-md:hidden ${
                 location.pathname === "/" ? "text-blue-600" : "text-gray-700"
@@ -71,6 +76,7 @@ export const SideBar = () => {
               <Link to={"/empleados-aguinaldo"}>Empleados aguinaldo</Link>
             </button>
             <button
+              onClick={() => setIsOpen(!isOpen)}
               type="button"
               className={`flex gap-2 md:hidden ${
                 location.pathname === "/" ? "text-blue-600" : "text-gray-700"
