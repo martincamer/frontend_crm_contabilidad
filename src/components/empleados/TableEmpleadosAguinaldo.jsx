@@ -530,9 +530,7 @@ export const TableEmpleadosAguinaldo = () => {
               <tbody className="text-xs capitalize">
                 {empleadosPorFabrica[fabrica].map((g) => {
                   // Calcular la antigüedad
-                  const { years, months } = calculateAntiquity(
-                    g?.fecha_ingreso
-                  );
+                  const { years } = calculateAntiquity(g?.fecha_ingreso);
 
                   let total_antiguedad = 0;
 
@@ -549,8 +547,6 @@ export const TableEmpleadosAguinaldo = () => {
                         )) *
                       (0.01 * years);
                   }
-
-                  console.log("meses", months);
 
                   // Función para calcular los meses de antigüedad desde la fecha de ingreso
                   const calcularMesesAntiguedad = (fechaIngreso) => {
